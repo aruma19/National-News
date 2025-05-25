@@ -4,7 +4,8 @@ import {
   loginHandler,
   logout,
   updateUser,
-  registerAdmin
+  registerAdmin,
+  getMe
 } from "../controllers/UserController.js";
 import { verifyToken } from "../middleware/VerifyToken.js";
 import upload from "../middleware/uploadImage.js";
@@ -17,5 +18,6 @@ router.post("/register/admin", registerAdmin);
 router.post("/login", loginHandler);
 router.post("/logout", verifyToken, logout);
 router.put("/user/update", verifyToken, upload.single("profileUser"), updateUser);
+router.get("/me", verifyToken, getMe);
 
 export default router;

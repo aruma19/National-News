@@ -146,4 +146,24 @@ async function updateUser(req, res) {
   }
 }
 
-export {registerUser,loginHandler, logout, updateUser, registerAdmin};
+// dalam UserController.js
+async function getMe(req, res) {
+  try {
+    const role = req.role;
+    const userId = role === "admin" ? req.adminId : req.userId;
+    const model = role === "admin" ? Admin : User;
+
+    const user = await model.findByPk(userId, {
+      attributes: ["id", "username", "email", "gender"]
+    });
+
+    if (!user) return res.status(404).json({ message: "User tidak ditemukan" });
+
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+
+export {registerUser,loginHandler, logout, updateUser, registerAdmin, getMe};
