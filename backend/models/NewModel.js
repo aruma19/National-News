@@ -36,13 +36,13 @@ const New = db.define('news', {
     type: DataTypes.INTEGER,
     allowNull: true
   },
-  userId: {
+  adminId: {
     type: DataTypes.INTEGER,
-    allowNull: false
+    allowNull: true
   },
 }, {
   freezeTableName: true,
-  timestamps: false
+  timestamps: true
 });
 
 export default New;

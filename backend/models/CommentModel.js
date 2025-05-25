@@ -10,11 +10,15 @@ const Comment = db.define("comments", {
   },
   userId: {
     type: DataTypes.INTEGER,
-    allowNull: false,
+    allowNull: true,
   },
   newsId: {
     type: DataTypes.INTEGER,
     allowNull: false,
+  },
+  adminId: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
   },
 }, {
   freezeTableName: true,

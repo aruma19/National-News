@@ -6,11 +6,11 @@ const { DataTypes } = Sequelize;
 const Like = db.define("likes", {
   userId: {
     type: DataTypes.INTEGER,
-    allowNull: true
+    allowNull: false
   },
   newsId: {
     type: DataTypes.INTEGER,
-    allowNull: true
+    allowNull: false
   }
 },{
     freezeTableName: true,

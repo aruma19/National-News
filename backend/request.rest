@@ -22,6 +22,17 @@ Content-Type: application/json
 }
 
 ###
+POST http://localhost:5003/register
+Content-Type: application/json
+
+{
+    "username": "denskuy",
+    "email": "denskuy@gmail.com",
+    "gender": "Male",
+    "password": "denskuy123"
+}
+
+###
 //Login Akun User
 POST http://localhost:5003/login
 Content-Type: application/json
@@ -35,15 +46,15 @@ POST http://localhost:5003/login
 Content-Type: application/json
 
 {
-    "email": "inces@gmail.com",
-    "password": "inces"
+    "email": "denskuy@gmail.com",
+    "password": "denskuy123"
 }
 
 ###
 //Logout Akun User
 POST http://localhost:5003/logout
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwidXNlcm5hbWUiOiJpbmNlc3NzIiwiZW1haWwiOiJpbmNlc3NzQGdtYWlsLmNvbSIsImdlbmRlciI6IkZlbWFsZSIsInByb2ZpbGVVc2VyIjoiIiwiY3JlYXRlZEF0IjoiMjAyNS0wNS0yMlQwOToyMzozOC4wMDBaIiwidXBkYXRlZEF0IjoiMjAyNS0wNS0yMlQxNjoyMzoyNC4wMDBaIiwicm9sZSI6InVzZXIiLCJpYXQiOjE3NDc5MzEzNzgsImV4cCI6MTc0NzkzMzE3OH0.-iQsVmFI1I-Hb6Xm8ulApWX9zkFO82WGHcf1f1LL9ZQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwidXNlcm5hbWUiOiJkZW5za3V5IiwiZW1haWwiOiJkZW5za3V5QGdtYWlsLmNvbSIsImdlbmRlciI6Ik1hbGUiLCJwcm9maWxlVXNlciI6IiIsImNyZWF0ZWRBdCI6IjIwMjUtMDUtMjVUMDM6Mzk6NDQuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjUtMDUtMjVUMDM6Mzk6NDQuMDAwWiIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzQ4MTQ0Mzk2LCJleHAiOjE3NDgxNDYxOTZ9.IMBtuoHZiKCpZkWKrXq2i7ysiEBzeZ2Gw0boWI1KFxw
 
 ###
 //Update Data User
@@ -86,63 +97,76 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwidXNlcm5hb
   "content": "Kalo Kataku ya. awaoonajkfdnajkfbndkjlnvadsjkffnsbdkjlfndskjlfnasdjkfnbakjlfbndskjlfnbksdjnfkjf nmsbvkjsd c nflsdfnjklsdanfljksd sldf"
 }
 
+### Mengambil data komentar
+GET http://localhost:5003/comments
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJmYXJza3V5IiwiZW1haWwiOiJmYXJza3V5QGdtYWlsLmNvbSIsImdlbmRlciI6Ik1hbGUiLCJwcm9maWxlVXNlciI6IiIsImNyZWF0ZWRBdCI6IjIwMjUtMDUtMjFUMTQ6NTY6MTcuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjUtMDUtMjVUMDM6MjI6MzQuMDAwWiIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzQ4MTQ0NTQzLCJleHAiOjE3NDgxNDYzNDN9.3wDHrk4eKRDT75bgiptLUzF9wsheJzTtymuIiadbA_I
+
+### Mengambil data komentar semua
+GET http://localhost:5003/comments/news/6
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJmYXJza3V5IiwiZW1haWwiOiJmYXJza3V5QGdtYWlsLmNvbSIsImdlbmRlciI6Ik1hbGUiLCJwcm9maWxlVXNlciI6IiIsImNyZWF0ZWRBdCI6IjIwMjUtMDUtMjFUMTQ6NTY6MTcuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjUtMDUtMjVUMDM6MjI6MzQuMDAwWiIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzQ4MTQ0NTQzLCJleHAiOjE3NDgxNDYzNDN9.3wDHrk4eKRDT75bgiptLUzF9wsheJzTtymuIiadbA_I
+
 ###
 //Memberikan Like Pada Berita
 POST http://localhost:5003/news/liked
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJmYXJza3V5IiwiZW1haWwiOiJmYXJza3V5QGdtYWlsLmNvbSIsImdlbmRlciI6Ik1hbGUiLCJwcm9maWxlVXNlciI6IiIsImNyZWF0ZWRBdCI6IjIwMjUtMDUtMjFUMTQ6NTY6MTcuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjUtMDUtMjNUMTc6MDY6MjcuMDAwWiIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzQ4MDIwMzEyLCJleHAiOjE3NDgwMjIxMTJ9.oCf1qDO-fqe48yMOyh1ckmSJu9g_hGmcrIpJ0dZ11qU
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJmYXJza3V5IiwiZW1haWwiOiJmYXJza3V5QGdtYWlsLmNvbSIsImdlbmRlciI6Ik1hbGUiLCJwcm9maWxlVXNlciI6IiIsImNyZWF0ZWRBdCI6IjIwMjUtMDUtMjFUMTQ6NTY6MTcuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjUtMDUtMjVUMDU6MjM6NTEuMDAwWiIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzQ4MTUwODA4LCJleHAiOjE3NDgxNTI2MDh9.oz7PJdTyjk8kdKYLphTDFwoCXqs7Uzpty4KTlbQ26KY
 
 {
-  "newsId": 8
+  "newsId": 12
 }
 
 ###
 //Melihat Daftar Berita yang disukai user
-GET http://localhost:5003/news/liked
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwidXNlcm5hbWUiOiJpbmNlcyIsImVtYWlsIjoiaW5jZXNAZ21haWwuY29tIiwiZ2VuZGVyIjoiRmVtYWxlIiwicHJvZmlsZVVzZXIiOiIiLCJjcmVhdGVkQXQiOiIyMDI1LTA1LTIyVDA5OjIzOjM4LjAwMFoiLCJ1cGRhdGVkQXQiOiIyMDI1LTA1LTI0VDE0OjE5OjQxLjAwMFoiLCJyb2xlIjoidXNlciIsImlhdCI6MTc0ODA5NzgxNSwiZXhwIjoxNzQ4MDk5NjE1fQ.R4x_FLddimEMistKKVevYh7wdmMPbPnt797ozJP6wFg
+GET http://localhost:5003/news/liked/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJmYXJza3V5IiwiZW1haWwiOiJmYXJza3V5QGdtYWlsLmNvbSIsImdlbmRlciI6Ik1hbGUiLCJwcm9maWxlVXNlciI6IiIsImNyZWF0ZWRBdCI6IjIwMjUtMDUtMjFUMTQ6NTY6MTcuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjUtMDUtMjVUMTA6MDE6MzcuMDAwWiIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzQ4MTY3MzE4LCJleHAiOjE3NDgxNjkxMTh9.cKR_zVg1tcikoAXTNKqikIPFKgqA5djh5ifJoRZEQwg
 
 ###
 //Menghapus Suka pada berita
 DELETE http://localhost:5003/news/liked/8
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJmYXJza3V5IiwiZW1haWwiOiJmYXJza3V5QGdtYWlsLmNvbSIsImdlbmRlciI6Ik1hbGUiLCJwcm9maWxlVXNlciI6IiIsImNyZWF0ZWRBdCI6IjIwMjUtMDUtMjFUMTQ6NTY6MTcuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjUtMDUtMjNUMTc6MDY6MjcuMDAwWiIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzQ4MDIwMzEyLCJleHAiOjE3NDgwMjIxMTJ9.oCf1qDO-fqe48yMOyh1ckmSJu9g_hGmcrIpJ0dZ11qU
+Authorization: Bearer yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJmYXJza3V5IiwiZW1haWwiOiJmYXJza3V5QGdtYWlsLmNvbSIsImdlbmRlciI6Ik1hbGUiLCJwcm9maWxlVXNlciI6IiIsImNyZWF0ZWRBdCI6IjIwMjUtMDUtMjFUMTQ6NTY6MTcuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjUtMDUtMjVUMDU6MjM6MDQuMDAwWiIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzQ4MTUwNjMxLCJleHAiOjE3NDgxNTI0MzF9.ERD8LuzN33h3Pv7tMk-CXEeQmg2XeaWvKbU_uWb3OkU
 
 ### Melihat Daftar Cek status like
 GET http://localhost:5003/news/liked/check/8
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwidXNlcm5hbWUiOiJpbmNlcyIsImVtYWlsIjoiaW5jZXNAZ21haWwuY29tIiwiZ2VuZGVyIjoiRmVtYWxlIiwicHJvZmlsZVVzZXIiOiIiLCJjcmVhdGVkQXQiOiIyMDI1LTA1LTIyVDA5OjIzOjM4LjAwMFoiLCJ1cGRhdGVkQXQiOiIyMDI1LTA1LTI0VDE0OjUxOjQ5LjAwMFoiLCJyb2xlIjoidXNlciIsImlhdCI6MTc0ODA5OTI4NSwiZXhwIjoxNzQ4MTAxMDg1fQ.aSTyen6cTsfvfKIgqCpgbKCl754I3hpTOiso3QGgDlc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJmYXJza3V5IiwiZW1haWwiOiJmYXJza3V5QGdtYWlsLmNvbSIsImdlbmRlciI6Ik1hbGUiLCJwcm9maWxlVXNlciI6IiIsImNyZWF0ZWRBdCI6IjIwMjUtMDUtMjFUMTQ6NTY6MTcuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjUtMDUtMjVUMDg6NDA6NTcuMDAwWiIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzQ4MTYzMzQyLCJleHAiOjE3NDgxNjUxNDJ9.bhBMmI-5j2rE-UD3ixrmTqMN5jQbfDvSOtBvysOGB9o
+
+###
+//Melihat Daftar Like di suatu berita
+GET http://localhost:5003/news/likesCount/2
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJmYXJza3V5IiwiZW1haWwiOiJmYXJza3V5QGdtYWlsLmNvbSIsImdlbmRlciI6Ik1hbGUiLCJwcm9maWxlVXNlciI6IiIsImNyZWF0ZWRBdCI6IjIwMjUtMDUtMjFUMTQ6NTY6MTcuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjUtMDUtMjVUMTA6MDE6MzcuMDAwWiIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzQ4MTY3MzE4LCJleHAiOjE3NDgxNjkxMTh9.cKR_zVg1tcikoAXTNKqikIPFKgqA5djh5ifJoRZEQwg
+
 
 //Melihat Daftar berita
 ###
 GET http://localhost:5003/news
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJmYXJza3V5IiwiZW1haWwiOiJmYXJza3V5QGdtYWlsLmNvbSIsImdlbmRlciI6Ik1hbGUiLCJwcm9maWxlVXNlciI6IiIsImNyZWF0ZWRBdCI6IjIwMjUtMDUtMjFUMTQ6NTY6MTcuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjUtMDUtMjNUMDk6MTM6MzYuMDAwWiIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzQ3OTkyMjYzLCJleHAiOjE3NDc5OTQwNjN9.BfA-70iMuMWjpNoFgbiy5O5QNS7hJk59vxaMxjzsByA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJmYXJza3V5IiwiZW1haWwiOiJmYXJza3V5QGdtYWlsLmNvbSIsImdlbmRlciI6Ik1hbGUiLCJwcm9maWxlVXNlciI6IiIsImNyZWF0ZWRBdCI6IjIwMjUtMDUtMjFUMTQ6NTY6MTcuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjUtMDUtMjVUMTA6MDE6MzcuMDAwWiIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzQ4MTY3MzE4LCJleHAiOjE3NDgxNjkxMTh9.cKR_zVg1tcikoAXTNKqikIPFKgqA5djh5ifJoRZEQwg
 
 ///Fitur Admin
 ###
 //Register Akun Admin
-POST http://localhost:5003/admin/register
+POST http://localhost:5003/register/admin
 Content-Type: application/json
 
 {
-    "username": "admin",
-    "email": "admin@gmail.com",
-    "password": "admin"
+    "username": "admin2",
+    "email": "admin2@gmail.com",
+    "password": "admin2"
 }
 
 ###
 //Login Akun Admin
-POST http://localhost:5003/admin/login
+POST http://localhost:5003/login
 Content-Type: application/json
 
 {
-    "email": "admin@gmail.com",
-    "password": "admin"
+    "email": "admin1@gmail.com",
+    "password": "admin1"
 }
 
 ###
-
 //Logout Akun Admin
-POST http://localhost:5003/admin/logout
+POST http://localhost:5003/logout
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ3OTIwOTExLCJleHAiOjE3NDc5MjgxMTF9.EK85XXZbIYTY_15mF1tMNmHZrICGmbFxDrX66ZdwS9Q
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwidXNlcm5hbWUiOiJhZG1pbjEiLCJlbWFpbCI6ImFkbWluMUBnbWFpbC5jb20iLCJwcm9maWxlQWRtaW4iOiIiLCJjcmVhdGVkQXQiOiIyMDI1LTA1LTI0VDIxOjAzOjE5LjAwMFoiLCJ1cGRhdGVkQXQiOiIyMDI1LTA1LTI0VDIxOjAzOjE5LjAwMFoiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NDgxNDM2NjMsImV4cCI6MTc0ODE0NTQ2M30.XtimvAPdq7oRrCj_Umf81BRf2o3PICKtCQZUV7ZEyQ4
 
 ###
 //Update Data diri admin
@@ -161,11 +185,11 @@ Content-Type: multipart/form-data
 //Membuat Kategori Berita
 POST http://localhost:5003/categories
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ3OTE0OTgyLCJleHAiOjE3NDc5MjIxODJ9.E6UAixDs8_7_Y4ZzKKm4bsezKawm0_0ZW95r-ewF1ag
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ4MTE3NjU3LCJleHAiOjE3NDgxMjQ4NTd9.s1_E82kOj35qHugOxvpuwPLt9g9iz6RBfFWKDwmUR9A
 
 
 {
-  "category": "Masyarakat"
+  "category": "Lingkungan"
 }
 
 ###
@@ -174,56 +198,91 @@ GET http://localhost:5003/categories
 
 ###
 //Mengedit Kategori
-PUT http://localhost:5003/categories/4
+PUT http://localhost:5003/categories/8
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ3OTE0OTgyLCJleHAiOjE3NDc5MjIxODJ9.E6UAixDs8_7_Y4ZzKKm4bsezKawm0_0ZW95r-ewF1ag
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ4MTE3NjU3LCJleHAiOjE3NDgxMjQ4NTd9.s1_E82kOj35qHugOxvpuwPLt9g9iz6RBfFWKDwmUR9A
 
 {
-  "category": "Korupsi"
+  "category": "Linglung"
 }
 
 ###
 //Menghapus Kategori
-DELETE http://localhost:5003/categories/5
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ3OTE0OTgyLCJleHAiOjE3NDc5MjIxODJ9.E6UAixDs8_7_Y4ZzKKm4bsezKawm0_0ZW95r-ewF1ag
+DELETE http://localhost:5003/categories/8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ4MTE3NjU3LCJleHAiOjE3NDgxMjQ4NTd9.s1_E82kOj35qHugOxvpuwPLt9g9iz6RBfFWKDwmUR9A
 
 ###
 //Menambahkan Data Berita
 POST http://localhost:5003/news 
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ3OTA5Njc3LCJleHAiOjE3NDc5MTY4Nzd9.m_oonnNb13KYrTNozOqSSsSkolc9rsACshXPnimR1zM
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ4MTE3NjU3LCJleHAiOjE3NDgxMjQ4NTd9.s1_E82kOj35qHugOxvpuwPLt9g9iz6RBfFWKDwmUR9A
+
 //image_small:"/uploads/wleowelo.png"
 {
   "author": "UIA Channel",
-  "title": "Guru Besar UI: Kondisi PRT RI Banyak Dikritik Dunia Internasional",
-  "url": "https://www.cnnindonesia.com/nasional/20250521084207-12-1231412/guru-besar-ui-kondisi-prt-ri-banyak-dikritik-dunia-internasional",
-  "description": "Guru besar UI menyoroti perlindungan pekerja rumah tangga atau PRT di Indonesia yang minim regulasi. RUU PPRT diharapkan segera disahkan.",
-  "iso_date": "2025-05-22T01:30:00.000Z",
-  "image_small": "https://akcdn.detik.net.id/visual/2024/08/15/demo-tuntut-dpr-mengesahkan-ruu-perlindungan-prt-10_169.jpeg?w=360&q=90",
-  "image_large": "https://akcdn.detik.net.id/visual/2024/08/15/demo-tuntut-dpr-mengesahkan-ruu-perlindungan-prt-10_169.jpeg?w=360&q=100",
+  "title": "3 Tersangka Kasus Kredit Sritex Dijebloskan ke Rutan Salemba",
+  "url": "https://www.cnnindonesia.com/nasional/20250521222134-12-1231792/3-tersangka-kasus-kredit-sritex-dijebloskan-ke-rutan-salemba",
+  "description": "Tiga tersangka kasus korupsi pemberian fasilitas kredit PT Sritex, ditahan di Rutan Salemba, Jakarta.",
+  "iso_date": "2025-05-21T15:35:24.000Z",
+  "image_small": "https://akcdn.detik.net.id/visual/2025/05/21/dirut-pt-sritex-iwan-setiawan-lukminto-ditahan-kejagung-1747841622564_169.jpeg?w=360&q=90",
+  "image_large": "https://akcdn.detik.net.id/visual/2025/05/21/dirut-pt-sritex-iwan-setiawan-lukminto-ditahan-kejagung-1747841622564_169.jpeg?w=360&q=100",
   "categoryId": 3
 }
 
 
 ###
 //Hapus Data Berita
-DELETE http://localhost:5003/news/5
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ3OTA5Njc3LCJleHAiOjE3NDc5MTY4Nzd9.m_oonnNb13KYrTNozOqSSsSkolc9rsACshXPnimR1zM
+DELETE http://localhost:5003/news/10
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ4MTE3NjU3LCJleHAiOjE3NDgxMjQ4NTd9.s1_E82kOj35qHugOxvpuwPLt9g9iz6RBfFWKDwmUR9A
 
 //Edit Data Berita
 ###
-PUT http://localhost:5003/news/6
+PUT http://localhost:5003/news/11
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ4MDA5MTA4LCJleHAiOjE3NDgwMTYzMDh9.Ph-HFOvWqSSvYU7gWxWvxE2kmL6FZMgSp34CWA1sSZM
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ4MTE3NjU3LCJleHAiOjE3NDgxMjQ4NTd9.s1_E82kOj35qHugOxvpuwPLt9g9iz6RBfFWKDwmUR9A
 
 {
   "author": "Cublacks News",
-  "title": "Korupsi Dana Hibah Jatim, KPK Sita Tanah Senilai Rp2 M di Pasuruan",
-  "url": "https://www.cnnindonesia.com/nasional/20250522173309-12-1232145/korupsi-dana-hibah-jatim-kpk-sita-tanah-senilai-rp2-m-di-pasuruan",
-  "description": "KPK menyita tanah senilai Rp2 miliar di Pasuruan terkait dugaan korupsi dana hibah. Lima saksi diperiksa dalam penyidikan kasus ini.",
-  "iso_date": "2025-05-22T15:00:04.000Z",
-  "image_small": "https://akcdn.detik.net.id/visual/2017/02/23/0cd938c1-a601-4d91-a192-c2caf42cb658_169.jpg?w=360&q=90",
-  "image_large": "https://akcdn.detik.net.id/visual/2017/02/23/0cd938c1-a601-4d91-a192-c2caf42cb658_169.jpg?w=360&q=100",
-  "categoryId": 4
+  "title": "3 Tersangka Kasus Kredit Sritex Dijebloskan ke Rutan Salemba",
+  "url": "https://www.cnnindonesia.com/nasional/20250521222134-12-1231792/3-tersangka-kasus-kredit-sritex-dijebloskan-ke-rutan-salemba",
+  "description": "Tiga tersangka kasus korupsi pemberian fasilitas kredit PT Sritex, ditahan di Rutan Salemba, Jakarta.",
+  "iso_date": "2025-05-21T15:35:24.000Z",
+  "image_small": "https://akcdn.detik.net.id/visual/2025/05/21/dirut-pt-sritex-iwan-setiawan-lukminto-ditahan-kejagung-1747841622564_169.jpeg?w=360&q=90",
+  "image_large": "https://akcdn.detik.net.id/visual/2025/05/21/dirut-pt-sritex-iwan-setiawan-lukminto-ditahan-kejagung-1747841622564_169.jpeg?w=360&q=100",
+  "categoryId": 3
 }
 
+###
+//Menambahkan Komentar pada inputan admin
+POST http://localhost:5003/comments
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ4MTE3NjU3LCJleHAiOjE3NDgxMjQ4NTd9.s1_E82kOj35qHugOxvpuwPLt9g9iz6RBfFWKDwmUR9A
+
+{
+  "newsId": 11,
+  "content": "e eleh"
+}
+
+//Menghapus Komentar dari suatu berita
+###
+DELETE http://localhost:5003/comments/7
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwidXNlcm5hbWUiOiJhZG1pbjEiLCJlbWFpbCI6ImFkbWluMUBnbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NDgxMjA2MDksImV4cCI6MTc0ODEyNzgwOX0.WBkLQ83IJGWyvg-YHxKHYGKWTPtpxrELP1J-xr2cq0E
+
+//Mengedit Komentar dari sebuah berita
+###
+PUT http://localhost:5003/comments/14
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwidXNlcm5hbWUiOiJhZG1pbjEiLCJlbWFpbCI6ImFkbWluMUBnbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NDgxMjA2MDksImV4cCI6MTc0ODEyNzgwOX0.WBkLQ83IJGWyvg-YHxKHYGKWTPtpxrELP1J-xr2cq0E
+
+{
+  "newsId": 1,
+  "content": "mantap"
+}
+
+### Mengambil data komentar
+GET http://localhost:5003/comments/6
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJmYXJza3V5IiwiZW1haWwiOiJmYXJza3V5QGdtYWlsLmNvbSIsImdlbmRlciI6Ik1hbGUiLCJwcm9maWxlVXNlciI6IiIsImNyZWF0ZWRBdCI6IjIwMjUtMDUtMjFUMTQ6NTY6MTcuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjUtMDUtMjRUMTk6MTU6MTEuMDAwWiIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzQ4MTE0ODMzLCJleHAiOjE3NDgxMTY2MzN9.mA6T9WTTtlGjScutbZC7jmWOFIFRTL7MeFxxXsfN32I
+
+### Mengambil data komentar semua
+GET http://localhost:5003/comments/news/6
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwidXNlcm5hbWUiOiJhZG1pbjEiLCJlbWFpbCI6ImFkbWluMUBnbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NDgxMjA2MDksImV4cCI6MTc0ODEyNzgwOX0.WBkLQ83IJGWyvg-YHxKHYGKWTPtpxrELP1J-xr2cq0E

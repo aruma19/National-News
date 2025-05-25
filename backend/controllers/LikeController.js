@@ -3,7 +3,7 @@ import New from "../models/NewModel.js";
 import Category from "../models/CategoryModel.js";
 
 // Tambah like
-export const likeNews = async (req, res) => {
+export const likedNews = async (req, res) => {
   try {
     const { newsId } = req.body;
     const userId = req.userId;
@@ -25,26 +25,29 @@ export const likeNews = async (req, res) => {
 export const getLikedNews = async (req, res) => {
   try {
     const userId = req.userId;
-    const likedNews = await Like.findAll({
-      where: { userId },
-      include: [{
-        model: New,
-         required: true, // hanya ambil yang news-nya masih ada
-        attributes: ["id", "title", "content", "author", "image_small", "iso_date"],
-        include: [{ 
+
+    const likedNews = await New.findAll({
+      include: [
+        {
+          model: Like,
+          where: { userId },
+          attributes: [] // kita nggak butuh kolom dari Like
+        },
+        {
           model: Category,
           attributes: ["category"]
-        }]
-      }]
-
+        }
+      ],
+      attributes: ["id", "title", "description", "url", "author", "image_small", "image_large", "iso_date"]
     });
 
-    // Kembalikan hanya data berita yang disukai
-    res.status(200).json(likedNews.map(item => item.new));
+    res.status(200).json(likedNews);
   } catch (error) {
+    console.error(error); // tampilkan detail error di log
     res.status(500).json({ message: error.message });
   }
 };
+
 
 // Cek apakah user sudah like berita tertentu
 export const checkLikeStatus = async (req, res) => {

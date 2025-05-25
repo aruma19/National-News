@@ -8,7 +8,6 @@ import {
 import { verifyToken } from "../middleware/VerifyToken.js";
 import upload from "../middleware/uploadImage.js";
 
-
 const router = express.Router();
 
 router.post("/admin/register", registerAdmin);

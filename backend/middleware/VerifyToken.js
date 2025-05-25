@@ -8,10 +8,18 @@ export const verifyToken = (req, res, next) => {
 
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
     if (err) return res.sendStatus(403); // Forbidden
+    console.log("TOKEN DECODED:", decoded);
 
-    req.userId = decoded.id;       //  WAJIB
-    req.email = decoded.email;     // Optional
-    req.role = decoded.role;       // Optional
+    req.role = decoded.role;
+
+    if (decoded.role === "admin") {
+      req.adminId = decoded.id;
+    } else {
+      req.userId = decoded.id;
+    }
+
+    req.email = decoded.email; // Optional
+
     next();
   });
 };

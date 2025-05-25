@@ -4,7 +4,8 @@ import {
   getCommentById,
   createComment,
   updateComment,
-  deleteComment
+  deleteComment,
+  getCommentsByNews
 } from "../controllers/CommentController.js";
 import { verifyToken } from "../middleware/VerifyToken.js";
 
@@ -15,5 +16,7 @@ router.get("/comments/:id", verifyToken, getCommentById);
 router.post("/comments", verifyToken, createComment);
 router.put("/comments/:id", verifyToken, updateComment);
 router.delete("/comments/:id", verifyToken, deleteComment);
+
+router.get("/comments/news/:newsId", verifyToken, getCommentsByNews);
 
 export default router;

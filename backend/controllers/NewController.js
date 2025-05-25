@@ -1,11 +1,11 @@
 import New from "../models/NewModel.js";
 import Category from "../models/CategoryModel.js";
 
-// Get all news for the logged-in user, include category data
+// Get all news for the logged-in admin, include category data
 async function getNews(req, res) {
   try {
     const response = await New.findAll({
-      include: [{ model: Category, attributes: ["category"] }] 
+      include: [{ model: Category, attributes: ["category"] }]
     });
 
     res.status(200).json(response);
@@ -36,7 +36,7 @@ async function getNewById(req, res) {
 // Create news, pastikan categoryId dikirim dari client
 async function createNew(req, res) {
   try {
-    const userId = req.userId;
+    const adminId = req.adminId;
     const {
       author,
       title,
@@ -61,7 +61,7 @@ async function createNew(req, res) {
       iso_date,
       image_small,
       image_large,
-      userId,
+      adminId,
       categoryId,
     });
 
@@ -81,7 +81,7 @@ async function updateNew(req, res) {
     }
 
     // Hak akses (jika diperlukan)
-    if (req.role !== "admin" && newItem.userId !== req.userId) {
+    if (req.role !== "admin" && newItem.adminId !== req.adminId) {
       return res.status(403).json({ message: "Forbidden: You cannot update this news" });
     }
 

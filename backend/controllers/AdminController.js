@@ -56,7 +56,7 @@ async function loginAdmin(req, res) {
 // Logout Admin
 async function logoutAdmin(req, res) {
   try {
-    const adminId = req.userId;
+    const adminId = req.adminId;
 
     // Hapus token refresh dari database jika digunakan
     await Admin.update({ refresh_token: null }, { where: { id: adminId } });
@@ -69,7 +69,7 @@ async function logoutAdmin(req, res) {
 
 async function updateAdmin(req, res) {
   try {
-    const adminId = req.userId;  // dari verifyToken middleware
+    const adminId = req.adminId;  // dari verifyToken middleware
     const { username, email, password } = req.body;
 
     const admin = await Admin.findByPk(adminId);
