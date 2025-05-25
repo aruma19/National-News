@@ -16,10 +16,6 @@ const Admin = db.define("admin", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  profileAdmin: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
 }, {
   
   freezeTableName: true
