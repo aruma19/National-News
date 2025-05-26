@@ -24,7 +24,7 @@ const LikedNews = () => {
         return;
       }
 
-      fetchLikedNews(token);
+      fetchLikedNews(token, decoded.id);
     } catch (error) {
       localStorage.removeItem("accessToken");
       window.location.href = "/";
@@ -32,38 +32,35 @@ const LikedNews = () => {
   }, []);
 
   const fetchLikedNews = async (token, id) => {
-  try {
-    const response = await axios.get(`${BASE_URL}/news/liked/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    setLikedNews(response.data);
-  } catch (error) {
-    Swal.fire({
-      icon: "error",
-      title: "Gagal mengambil berita yang disukai",
-      text: error.response?.data?.message || "Terjadi kesalahan",
-    });
-  } finally {
-    setLoading(false);
-  }
-};
+    try {
+      const response = await axios.get(`${BASE_URL}/news/liked/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setLikedNews(response.data);
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Gagal mengambil berita yang disukai",
+        text: error.response?.data?.message || "Terjadi kesalahan",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  // Fungsi untuk unlike berita
   const handleUnlike = async (newsId) => {
     const token = localStorage.getItem("accessToken");
     if (!token) return;
 
     try {
-      // Panggil API untuk unlike berita
       await axios.delete(`${BASE_URL}/news/liked/${newsId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
-      // Update state: hapus berita yang sudah di unlike dari list
       setLikedNews((prev) => prev.filter((news) => news.id !== newsId));
 
       Swal.fire({
@@ -83,13 +80,29 @@ const LikedNews = () => {
   };
 
   return (
-    <div className="container mt-6">
-      <h2 className="title is-3 has-text-centered mb-6">Berita yang Kamu Suka ❤️</h2>
+    <div className="container mt-6 px-4" style={{
+      maxWidth: "1180px",
+      width: "calc(100vw - 250px)",
+      marginLeft: "230px",
+      boxSizing: "border-box",
+    }}>
+      <h2
+      className="title is-3 has-text-centered mb-6"
+      style={{
+      color: "#1e40af",
+      fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+      fontWeight: 700,
+      letterSpacing: "0.03em",
+      lineHeight: 1.2,
+  }}
+>
+  History Like
+</h2>
 
       {loading ? (
-        <p className="has-text-centered">Memuat berita...</p>
+        <p className="has-text-centered has-text-grey">Memuat berita...</p>
       ) : likedNews.length === 0 ? (
-        <p className="has-text-centered has-text-grey">
+        <p className="has-text-centered has-text-grey-light">
           Kamu belum menyukai berita apapun.
         </p>
       ) : (
@@ -98,46 +111,56 @@ const LikedNews = () => {
             <div
               key={news.id}
               className="column is-half-tablet is-one-third-desktop"
-              style={{ display: "flex", flexDirection: "column" }}
             >
               <div
                 className="card"
                 style={{
-                  boxShadow: "0 2px 8px rgba(0,0,0,0.12)",
-                  borderRadius: 8,
+                  borderRadius: "12px",
+                  boxShadow: "0 4px 20px rgba(30, 64, 175, 0.15)",
                   overflow: "hidden",
                   display: "flex",
                   flexDirection: "column",
                   height: "100%",
-                  transition: "transform 0.2s",
-                  position: "relative",
+                  transition: "all 0.3s ease-in-out",
                 }}
-                onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.03)")}
-                onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.transform = "scale(1.02)")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.transform = "scale(1)")
+                }
               >
                 {news.image_small && (
                   <figure className="image is-16by9">
                     <img
                       src={news.image_small}
                       alt={news.title}
-                      style={{ objectFit: "cover", height: "200px", width: "100%" }}
+                      style={{ objectFit: "cover", width: "100%" }}
                     />
                   </figure>
                 )}
-                <div className="card-content" style={{ flexGrow: 1 }}>
-                  <p
-                    className="title is-5 has-text-weight-semibold mb-2"
-                    style={{ lineHeight: 1.2 }}
-                  >
+                <div
+                  className="card-content"
+                  style={{ flexGrow: 1, backgroundColor: "#ffffff" }}
+                >
+                  <p className="title is-5 has-text-weight-semibold"
+                    style={{
+                    color: "#1e40af",
+                    fontSize: "1.15rem",
+                    marginBottom: "0.8rem",
+                    fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+                    textAlign: "justify",
+                  }}
+                >
                     {news.title}
                   </p>
                   <p
-                    className="subtitle is-6 has-text-primary is-italic"
-                    style={{ marginBottom: "0.3rem" }}
+                    className="subtitle is-6 is-italic mb-1"
+                    style={{ color: "#111827", fontWeight: 600 }}
                   >
                     {news.category?.category || "Umum"}
                   </p>
-                  <p className="is-size-7 has-text-grey mb-3">
+                  <p className="is-size-7 has-text-grey mb-2">
                     {new Date(news.iso_date).toLocaleDateString("id-ID", {
                       day: "numeric",
                       month: "long",
@@ -157,29 +180,32 @@ const LikedNews = () => {
                       WebkitBoxOrient: "vertical",
                     }}
                   >
-                    {news.content?.substring(0, 120).replace(/<\/?[^>]+(>|$)/g, "")}...
+                    {news.content
+                      ?.substring(0, 120)
+                      .replace(/<\/?[^>]+(>|$)/g, "")}
+                    ...
                   </p>
                 </div>
-
-                {/* Tombol Unlike di pojok kanan bawah */}
                 <button
                   onClick={() => handleUnlike(news.id)}
                   style={{
-                    backgroundColor: "#d6336c",
-                    color: "#fff",
+                    backgroundColor: "#1e40af",
+                    color: "#ffffff",
                     border: "none",
-                    padding: "0.5rem 1rem",
-                    fontWeight: "600",
+                    padding: "0.6rem 1rem",
+                    fontWeight: 600,
                     cursor: "pointer",
-                    borderRadius: 0,
-                    borderTop: "1px solid #b02a56",
-                    transition: "background-color 0.3s",
+                    borderTop: "1px solid #1e3a8a",
+                    transition: "background-color 0.3s ease",
                   }}
-                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#b02a56")}
-                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#d6336c")}
-                  type="button"
+                  onMouseEnter={(e) =>
+                    (e.currentTarget.style.backgroundColor = "#1e3a8a")
+                  }
+                  onMouseLeave={(e) =>
+                    (e.currentTarget.style.backgroundColor = "#1e40af")
+                  }
                 >
-                  ❤️ Unlike
+                  💔 Hapus dari Favorit
                 </button>
               </div>
             </div>

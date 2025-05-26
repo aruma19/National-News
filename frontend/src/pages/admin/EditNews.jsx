@@ -74,58 +74,189 @@ const EditNews = () => {
   };
 
   return (
-    <div className="container mt-5">
-      <h2 className="title is-3">Edit Berita</h2>
-      <form onSubmit={handleSubmit}>
-        {[
-          { label: "Judul", name: "title" },
-          { label: "Author", name: "author" },
-          { label: "URL", name: "url" },
-          { label: "Deskripsi", name: "description" },
-          { label: "Tanggal (ISO)", name: "iso_date" },
-          { label: "Gambar Kecil (URL)", name: "image_small" },
-          { label: "Gambar Besar (URL)", name: "image_large" },
-        ].map(({ label, name }) => (
-          <div className="field" key={name}>
-            <label className="label">{label}</label>
-            <div className="control">
-              <input
-                className="input"
-                type="text"
-                name={name}
-                value={news[name]}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-        ))}
+  <div
+    style={{
+      maxWidth: "800px",
+      width: "calc(100vw - 360px)",
+      marginLeft: "400px",
+      marginRight: "250px",
+      marginTop: 40,
+      padding: 20,
+      background: "linear-gradient(145deg, #f0f4ff, #d9e2ff)",
+      borderRadius: 16,
+      boxShadow: "0 10px 30px rgba(24, 43, 99, 0.2)",
+      fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+      color: "#0a1a3a",
+      boxSizing: "border-box",
+    }}
+  >
+    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+      <button
+        onClick={() => navigate("/dashboardAdmin")}
+        style={{
+          backgroundColor: "#ffffff",
+          color: "#1a2a6c",
+          fontWeight: 600,
+          border: "2px solid #3861ff",
+          padding: "8px 18px",
+          borderRadius: 10,
+          fontSize: "0.9rem",
+          cursor: "pointer",
+          boxShadow: "0 4px 12px rgba(56, 97, 255, 0.2)",
+          transition: "transform 0.2s ease, box-shadow 0.2s ease",
+        }}
+      >
+        ← Kembali
+      </button>
 
-        <div className="field">
-          <label className="label">Kategori</label>
-          <div className="control">
-            <div className="select is-fullwidth">
-              <select name="categoryId" value={news.categoryId} onChange={handleChange}>
-                <option value="">Pilih Kategori</option>
-                {categories.map((cat) => (
-                  <option key={cat.id} value={cat.id}>
-                    {cat.category}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-        </div>
+      <h2
+        style={{
+          fontSize: "1.6rem",
+          fontWeight: 700,
+          color: "#1a2a6c",
+          textShadow: "1px 1px 3px rgba(26, 42, 108, 0.3)",
+          margin: 0,
+        }}
+      >
+        Edit Berita
+      </h2>
 
-        <div className="field mt-4">
-          <div className="control">
-            <button className="button is-primary" type="submit">
-              Simpan Perubahan
-            </button>
-          </div>
-        </div>
-      </form>
+      <div style={{ width: 100 }} /> {/* Spacer untuk menyamakan layout */}
     </div>
-  );
+
+    <form onSubmit={handleSubmit}>
+      {[
+        { label: "Judul", name: "title", type: "text" },
+        { label: "Author", name: "author", type: "text" },
+        { label: "URL", name: "url", type: "text" },
+        { label: "Deskripsi", name: "description", type: "text" },
+        { label: "Tanggal (ISO)", name: "iso_date", type: "date" },
+        { label: "Gambar Kecil (URL)", name: "image_small", type: "text" },
+        { label: "Gambar Besar (URL)", name: "image_large", type: "text" },
+      ].map(({ label, name, type }) => (
+        <div key={name} style={{ marginBottom: 14 }}>
+          <label
+            htmlFor={name}
+            style={{
+              display: "block",
+              fontWeight: 700,
+              marginBottom: 4,
+              color: "#1a2a6c",
+            }}
+          >
+            {label}
+          </label>
+          <input
+            id={name}
+            name={name}
+            type={type}
+            value={
+              name === "iso_date" && news[name]
+                ? news[name].substring(0, 10)
+                : news[name] || ""
+            }
+            onChange={handleChange}
+            style={{
+              width: "100%",
+              padding: "8px 12px",
+              borderRadius: 8,
+              border: "2px solid #1a2a6c",
+              fontSize: "0.95rem",
+              backgroundColor: "white",
+              outline: "none",
+              transition: "0.3s",
+            }}
+            onFocus={(e) => {
+              e.target.style.borderColor = "#3861ff";
+              e.target.style.boxShadow = "0 0 6px rgba(56, 97, 255, 0.3)";
+            }}
+            onBlur={(e) => {
+              e.target.style.borderColor = "#1a2a6c";
+              e.target.style.boxShadow = "none";
+            }}
+          />
+        </div>
+      ))}
+
+      <div style={{ marginBottom: 16 }}>
+        <label
+          htmlFor="categoryId"
+          style={{
+            display: "block",
+            fontWeight: 700,
+            marginBottom: 4,
+            color: "#1a2a6c",
+          }}
+        >
+          Kategori
+        </label>
+        <select
+          id="categoryId"
+          name="categoryId"
+          value={news.categoryId}
+          onChange={handleChange}
+          style={{
+            width: "100%",
+            padding: "10px 14px",
+            borderRadius: 8,
+            border: "2px solid #1a2a6c",
+            fontSize: "0.95rem",
+            backgroundColor: "white",
+            cursor: "pointer",
+            transition: "0.3s",
+          }}
+          onFocus={(e) => {
+            e.target.style.borderColor = "#3861ff";
+            e.target.style.boxShadow = "0 0 6px rgba(56, 97, 255, 0.3)";
+          }}
+          onBlur={(e) => {
+            e.target.style.borderColor = "#1a2a6c";
+            e.target.style.boxShadow = "none";
+          }}
+        >
+          <option value="" disabled>
+            Pilih Kategori
+          </option>
+          {categories.map((cat) => (
+            <option key={cat.id} value={cat.id}>
+              {cat.category}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div style={{ textAlign: "center", marginTop: 24 }}>
+        <button
+          type="submit"
+          style={{
+            background: "linear-gradient(135deg, #3861ff, #1a2a6c)",
+            color: "white",
+            fontWeight: 700,
+            border: "none",
+            borderRadius: 10,
+            padding: "12px 30px",
+            fontSize: "1rem",
+            cursor: "pointer",
+            boxShadow: "0 6px 18px rgba(56, 97, 255, 0.6)",
+            transition: "all 0.3s ease",
+          }}
+          onMouseEnter={(e) => {
+            e.target.style.background =
+              "linear-gradient(135deg, #1a2a6c, #3861ff)";
+            e.target.style.boxShadow = "0 8px 24px rgba(26, 42, 108, 0.6)";
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.background =
+              "linear-gradient(135deg, #3861ff, #1a2a6c)";
+            e.target.style.boxShadow = "0 6px 18px rgba(56, 97, 255, 0.6)";
+          }}
+        >
+          Simpan Perubahan
+        </button>
+      </div>
+    </form>
+  </div>
+);
 };
 
 export default EditNews;

@@ -5,6 +5,115 @@ import { BASE_URL } from "../../utils";
 import Swal from "sweetalert2";
 import jwtDecode from "jwt-decode";
 
+const styles = {
+  container: {
+    fontFamily: "Inter, sans-serif",
+    backgroundColor: "#f5f8fc",
+    padding: "2rem",
+    minHeight: "100vh",
+    color: "#0a1f44",
+  },
+  box: {
+    background: "linear-gradient(to bottom right, #ffffff, #f7fbff)",
+    borderRadius: "16px",
+    padding: "28px",
+    boxShadow: "0 12px 30px rgba(13, 30, 74, 0.12)",
+    maxWidth: "900px",
+    margin: "0 auto",
+  },
+  title: {
+    fontWeight: 700,
+    fontSize: "2rem",
+    color: "#0b1a40",
+    textShadow: "0 1px 3px rgba(11, 26, 64, 0.15)",
+    letterSpacing: "0.02em",
+    textAlign: "center",
+    marginBottom: "1.5rem",
+  },
+  imageWrapper: {
+    borderRadius: "12px",
+    overflow: "hidden",
+    boxShadow: "0 6px 18px rgba(11, 26, 64, 0.1)",
+    marginBottom: "1.5rem",
+  },
+  image: {
+    width: "100%",
+    height: "auto",
+    display: "block",
+    borderRadius: "12px",
+  },
+  meta: {
+    fontSize: "0.95rem",
+    color: "#42548b",
+    fontWeight: 500,
+    marginBottom: "0.75rem",
+  },
+  strong: {
+    color: "#1b2c60",
+  },
+  contentSection: {
+    backgroundColor: "#f9fbff",
+    padding: "1.8rem 2rem",
+    borderRadius: "14px",
+    boxShadow: "0 4px 14px rgba(11, 26, 64, 0.07)",
+    marginBottom: "2.3rem",
+    color: "#273861",
+    fontSize: "1.05rem",
+    textAlign: "justify",
+  },
+  contentTitle: {
+    fontSize: "1.25rem",
+    fontWeight: 600,
+    marginBottom: "0.75rem",
+    color: "#1a2a6c",
+  },
+  commentBox: {
+    marginTop: "2rem",
+  },
+  textarea: {
+    width: "100%",
+    padding: "0.75rem",
+    borderRadius: "8px",
+    border: "1px solid #cbd5e0",
+    fontSize: "1rem",
+    marginBottom: "0.75rem",
+    resize: "vertical",
+  },
+  buttonPrimary: {
+    backgroundColor: "#3861ff",
+    color: "#fff",
+    padding: "0.5rem 1rem",
+    borderRadius: "6px",
+    fontWeight: "600",
+    border: "none",
+    cursor: "pointer",
+    marginBottom: "1.25rem",
+  },
+  commentCard: {
+    backgroundColor: "#ffffff",
+    borderRadius: "12px",
+    boxShadow: "0 2px 10px rgba(11, 26, 64, 0.06)",
+    padding: "1rem",
+    marginBottom: "1rem",
+  },
+  buttonSmall: {
+    fontSize: "0.85rem",
+    marginRight: "0.5rem",
+    padding: "0.35rem 0.75rem",
+    borderRadius: "6px",
+    border: "none",
+    cursor: "pointer",
+  },
+  buttonWarning: {
+    backgroundColor: "#f6ad55",
+    color: "#fff",
+  },
+  buttonDanger: {
+    backgroundColor: "#e53e3e",
+    color: "#fff",
+  },
+};
+
 const DetailAdmin = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -170,85 +279,101 @@ const DetailAdmin = () => {
   });
 
   return (
-    <div className="container mt-5 mb-6">
-      <div className="box">
-        <h1 className="title is-3 has-text-centered">{news.title}</h1>
+    <div style={styles.container}>
+      <div style={styles.box}>
+        {/* Tombol Back */}
+      <button
+        style={{ 
+          backgroundColor: "#ffffff",
+          color: "#1a2a6c",
+          fontWeight: 600,
+          border: "2px solid #3861ff",
+          padding: "10px 22px",
+          borderRadius: 10,
+          fontSize: "0.95rem",
+          cursor: "pointer",
+          marginBottom: 24,
+          boxShadow: "0 4px 12px rgba(56, 97, 255, 0.2)",
+          transition: "transform 0.2s ease, box-shadow 0.2s ease",
+        }}
+        onClick={() => navigate("/dashboardAdmin")}
+      >
+        ← Kembali ke Dashboard
+      </button>
+        <h1 style={styles.title}>{news.title}</h1>
 
         {news.image_large && (
-          <figure className="image is-3by1 mb-4" style={{ borderRadius: "12px", overflow: "hidden" }}>
+          <div style={styles.imageWrapper}>
             <img
               src={news.image_large.startsWith("http") ? news.image_large : `${BASE_URL}${news.image_large}`}
               alt={news.title}
-              style={{ objectFit: "cover", width: "100%" }}
+              style={styles.image}
             />
-          </figure>
+          </div>
         )}
 
-        <p className="has-text-grey is-size-6 mb-1">
-          Ditulis oleh <strong>{news.author || "Admin"}</strong> | Kategori: <strong>{news.category?.category || "Umum"}</strong>
+        <p style={styles.meta}>
+          Ditulis oleh <strong style={styles.strong}>{news.author || "Admin"}</strong> | Kategori:{" "}
+          <strong style={styles.strong}>{news.category?.category || "Umum"}</strong>
         </p>
-        <p className="has-text-grey is-size-7 mb-3">Tanggal: {formattedDate}</p>
+        <p style={styles.meta}>Tanggal: {formattedDate}</p>
 
         {news.url && (
-          <p><strong>URL:</strong> <a href={news.url} target="_blank" rel="noopener noreferrer">{news.url}</a></p>
+          <p style={styles.meta}>
+            <strong style={styles.strong}>URL:</strong>{" "}
+            <a href={news.url} target="_blank" rel="noopener noreferrer">{news.url}</a>
+          </p>
         )}
 
-        <div className="content mb-4">
-          <p><strong>Deskripsi:</strong> {news.description}</p>
+        <div style={styles.contentSection}>
+          <h2 style={styles.contentTitle}>Deskripsi</h2>
+          <p>{news.description}</p>
         </div>
 
         {news.content && (
-          <div className="content mt-5">
-            <h2 className="title is-5">Konten Lengkap</h2>
+          <div style={styles.contentSection}>
+            <h2 style={styles.contentTitle}>Konten Lengkap</h2>
             <p>{news.content}</p>
           </div>
         )}
 
         {/* Komentar Section */}
-        <div className="mt-5">
-          <h3 className="title is-5">Komentar</h3>
+        <div style={styles.commentBox}>
+          <h3 style={styles.contentTitle}>Komentar</h3>
           <textarea
-            className="textarea mb-2"
+            style={styles.textarea}
             placeholder="Tulis komentar..."
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
-          ></textarea>
-          <button className="button is-primary mb-4" onClick={handleAddComment}>Kirim</button>
+          />
+          <button style={styles.buttonPrimary} onClick={handleAddComment}>Kirim</button>
 
           <div>
-            {comments.length === 0 && <p className="has-text-grey">Belum ada komentar.</p>}
+            {comments.length === 0 && <p style={styles.meta}>Belum ada komentar.</p>}
             {comments.map((comment) => (
-              <div key={comment.id} className="box">
+              <div key={comment.id} style={styles.commentCard}>
                 <p><strong>{comment.user?.username || comment.admin?.username || "Anonim"}</strong>:</p>
                 <p>{comment.content}</p>
-
-                {/* Tombol edit/hapus hanya untuk komentar user yg login */}
-                <div className="buttons mt-2">
-                  {/* Tombol edit hanya untuk komentar sendiri */}
+                <div style={{ marginTop: "0.5rem" }}>
                   {((comment.userId && comment.userId === userId && role === "user") ||
                     (comment.adminId && comment.adminId === adminId && role === "admin")) && (
-                      <button
-                        className="button is-small is-warning"
-                        onClick={() => handleEditComment(comment.id, comment.content)}
-                      >
-                        Edit
-                      </button>
-                    )}
-
-                  {/* Tombol hapus:
-                  - Jika admin login: bisa hapus semua komentar
-                  - Jika user login: hanya hapus komentar sendiri */}
+                    <button
+                      style={{ ...styles.buttonSmall, ...styles.buttonWarning }}
+                      onClick={() => handleEditComment(comment.id, comment.content)}
+                    >
+                      Edit
+                    </button>
+                  )}
                   {(role === "admin" ||
                     (comment.userId && comment.userId === userId && role === "user")) && (
-                      <button
-                        className="button is-small is-danger"
-                        onClick={() => handleDeleteComment(comment.id)}
-                      >
-                        Hapus
-                      </button>
-                    )}
+                    <button
+                      style={{ ...styles.buttonSmall, ...styles.buttonDanger }}
+                      onClick={() => handleDeleteComment(comment.id)}
+                    >
+                      Hapus
+                    </button>
+                  )}
                 </div>
-
               </div>
             ))}
           </div>
