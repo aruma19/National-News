@@ -23,13 +23,10 @@ import "./models/associations.js";
 dotenv.config();
 
 const app = express();
-app.set("view engine", "ejs");
 
 app.use(cookieParser());
 app.use(cors({ credentials: true, origin: "https://national-news-dot-f-08-450706.uc.r.appspot.com" }));
 app.use(express.json());
-
-app.get("/", (req, res) => res.render("index"));
 
 app.use(UserRoute);
 app.use(NewRoute);
