@@ -37,7 +37,6 @@ const Dashboard = () => {
 
       fetchNews(token);
       fetchCategories(token);
-      fetchNewsDetail();
 
       return () => clearTimeout(logoutTimer);
     } catch (err) {
@@ -49,7 +48,7 @@ const Dashboard = () => {
   const fetchNews = async (token) => {
     setLoading(true);
     try {
-      const response = await axios.get(`${BASE_URL}/news/${id}`, {
+      const response = await axios.get(`${BASE_URL}/news`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setNewsList(response.data);
@@ -63,20 +62,6 @@ const Dashboard = () => {
       });
     }
     setLoading(false);
-  };
-
-  const fetchNewsDetail = async () => {
-    try {
-      const res = await axios.get(`${BASE_URL}/news/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setNews(res.data);
-      setLikeCount(res.data.likeCount || 0); // default ke 0 jika null
-    } catch (error) {
-      Swal.fire("Error", "Gagal mengambil data berita", "error");
-    } finally {
-      setLoading(false);
-    }
   };
 
   const fetchCategories = async (token) => {
