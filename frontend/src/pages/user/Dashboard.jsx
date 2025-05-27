@@ -64,6 +64,7 @@ const Dashboard = () => {
     setLoading(false);
   };
 
+  fetchNewsDetail();
   const fetchNewsDetail = async () => {
     try {
       const res = await axios.get(`${BASE_URL}/news/${id}`, {
