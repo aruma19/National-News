@@ -67,36 +67,36 @@ async function logoutAdmin(req, res) {
   }
 }
 
-async function updateAdmin(req, res) {
-  try {
-    const adminId = req.adminId;  // dari verifyToken middleware
-    const { username, email, password } = req.body;
+// async function updateAdmin(req, res) {
+//   try {
+//     const adminId = req.adminId;  // dari verifyToken middleware
+//     const { username, email, password } = req.body;
 
-    const admin = await Admin.findByPk(adminId);
-    if (!admin) return res.status(404).json({ message: "Admin tidak ditemukan" });
+//     const admin = await Admin.findByPk(adminId);
+//     if (!admin) return res.status(404).json({ message: "Admin tidak ditemukan" });
 
-    // Jika mau update password, hash dulu
-    let hashedPassword = admin.password;
-    if (password) {
-      hashedPassword = await bcrypt.hash(password, 10);
-    }
+//     // Jika mau update password, hash dulu
+//     let hashedPassword = admin.password;
+//     if (password) {
+//       hashedPassword = await bcrypt.hash(password, 10);
+//     }
 
-    let profileAdmin = admin.profileAdmin;
-    if (req.file) {
-       profileAdmin = req.file ? `/uploads/profile/admin/${req.file.filename}` : user.profileAdmin;
-    }
+//     let profileAdmin = admin.profileAdmin;
+//     if (req.file) {
+//        profileAdmin = req.file ? `/uploads/profile/admin/${req.file.filename}` : user.profileAdmin;
+//     }
 
-    await admin.update({
-      username: username || admin.username,
-      email: email || admin.email,
-      password: hashedPassword,
-      profileAdmin,
-    });
+//     await admin.update({
+//       username: username || admin.username,
+//       email: email || admin.email,
+//       password: hashedPassword,
+//       profileAdmin,
+//     });
 
-    res.json({ message: "Data admin berhasil diperbarui" });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
+//     res.json({ message: "Data admin berhasil diperbarui" });
+//   } catch (error) {
+//     res.status(500).json({ message: error.message });
+//   }
+// };
 
-export {registerAdmin,loginAdmin, logoutAdmin, updateAdmin};
+export {registerAdmin,loginAdmin, logoutAdmin};

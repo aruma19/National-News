@@ -166,4 +166,4 @@ async function getMe(req, res) {
 }
 
 
-export {registerUser,loginHandler, logout, updateUser, registerAdmin, getMe};
+export {registerUser,loginHandler, logout,  registerAdmin, getMe};
