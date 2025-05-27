@@ -37,6 +37,7 @@ const Dashboard = () => {
 
       fetchNews(token);
       fetchCategories(token);
+      fetchNewsDetail();
 
       return () => clearTimeout(logoutTimer);
     } catch (err) {
@@ -64,7 +65,6 @@ const Dashboard = () => {
     setLoading(false);
   };
 
-  fetchNewsDetail();
   const fetchNewsDetail = async () => {
     try {
       const res = await axios.get(`${BASE_URL}/news/${id}`, {
