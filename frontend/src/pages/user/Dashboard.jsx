@@ -49,7 +49,7 @@ const Dashboard = () => {
   const fetchNews = async (token) => {
     setLoading(true);
     try {
-      const response = await axios.get(`${BASE_URL}/news`, {
+      const response = await axios.get(`${BASE_URL}/news/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setNewsList(response.data);
