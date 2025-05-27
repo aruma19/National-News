@@ -39,14 +39,18 @@ app.use(CategoryRoute);
 app.use(CommentRoute);
 app.use(AdminRoute);
 
+const port = process.env.PORT || 5003;
+
 //app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
 (async () => {
   try {
-    await db.sync(); 
+    await db.sync();
     console.log("Database synced!");
-    
-    app.listen(5003, () => console.log("Server connected on port 5003"));
+
+    app.listen(port, () => {
+      console.log(`Server running on port ${port}`);
+    });
   } catch (error) {
     console.error("DB Sync Error:", error);
   }
