@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { BASE_URL } from "../../utils";
 import Swal from "sweetalert2";
 import jwtDecode from "jwt-decode";
@@ -8,7 +8,6 @@ import jwtDecode from "jwt-decode";
 const Detail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const location = useLocation();
   const token = localStorage.getItem("accessToken");
 
   const [news, setNews] = useState(null);
@@ -53,7 +52,7 @@ const Detail = () => {
       localStorage.removeItem("accessToken");
       navigate("/");
     }
-  }, [id, location.key, navigate, token]);
+  }, [id, navigate, token]);
 
   const fetchNewsDetail = async () => {
     try {

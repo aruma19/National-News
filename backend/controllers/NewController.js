@@ -14,7 +14,7 @@ async function getNews(req, res) {
     res.status(500).json({ message: error.message });
   }
 }
-
+ 
 // Get news by ID including category
 async function getNewById(req, res) {
   try {
