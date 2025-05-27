@@ -15,10 +15,10 @@ POST http://localhost:5003/register
 Content-Type: application/json
 
 {
-    "username": "inces",
-    "email": "inces@gmail.com",
+    "username": "mantap",
+    "email": "mantap@gmail.com",
     "gender": "Female",
-    "password": "inces123"
+    "password": "mantap123"
 }
 
 ###
@@ -67,7 +67,6 @@ Content-Type: application/json
     "email": "inces@gmail.com",
     "gender": "Female",
     "password": "inces",
-    "profileUser": "meong.jpg"
 }
 
 ###
@@ -139,6 +138,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hb
 ###
 GET http://localhost:5003/news
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJmYXJza3V5IiwiZW1haWwiOiJmYXJza3V5QGdtYWlsLmNvbSIsImdlbmRlciI6Ik1hbGUiLCJjcmVhdGVkQXQiOiIyMDI1LTA1LTIxVDE0OjU2OjE3LjAwMFoiLCJ1cGRhdGVkQXQiOiIyMDI1LTA1LTI3VDA5OjQ2OjA2LjAwMFoiLCJyb2xlIjoidXNlciIsImlhdCI6MTc0ODMzOTQ2OCwiZXhwIjoxNzQ4MzQxMjY4fQ.psSxB-AkrVhW_dGyhRrPAGcT5PFPySDF0MTWYXcJ0A0
+    
+//Melihat Detail berita
+###
+GET http://localhost:5003/news/5
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJmYXJza3V5IiwiZW1haWwiOiJmYXJza3V5QGdtYWlsLmNvbSIsImdlbmRlciI6Ik1hbGUiLCJjcmVhdGVkQXQiOiIyMDI1LTA1LTIxVDE0OjU2OjE3LjAwMFoiLCJ1cGRhdGVkQXQiOiIyMDI1LTA1LTI3VDEwOjQxOjAxLjAwMFoiLCJyb2xlIjoidXNlciIsImlhdCI6MTc0ODM0Mjc5NSwiZXhwIjoxNzQ4MzQ0NTk1fQ.Noss2BwRiIoc3DTT9C9ZiNa1Tbq3Rct0foWgb1JoVLo
+
 
 ///Fitur Admin
 ###
