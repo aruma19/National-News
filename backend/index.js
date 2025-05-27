@@ -29,7 +29,7 @@ app.use(cookieParser());
 app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 app.use(express.json());
 
-app.get("/", (req, res) => res.render("associations"));
+app.get("/", (req, res) => res.render("index"));
 
 app.use(UserRoute);
 app.use(NewRoute);
