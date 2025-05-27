@@ -11,7 +11,6 @@ import dotenv from "dotenv";
 import db from "./config/Database.js";
 import path from "path";
 
-
 // Import models dan asosiasi agar relasi aktif
 import "./models/UserModel.js";
 import "./models/LikeModel.js";
@@ -39,7 +38,7 @@ app.use(CategoryRoute);
 app.use(CommentRoute);
 app.use(AdminRoute);
 
-const port = process.env.PORT || 5003;
+const port = process.env.PORT;
 
 //app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
