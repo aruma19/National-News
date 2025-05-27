@@ -105,7 +105,7 @@ const Dashboard = () => {
     <div
       style={{
         minHeight: "400vh",
-        backgroundColor: "#f4f6fb",
+        backgroundColor: "#f4f6fb", // Warna latar yang lembut modern
         padding: "1.5rem 1rem",
         display: "flex",
         flexDirection: "column",
@@ -124,7 +124,7 @@ const Dashboard = () => {
           backgroundColor: "#fff",
           borderRadius: "12px",
           padding: "1.5rem 3rem 1.5rem 2rem",
-          boxShadow: "0 10px 25px rgba(30, 64, 175, 0.1)",
+          boxShadow: "0 10px 25px rgba(30, 64, 175, 0.1)", // Shadow biru lembut untuk kesan modern
           boxSizing: "border-box",
           paddingRight: "4rem",
         }}
@@ -132,7 +132,7 @@ const Dashboard = () => {
         <h2
           style={{
             fontWeight: "700",
-            color: "#1e40af",
+            color: "#1e40af", // Biru tua, serasi dengan navbar modern
             marginBottom: "1.5rem",
             fontSize: "1.75rem",
             textAlign: "center",
@@ -142,7 +142,11 @@ const Dashboard = () => {
           📰 Berita Terbaru
         </h2>
 
-        <div className="columns is-variable is-4 is-vcentered mb-6" style={{ marginBottom: "1.8rem" }}>
+        {/* Filter Bar */}
+        <div
+          className="columns is-variable is-4 is-vcentered mb-6"
+          style={{ marginBottom: "1.8rem" }}
+        >
           <div className="column is-8">
             <input
               className="input"
@@ -152,7 +156,7 @@ const Dashboard = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
               style={{
                 borderRadius: "25px",
-                border: "1.5px solid #a5b4fc",
+                border: "1.5px solid #a5b4fc", // warna biru muda untuk border
                 padding: "0.65rem 1.25rem",
                 fontSize: "1rem",
                 boxShadow: "0 3px 8px rgba(30, 64, 175, 0.1)",
@@ -164,14 +168,17 @@ const Dashboard = () => {
             />
           </div>
           <div className="column is-4">
-            <div className="select is-fullwidth" style={{
-              borderRadius: "25px",
-              overflow: "visible",
-              boxShadow: "0 4px 12px rgba(30, 64, 175, 0.15)",
-              height: "50px",
-              backgroundColor: "#e0e7ff",
-              padding: "0 0.5rem",
-            }}>
+            <div
+              className="select is-fullwidth"
+              style={{
+                borderRadius: "25px",
+                overflow: "visibke",
+                boxShadow: "0 4px 12px rgba(30, 64, 175, 0.15)",
+                height: "50px",
+                backgroundColor: "#e0e7ff",
+                padding: "0 0.5rem",
+              }}
+            >
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
@@ -186,8 +193,8 @@ const Dashboard = () => {
                   fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
                   color: "#1e40af",
                   fontWeight: "600",
-                  height: "50px",
-                  lineHeight: "1.5",
+                  height: "50px",         // sesuaikan tinggi select agar teks terlihat penuh
+                  lineHeight: "1.5",      // untuk memastikan teks tidak terpotong vertikal
                   whiteSpace: "normal",
                   width: "100%",
                   appearance: "none",
@@ -204,6 +211,7 @@ const Dashboard = () => {
           </div>
         </div>
 
+        {/* Loading or Empty State */}
         {loading && (
           <div className="has-text-centered mt-6">
             <button
@@ -232,6 +240,7 @@ const Dashboard = () => {
           </p>
         )}
 
+        {/* News Cards */}
         <div className="columns is-multiline" style={{ marginTop: "1.25rem" }}>
           {filteredNews.map((news) => (
             <div
@@ -288,7 +297,9 @@ const Dashboard = () => {
                     style={{
                       color: "#1e40af",
                       fontSize: "1.15rem",
+                      marginBottom: "0.8rem",
                       fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+                      textAlign: "justify",
                     }}
                   >
                     {news.title}
@@ -296,17 +307,23 @@ const Dashboard = () => {
                   <p
                     className="subtitle is-6"
                     style={{
-                      color: "#475569",
-                      marginBottom: "0.5rem",
-                      fontSize: "0.95rem",
+                      color: "#4b5563",
+                      fontSize: "0.9rem",
+                      fontWeight: "600",
                       fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
                     }}
                   >
-                    {news.author || "Tidak diketahui"}
+                    {news.author || "Admin"} &nbsp;&bull;&nbsp;{" "}
+                    {news.category?.category || "Umum"}
                   </p>
                   <p
-                    className="has-text-grey"
-                    style={{ fontSize: "0.85rem" }}
+                    className="is-size-7"
+                    style={{
+                      color: "#6b7280",
+                      marginTop: "0.6rem",
+                      fontSize: "0.85rem",
+                      fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+                    }}
                   >
                     {new Date(news.iso_date).toLocaleDateString("id-ID", {
                       day: "numeric",
