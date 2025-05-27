@@ -64,6 +64,20 @@ const Dashboard = () => {
     setLoading(false);
   };
 
+  const fetchNewsDetail = async () => {
+    try {
+      const res = await axios.get(`${BASE_URL}/news/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setNews(res.data);
+      setLikeCount(res.data.likeCount || 0); // default ke 0 jika null
+    } catch (error) {
+      Swal.fire("Error", "Gagal mengambil data berita", "error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const fetchCategories = async (token) => {
     try {
       const response = await axios.get(`${BASE_URL}/categories`, {

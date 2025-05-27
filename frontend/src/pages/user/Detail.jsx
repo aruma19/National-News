@@ -438,27 +438,27 @@ const Detail = () => {
 
       <div className="container" role="main" aria-labelledby="news-title">
         <button
-          onClick={() => navigate("/dashboard")}
-          className="btn-back"
-          aria-label="Kembali ke Dashboard"
-        >
-          ← Kembali ke Dashboard
-        </button>
-        <h1 className="title" id="news-title">{news.title}</h1>
-        {news.image_large && (
-          <div className="image-container" aria-label={`Gambar berita: ${news.title}`}>
-            <img
-              src={news.image_large.startsWith("http")
-                ? news.image_large
-                : `${BASE_URL}${news.image_large}`
-              }
-              alt={news.title}
-              loading="lazy"
-              style={{ width: '100%', height: 'auto', maxHeight: 'auto', objectFit: 'contain' }}
-            />
-          </div>
+        onClick={() => navigate("/dashboard")}
+        className="btn-back"
+        aria-label="Kembali ke Dashboard"
+      >
+        ← Kembali ke Dashboard
+      </button>
+  <h1 className="title" id="news-title">{news.title}</h1>
+  {news.image_large && (
+    <div className="image-container" aria-label={`Gambar berita: ${news.title}`}>
+      <img 
+        src={news.image_large.startsWith("http")
+          ? news.image_large
+          : `${BASE_URL}${news.image_large}`
+        } 
+        alt={news.title} 
+        loading="lazy"
+        style={{ width: '100%', height: 'auto', maxHeight: 'auto', objectFit: 'contain' }}
+      />
+    </div>
         )}
-
+        
         <p className="meta-info">
           Ditulis oleh <strong>{news.author || "User"}</strong> | Kategori:{" "}
           <strong>{news.category?.category || "Umum"}</strong>
@@ -522,46 +522,46 @@ const Detail = () => {
           </button>
 
           <div className="comments-list" role="list" aria-live="polite" aria-relevant="additions removals">
-            {comments.length === 0 && <p>Belum ada komentar.</p>}
+  {comments.length === 0 && <p>Belum ada komentar.</p>}
             {comments.map((comment) => {
               if (!comment.user) return null;
-              console.log('userId:', userId, 'comment.user.id:', comment.user.id, 'comment:', comment);
+  console.log('userId:', userId, 'comment.user.id:', comment.user.id, 'comment:', comment);
 
-              return (
-                <article
-                  className="comment-item"
-                  key={comment.id}
-                  role="listitem"
-                  aria-label={`Komentar dari ${comment.user.username}`}
-                >
-                  <p className="comment-content">{comment.content}</p>
-                  <div className="comment-meta">
-                    <span className="comment-author">{comment.user.username}</span>
-                    <span className="comment-date">
-                      {formatCommentDate(comment.updatedAt)}
-                      {comment.updatedAt !== comment.createdAt && " (diedit)"}
-                    </span>
-                    {comment.userId === userId && (
-                      <span className="comment-actions">
-                        <button
-                          onClick={() => handleEditComment(comment.id, comment.content)}
-                          aria-label={`Edit komentar dari ${comment.user.username}`}
-                        >
-                          Edit
-                        </button>
-                        <button
-                          onClick={() => handleDeleteComment(comment.id)}
-                          aria-label={`Hapus komentar dari ${comment.user.username}`}
-                        >
-                          Hapus
-                        </button>
-                      </span>
-                    )}
-                  </div>
-                </article>
-              );
-            })}
-          </div>
+  return (
+    <article
+      className="comment-item"
+      key={comment.id}
+      role="listitem"
+      aria-label={`Komentar dari ${comment.user.username}`}
+    >
+      <p className="comment-content">{comment.content}</p>
+      <div className="comment-meta">
+        <span className="comment-author">{comment.user.username}</span>
+        <span className="comment-date">
+          {formatCommentDate(comment.updatedAt)}
+          {comment.updatedAt !== comment.createdAt && " (diedit)"}
+        </span>
+        {comment.userId === userId && (
+          <span className="comment-actions">
+            <button
+              onClick={() => handleEditComment(comment.id, comment.content)}
+              aria-label={`Edit komentar dari ${comment.user.username}`}
+            >
+              Edit
+            </button>
+            <button
+              onClick={() => handleDeleteComment(comment.id)}
+              aria-label={`Hapus komentar dari ${comment.user.username}`}
+            >
+              Hapus
+            </button>
+          </span>
+        )}
+      </div>
+    </article>
+  );
+})}
+</div>
         </section>
       </div>
     </>
