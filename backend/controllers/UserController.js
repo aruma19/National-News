@@ -109,42 +109,34 @@ async function logout(req, res) {
 }
 
 
-// async function updateUser(req, res) {
-//   try {
-//     const userId = req.userId;     // dari verifyToken middleware
-//     const role = req.role;         // role: "user" atau "admin"
-//     const { username, email, gender, password } = req.body;
+async function updateUser(req, res) {
+  try {
+    const userId = req.userId;     // dari verifyToken middleware
+    const role = req.role;         // role: "user" atau "admin"
+    const { username, email, gender, password } = req.body;
 
-//     let model = role === "admin" ? Admin : User;
-//     let user = await model.findByPk(userId);
-//     if (!user) return res.status(404).json({ message: `${role} tidak ditemukan` });
+    let model = role === "admin" ? Admin : User;
+    let user = await model.findByPk(userId);
+    if (!user) return res.status(404).json({ message: `${role} tidak ditemukan` });
 
-//     // Hash password jika ingin diubah
-//     let hashedPassword = user.password;
-//     if (password) {
-//       hashedPassword = await bcrypt.hash(password, 10);
-//     }
+    // Hash password jika ingin diubah
+    let hashedPassword = user.password;
+    if (password) {
+      hashedPassword = await bcrypt.hash(password, 10);
+    }
 
-//     // Handle foto profil
-//     let profileField = role === "admin" ? "profileAdmin" : "profileUser";
-//     let profilePath = user[profileField];
-//     if (req.file) {
-//       profilePath = `/uploads/profile/${role}/${req.file.filename}`;
-//     }
+    await user.update({
+      username: username || user.username,
+      email: email || user.email,
+      gender: gender || user.gender,
+      password: hashedPassword,
+    });
 
-//     await user.update({
-//       username: username || user.username,
-//       email: email || user.email,
-//       gender: gender || user.gender,
-//       password: hashedPassword,
-//       [profileField]: profilePath,
-//     });
-
-//     res.json({ message: `Data ${role} berhasil diperbarui` });
-//   } catch (error) {
-//     res.status(500).json({ message: error.message });
-//   }
-// }
+    res.json({ message: `Data ${role} berhasil diperbarui` });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
 
 // dalam UserController.js
 async function getMe(req, res) {
@@ -166,4 +158,4 @@ async function getMe(req, res) {
 }
 
 
-export {registerUser,loginHandler, logout,  registerAdmin, getMe};
+export {registerUser,loginHandler, logout,  registerAdmin, updateUser, getMe};
