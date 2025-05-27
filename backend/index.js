@@ -26,7 +26,7 @@ const app = express();
 app.set("view engine", "ejs");
 
 app.use(cookieParser());
-app.use(cors({ credentials: true, origin: "https://national-news-dot-f-08-450706.uc.r.appspot.com/" }));
+app.use(cors({ credentials: true, origin: "https://national-news-dot-f-08-450706.uc.r.appspot.com" }));
 app.use(express.json());
 
 app.get("/", (req, res) => res.render("index"));
