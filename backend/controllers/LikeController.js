@@ -41,6 +41,10 @@ export const getLikedNews = async (req, res) => {
       attributes: ["id", "title", "description", "url", "author", "image_small", "image_large", "iso_date"]
     });
 
+    if (likedNews.length === 0) {
+      return res.status(404).json({ message: "Tidak ditemukan like oleh user ini" });
+    }
+
     res.status(200).json(likedNews);
   } catch (error) {
     console.error(error); // tampilkan detail error di log
