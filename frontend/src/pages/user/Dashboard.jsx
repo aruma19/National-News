@@ -10,6 +10,17 @@ const Dashboard = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
@@ -104,37 +115,34 @@ const Dashboard = () => {
   return (
     <div
       style={{
-        minHeight: "400vh",
-        backgroundColor: "#f4f6fb", // Warna latar yang lembut modern
-        padding: "1.5rem 1rem",
+        minHeight: "100vh",
+        backgroundColor: "#f4f6fb",
+        padding: isMobile ? "80px 1rem 2rem 1rem" : "2rem 1rem 2rem 250px",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         width: "100%",
         boxSizing: "border-box",
-        maxWidth: "100%",
-        marginLeft: "100px",
-        overflowX: "auto",
+        transition: "padding 0.3s ease",
       }}
     >
       <div
         style={{
           width: "100%",
-          maxWidth: "900px",
+          maxWidth: isMobile ? "100%" : "900px",
           backgroundColor: "#fff",
-          borderRadius: "12px",
-          padding: "1.5rem 3rem 1.5rem 2rem",
-          boxShadow: "0 10px 25px rgba(30, 64, 175, 0.1)", // Shadow biru lembut untuk kesan modern
+          borderRadius: isMobile ? "8px" : "12px",
+          padding: isMobile ? "1rem" : "1.5rem 3rem 1.5rem 2rem",
+          boxShadow: "0 10px 25px rgba(30, 64, 175, 0.1)",
           boxSizing: "border-box",
-          paddingRight: "4rem",
         }}
       >
         <h2
           style={{
             fontWeight: "700",
-            color: "#1e40af", // Biru tua, serasi dengan navbar modern
+            color: "#1e40af",
             marginBottom: "1.5rem",
-            fontSize: "1.75rem",
+            fontSize: isMobile ? "1.5rem" : "1.75rem",
             textAlign: "center",
             fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
           }}
@@ -142,97 +150,101 @@ const Dashboard = () => {
           📰 Berita Terbaru
         </h2>
 
-        {/* Filter Bar */}
+        {/* Filter Bar - Responsive */}
         <div
-          className="columns is-variable is-4 is-vcentered mb-6"
-          style={{ marginBottom: "1.8rem" }}
+          style={{
+            display: "flex",
+            flexDirection: isMobile ? "column" : "row",
+            gap: isMobile ? "1rem" : "1.5rem",
+            marginBottom: "1.8rem",
+            alignItems: isMobile ? "stretch" : "center",
+          }}
         >
-          <div className="column is-8">
+          <div style={{ flex: isMobile ? "1" : "2" }}>
             <input
-              className="input"
               type="text"
-              placeholder="🔍 Cari Berita berdasarkan judul, deskripsi, tanggal "
+              placeholder="🔍 Cari Berita berdasarkan judul, deskripsi, tanggal"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               style={{
+                width: "100%",
                 borderRadius: "25px",
-                border: "1.5px solid #a5b4fc", // warna biru muda untuk border
-                padding: "0.65rem 1.25rem",
-                fontSize: "1rem",
+                border: "1.5px solid #a5b4fc",
+                padding: isMobile ? "0.8rem 1.25rem" : "0.65rem 1.25rem",
+                fontSize: isMobile ? "1rem" : "1rem",
                 boxShadow: "0 3px 8px rgba(30, 64, 175, 0.1)",
                 transition: "border-color 0.3s ease",
                 fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+                boxSizing: "border-box",
+                outline: "none",
               }}
               onFocus={(e) => (e.target.style.borderColor = "#1e40af")}
               onBlur={(e) => (e.target.style.borderColor = "#a5b4fc")}
             />
           </div>
-          <div className="column is-4">
-            <div
-              className="select is-fullwidth"
+          <div style={{ flex: isMobile ? "1" : "1" }}>
+            <select
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
               style={{
+                width: "100%",
                 borderRadius: "25px",
-                overflow: "visibke",
-                boxShadow: "0 4px 12px rgba(30, 64, 175, 0.15)",
-                height: "50px",
-                backgroundColor: "#e0e7ff",
-                padding: "0 0.5rem",
+                padding: isMobile ? "0.8rem 1.25rem" : "0.65rem 1.25rem",
+                fontSize: isMobile ? "1rem" : "1rem",
+                border: "1.5px solid #a5b4fc",
+                outline: "none",
+                cursor: "pointer",
+                backgroundColor: "white",
+                fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+                color: "#1e40af",
+                fontWeight: "600",
+                boxShadow: "0 3px 8px rgba(30, 64, 175, 0.1)",
+                boxSizing: "border-box",
+                appearance: "none",
+                backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
+                backgroundPosition: "right 0.5rem center",
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "1.5em 1.5em",
+                paddingRight: "2.5rem",
               }}
             >
-              <select
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                style={{
-                  borderRadius: "25px",
-                  padding: "0.65rem 1.65rem",
-                  fontSize: "1rem",
-                  border: "none",
-                  outline: "none",
-                  cursor: "pointer",
-                  backgroundColor: "white",
-                  fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-                  color: "#1e40af",
-                  fontWeight: "600",
-                  height: "50px",         // sesuaikan tinggi select agar teks terlihat penuh
-                  lineHeight: "1.5",      // untuk memastikan teks tidak terpotong vertikal
-                  whiteSpace: "normal",
-                  width: "100%",
-                  appearance: "none",
-                }}
-              >
-                <option value="All">Semua Kategori</option>
-                {categories.map((cat) => (
-                  <option key={cat.id} value={cat.category}>
-                    {cat.category}
-                  </option>
-                ))}
-              </select>
-            </div>
+              <option value="All">Semua Kategori</option>
+              {categories.map((cat) => (
+                <option key={cat.id} value={cat.category}>
+                  {cat.category}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
 
         {/* Loading or Empty State */}
         {loading && (
-          <div className="has-text-centered mt-6">
-            <button
-              className="button is-loading is-info"
+          <div style={{ textAlign: "center", marginTop: "2rem" }}>
+            <div
               style={{
+                display: "inline-block",
+                padding: "0.8rem 2rem",
+                backgroundColor: "#1e40af",
+                color: "white",
                 borderRadius: "25px",
-                padding: "0.6rem 2.5rem",
-                fontWeight: "700",
+                fontWeight: "600",
                 fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+                fontSize: isMobile ? "0.9rem" : "1rem",
               }}
             >
               Memuat data berita...
-            </button>
+            </div>
           </div>
         )}
         {!loading && filteredNews.length === 0 && (
           <p
-            className="has-text-centered has-text-grey-light is-italic"
             style={{
-              fontSize: "1.1rem",
-              marginTop: "3.5rem",
+              textAlign: "center",
+              color: "#6b7280",
+              fontStyle: "italic",
+              fontSize: isMobile ? "1rem" : "1.1rem",
+              marginTop: "3rem",
               fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
             }}
           >
@@ -240,102 +252,105 @@ const Dashboard = () => {
           </p>
         )}
 
-        {/* News Cards */}
-        <div className="columns is-multiline" style={{ marginTop: "1.25rem" }}>
+        {/* News Cards - Responsive Grid */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: isMobile 
+              ? "1fr" 
+              : "repeat(auto-fit, minmax(300px, 1fr))",
+            gap: isMobile ? "1rem" : "1.5rem",
+            marginTop: "1.5rem",
+          }}
+        >
           {filteredNews.map((news) => (
-            <div
+            <a
               key={news.id}
-              className="column is-12-mobile is-6-tablet is-4-desktop"
-              style={{ marginBottom: "1.25rem" }}
-            >
-              <a
-                href={`/detail/${news.id}`}
-                className="card"
-                style={{
-                  textDecoration: "none",
-                  color: "inherit",
-                  height: "100%",
-                  borderRadius: "12px",
-                  boxShadow: "0 8px 16px rgba(30, 64, 175, 0.1)",
-                  transition: "transform 0.3s ease, box-shadow 0.3s ease",
-                  display: "flex",
-                  flexDirection: "column",
-                  overflow: "hidden",
-                  cursor: "pointer",
-                  backgroundColor: "#ffffff",
-                }}
-                onMouseEnter={(e) => {
+              href={`/detail/${news.id}`}
+              style={{
+                textDecoration: "none",
+                color: "inherit",
+                borderRadius: "12px",
+                boxShadow: "0 8px 16px rgba(30, 64, 175, 0.1)",
+                transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                display: "flex",
+                flexDirection: "column",
+                overflow: "hidden",
+                cursor: "pointer",
+                backgroundColor: "#ffffff",
+              }}
+              onMouseEnter={(e) => {
+                if (!isMobile) {
                   e.currentTarget.style.transform = "translateY(-6px)";
-                  e.currentTarget.style.boxShadow =
-                    "0 16px 32px rgba(30, 64, 175, 0.15)";
-                }}
-                onMouseLeave={(e) => {
+                  e.currentTarget.style.boxShadow = "0 16px 32px rgba(30, 64, 175, 0.15)";
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!isMobile) {
                   e.currentTarget.style.transform = "translateY(0)";
                   e.currentTarget.style.boxShadow = "0 8px 16px rgba(30, 64, 175, 0.1)";
-                }}
-              >
-                {news.image_small && (
-                  <div className="card-image" style={{ flexShrink: 0 }}>
-                    <figure className="image is-4by3" style={{ marginBottom: 0 }}>
-                      <img
-                        src={news.image_small}
-                        alt={news.title}
-                        style={{
-                          objectFit: "cover",
-                          width: "100%",
-                          height: "150px",
-                          borderTopLeftRadius: "12px",
-                          borderTopRightRadius: "12px",
-                        }}
-                      />
-                    </figure>
-                  </div>
-                )}
-                <div className="card-content" style={{ flexGrow: 1, padding: "1rem" }}>
-                  <p
-                    className="title is-5 has-text-weight-semibold"
+                }
+              }}
+            >
+              {news.image_small && (
+                <div style={{ flexShrink: 0 }}>
+                  <img
+                    src={news.image_small}
+                    alt={news.title}
                     style={{
-                      color: "#1e40af",
-                      fontSize: "1.15rem",
-                      marginBottom: "0.8rem",
-                      fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-                      textAlign: "justify",
+                      objectFit: "cover",
+                      width: "100%",
+                      height: isMobile ? "180px" : "150px",
+                      borderTopLeftRadius: "12px",
+                      borderTopRightRadius: "12px",
                     }}
-                  >
-                    {news.title}
-                  </p>
-                  <p
-                    className="subtitle is-6"
-                    style={{
-                      color: "#4b5563",
-                      fontSize: "0.9rem",
-                      fontWeight: "600",
-                      fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-                    }}
-                  >
-                    {news.author || "Admin"} &nbsp;&bull;&nbsp;{" "}
-                    {news.category?.category || "Umum"}
-                  </p>
-                  <p
-                    className="is-size-7"
-                    style={{
-                      color: "#6b7280",
-                      marginTop: "0.6rem",
-                      fontSize: "0.85rem",
-                      fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-                    }}
-                  >
-                    {new Date(news.iso_date).toLocaleDateString("id-ID", {
-                      day: "numeric",
-                      month: "long",
-                      year: "numeric",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </p>
+                  />
                 </div>
-              </a>
-            </div>
+              )}
+              <div style={{ flexGrow: 1, padding: isMobile ? "1.2rem" : "1rem" }}>
+                <h3
+                  style={{
+                    color: "#1e40af",
+                    fontSize: isMobile ? "1.1rem" : "1.15rem",
+                    marginBottom: "0.8rem",
+                    fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+                    fontWeight: "600",
+                    lineHeight: "1.4",
+                    margin: "0 0 0.8rem 0",
+                  }}
+                >
+                  {news.title}
+                </h3>
+                <p
+                  style={{
+                    color: "#4b5563",
+                    fontSize: isMobile ? "0.85rem" : "0.9rem",
+                    fontWeight: "600",
+                    fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+                    marginBottom: "0.6rem",
+                  }}
+                >
+                  {news.author || "Admin"} &nbsp;&bull;&nbsp;{" "}
+                  {news.category?.category || "Umum"}
+                </p>
+                <p
+                  style={{
+                    color: "#6b7280",
+                    fontSize: isMobile ? "0.8rem" : "0.85rem",
+                    fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+                    margin: 0,
+                  }}
+                >
+                  {new Date(news.iso_date).toLocaleDateString("id-ID", {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </p>
+              </div>
+            </a>
           ))}
         </div>
       </div>
