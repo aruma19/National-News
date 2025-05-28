@@ -258,7 +258,7 @@ const Dashboard = () => {
             display: "grid",
             gridTemplateColumns: isMobile 
               ? "1fr" 
-              : "repeat(4, 1fr)",
+              : "repeat(3, 1fr)",
             gap: isMobile ? "1rem" : "1.5rem",
             marginTop: "1.5rem",
           }}

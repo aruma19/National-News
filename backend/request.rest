@@ -104,48 +104,47 @@ GET http://localhost:5003/comments
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJmYXJza3V5IiwiZW1haWwiOiJmYXJza3V5QGdtYWlsLmNvbSIsImdlbmRlciI6Ik1hbGUiLCJjcmVhdGVkQXQiOiIyMDI1LTA1LTIxVDE0OjU2OjE3LjAwMFoiLCJ1cGRhdGVkQXQiOiIyMDI1LTA1LTI4VDAxOjI5OjQwLjAwMFoiLCJyb2xlIjoidXNlciIsImlhdCI6MTc0ODQwMTU0MCwiZXhwIjoxNzQ4NDAzMzQwfQ.zlMwGpkxsikAQRepivgXe_gtmRj2oDmjGfDq9EXgVEg
 
 ### Mengambil data komentar 
-GET http://localhost:5003/comments/news/6
+GET http://localhost:5003/comments/news/60
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJmYXJza3V5IiwiZW1haWwiOiJmYXJza3V5QGdtYWlsLmNvbSIsImdlbmRlciI6Ik1hbGUiLCJjcmVhdGVkQXQiOiIyMDI1LTA1LTIxVDE0OjU2OjE3LjAwMFoiLCJ1cGRhdGVkQXQiOiIyMDI1LTA1LTI4VDAxOjI5OjQwLjAwMFoiLCJyb2xlIjoidXNlciIsImlhdCI6MTc0ODQwMTU0MCwiZXhwIjoxNzQ4NDAzMzQwfQ.zlMwGpkxsikAQRepivgXe_gtmRj2oDmjGfDq9EXgVEg
 
 ###
 //Memberikan Like Pada Berita
 POST http://localhost:5003/news/liked
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJmYXJza3V5IiwiZW1haWwiOiJmYXJza3V5QGdtYWlsLmNvbSIsImdlbmRlciI6Ik1hbGUiLCJjcmVhdGVkQXQiOiIyMDI1LTA1LTIxVDE0OjU2OjE3LjAwMFoiLCJ1cGRhdGVkQXQiOiIyMDI1LTA1LTI4VDAxOjI5OjQwLjAwMFoiLCJyb2xlIjoidXNlciIsImlhdCI6MTc0ODQwMTU0MCwiZXhwIjoxNzQ4NDAzMzQwfQ.zlMwGpkxsikAQRepivgXe_gtmRj2oDmjGfDq9EXgVEg
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJmYXJza3V5IiwiZW1haWwiOiJmYXJza3V5QGdtYWlsLmNvbSIsImdlbmRlciI6Ik1hbGUiLCJjcmVhdGVkQXQiOiIyMDI1LTA1LTIxVDE0OjU2OjE3LjAwMFoiLCJ1cGRhdGVkQXQiOiIyMDI1LTA1LTI4VDAzOjE1OjM3LjAwMFoiLCJyb2xlIjoidXNlciIsImlhdCI6MTc0ODQwMzQxMCwiZXhwIjoxNzQ4NDA1MjEwfQ.hKkvwg-gPDyOhBebta11NcX11kkcx6Afw3u5TM33Kd8
 
 {
-  "newsId": 60
+  "newsId": 6
 }
 
 ###
 //Melihat Daftar Berita yang disukai user
 GET http://localhost:5003/news/liked/1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJmYXJza3V5IiwiZW1haWwiOiJmYXJza3V5QGdtYWlsLmNvbSIsImdlbmRlciI6Ik1hbGUiLCJjcmVhdGVkQXQiOiIyMDI1LTA1LTIxVDE0OjU2OjE3LjAwMFoiLCJ1cGRhdGVkQXQiOiIyMDI1LTA1LTI4VDAxOjI5OjQwLjAwMFoiLCJyb2xlIjoidXNlciIsImlhdCI6MTc0ODQwMTU0MCwiZXhwIjoxNzQ4NDAzMzQwfQ.zlMwGpkxsikAQRepivgXe_gtmRj2oDmjGfDq9EXgVEg
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJmYXJza3V5IiwiZW1haWwiOiJmYXJza3V5QGdtYWlsLmNvbSIsImdlbmRlciI6Ik1hbGUiLCJjcmVhdGVkQXQiOiIyMDI1LTA1LTIxVDE0OjU2OjE3LjAwMFoiLCJ1cGRhdGVkQXQiOiIyMDI1LTA1LTI4VDAzOjE1OjM3LjAwMFoiLCJyb2xlIjoidXNlciIsImlhdCI6MTc0ODQwMzQxMCwiZXhwIjoxNzQ4NDA1MjEwfQ.hKkvwg-gPDyOhBebta11NcX11kkcx6Afw3u5TM33Kd8
 
 ###
 //Menghapus Suka pada berita
-DELETE http://localhost:5003/news/liked/8
-Authorization: Bearer yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJmYXJza3V5IiwiZW1haWwiOiJmYXJza3V5QGdtYWlsLmNvbSIsImdlbmRlciI6Ik1hbGUiLCJwcm9maWxlVXNlciI6IiIsImNyZWF0ZWRBdCI6IjIwMjUtMDUtMjFUMTQ6NTY6MTcuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjUtMDUtMjVUMDU6MjM6MDQuMDAwWiIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzQ4MTUwNjMxLCJleHAiOjE3NDgxNTI0MzF9.ERD8LuzN33h3Pv7tMk-CXEeQmg2XeaWvKbU_uWb3OkU
+DELETE http://localhost:5003/news/liked/6
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJmYXJza3V5IiwiZW1haWwiOiJmYXJza3V5QGdtYWlsLmNvbSIsImdlbmRlciI6Ik1hbGUiLCJjcmVhdGVkQXQiOiIyMDI1LTA1LTIxVDE0OjU2OjE3LjAwMFoiLCJ1cGRhdGVkQXQiOiIyMDI1LTA1LTI4VDAzOjE1OjM3LjAwMFoiLCJyb2xlIjoidXNlciIsImlhdCI6MTc0ODQwMzQxMCwiZXhwIjoxNzQ4NDA1MjEwfQ.hKkvwg-gPDyOhBebta11NcX11kkcx6Afw3u5TM33Kd8
 
 ### Melihat Daftar Cek status like
 GET http://localhost:5003/news/liked/check/8
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJmYXJza3V5IiwiZW1haWwiOiJmYXJza3V5QGdtYWlsLmNvbSIsImdlbmRlciI6Ik1hbGUiLCJwcm9maWxlVXNlciI6IiIsImNyZWF0ZWRBdCI6IjIwMjUtMDUtMjFUMTQ6NTY6MTcuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjUtMDUtMjVUMDg6NDA6NTcuMDAwWiIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzQ4MTYzMzQyLCJleHAiOjE3NDgxNjUxNDJ9.bhBMmI-5j2rE-UD3ixrmTqMN5jQbfDvSOtBvysOGB9o
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJmYXJza3V5IiwiZW1haWwiOiJmYXJza3V5QGdtYWlsLmNvbSIsImdlbmRlciI6Ik1hbGUiLCJjcmVhdGVkQXQiOiIyMDI1LTA1LTIxVDE0OjU2OjE3LjAwMFoiLCJ1cGRhdGVkQXQiOiIyMDI1LTA1LTI4VDAzOjE1OjM3LjAwMFoiLCJyb2xlIjoidXNlciIsImlhdCI6MTc0ODQwMzQxMCwiZXhwIjoxNzQ4NDA1MjEwfQ.hKkvwg-gPDyOhBebta11NcX11kkcx6Afw3u5TM33Kd8
 
 ###
 //Melihat Daftar Like di suatu berita
 GET http://localhost:5003/news/likesCount/2
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJmYXJza3V5IiwiZW1haWwiOiJmYXJza3V5QGdtYWlsLmNvbSIsImdlbmRlciI6Ik1hbGUiLCJwcm9maWxlVXNlciI6IiIsImNyZWF0ZWRBdCI6IjIwMjUtMDUtMjFUMTQ6NTY6MTcuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjUtMDUtMjVUMTA6MDE6MzcuMDAwWiIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzQ4MTY3MzE4LCJleHAiOjE3NDgxNjkxMTh9.cKR_zVg1tcikoAXTNKqikIPFKgqA5djh5ifJoRZEQwg
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJmYXJza3V5IiwiZW1haWwiOiJmYXJza3V5QGdtYWlsLmNvbSIsImdlbmRlciI6Ik1hbGUiLCJjcmVhdGVkQXQiOiIyMDI1LTA1LTIxVDE0OjU2OjE3LjAwMFoiLCJ1cGRhdGVkQXQiOiIyMDI1LTA1LTI4VDAzOjE1OjM3LjAwMFoiLCJyb2xlIjoidXNlciIsImlhdCI6MTc0ODQwMzQxMCwiZXhwIjoxNzQ4NDA1MjEwfQ.hKkvwg-gPDyOhBebta11NcX11kkcx6Afw3u5TM33Kd8
 
 //Melihat Daftar berita
 ###
 GET http://localhost:5003/news
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJmYXJza3V5IiwiZW1haWwiOiJmYXJza3V5QGdtYWlsLmNvbSIsImdlbmRlciI6Ik1hbGUiLCJjcmVhdGVkQXQiOiIyMDI1LTA1LTIxVDE0OjU2OjE3LjAwMFoiLCJ1cGRhdGVkQXQiOiIyMDI1LTA1LTI3VDA5OjQ2OjA2LjAwMFoiLCJyb2xlIjoidXNlciIsImlhdCI6MTc0ODMzOTQ2OCwiZXhwIjoxNzQ4MzQxMjY4fQ.psSxB-AkrVhW_dGyhRrPAGcT5PFPySDF0MTWYXcJ0A0
-    
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJmYXJza3V5IiwiZW1haWwiOiJmYXJza3V5QGdtYWlsLmNvbSIsImdlbmRlciI6Ik1hbGUiLCJjcmVhdGVkQXQiOiIyMDI1LTA1LTIxVDE0OjU2OjE3LjAwMFoiLCJ1cGRhdGVkQXQiOiIyMDI1LTA1LTI4VDAzOjE1OjM3LjAwMFoiLCJyb2xlIjoidXNlciIsImlhdCI6MTc0ODQwMzQxMCwiZXhwIjoxNzQ4NDA1MjEwfQ.hKkvwg-gPDyOhBebta11NcX11kkcx6Afw3u5TM33Kd8
+
 //Melihat Detail berita
 ###
-GET http://localhost:5003/news/5
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJmYXJza3V5IiwiZW1haWwiOiJmYXJza3V5QGdtYWlsLmNvbSIsImdlbmRlciI6Ik1hbGUiLCJjcmVhdGVkQXQiOiIyMDI1LTA1LTIxVDE0OjU2OjE3LjAwMFoiLCJ1cGRhdGVkQXQiOiIyMDI1LTA1LTI3VDEwOjQxOjAxLjAwMFoiLCJyb2xlIjoidXNlciIsImlhdCI6MTc0ODM0Mjc5NSwiZXhwIjoxNzQ4MzQ0NTk1fQ.Noss2BwRiIoc3DTT9C9ZiNa1Tbq3Rct0foWgb1JoVLo
+GET http://localhost:5003/news/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJmYXJza3V5IiwiZW1haWwiOiJmYXJza3V5QGdtYWlsLmNvbSIsImdlbmRlciI6Ik1hbGUiLCJjcmVhdGVkQXQiOiIyMDI1LTA1LTIxVDE0OjU2OjE3LjAwMFoiLCJ1cGRhdGVkQXQiOiIyMDI1LTA1LTI4VDAzOjE1OjM3LjAwMFoiLCJyb2xlIjoidXNlciIsImlhdCI6MTc0ODQwMzQxMCwiZXhwIjoxNzQ4NDA1MjEwfQ.hKkvwg-gPDyOhBebta11NcX11kkcx6Afw3u5TM33Kd8
 
 
 ///Fitur Admin
@@ -155,9 +154,9 @@ POST http://localhost:5003/register/admin
 Content-Type: application/json
 
 {
-    "username": "admin2",
-    "email": "admin2@gmail.com",
-    "password": "admin2"
+    "username": "admin4",
+    "email": "admin4@gmail.com",
+    "password": "admin4"
 }
 
 ###
@@ -166,88 +165,87 @@ POST http://localhost:5003/login
 Content-Type: application/json
 
 {
-    "email": "admin1@gmail.com",
-    "password": "admin1"
+    "email": "admin@gmail.com",
+    "password": "admin"
 }
 
 ###
 //Logout Akun Admin
 POST http://localhost:5003/logout
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwidXNlcm5hbWUiOiJhZG1pbjEiLCJlbWFpbCI6ImFkbWluMUBnbWFpbC5jb20iLCJwcm9maWxlQWRtaW4iOiIiLCJjcmVhdGVkQXQiOiIyMDI1LTA1LTI0VDIxOjAzOjE5LjAwMFoiLCJ1cGRhdGVkQXQiOiIyMDI1LTA1LTI0VDIxOjAzOjE5LjAwMFoiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NDgxNDM2NjMsImV4cCI6MTc0ODE0NTQ2M30.XtimvAPdq7oRrCj_Umf81BRf2o3PICKtCQZUV7ZEyQ4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwiY3JlYXRlZEF0IjoiMjAyNS0wNS0yMlQwOTowOTozNS4wMDBaIiwidXBkYXRlZEF0IjoiMjAyNS0wNS0yMlQwOTowOTozNS4wMDBaIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ4NDAzOTY0LCJleHAiOjE3NDg0MDU3NjR9.KPPhvQo0EFAfhQvGnAlpXatDM6OlrSBxzQLAlA_8h3o
 
 ###
-//Update Data diri admin
-PUT http://localhost:5000/admin/update
-Authorization: Bearer <TOKEN_ADMIN>
-Content-Type: multipart/form-data
+# //Update Data diri admin
+# PUT http://localhost:5000/admin/update
+# Authorization: Bearer <TOKEN_ADMIN>
+# Content-Type: multipart/form-data
 
-{
-    "username": "admin.com",
-    "email": "admin@gmail.com",
-    "password": "admin",
-    "profileAdmin": "[file image (jpg/png)]"
-}
+# {
+#     "username": "admin.com",
+#     "email": "admin@gmail.com",
+#     "password": "admin",
+#     "profileAdmin": "[file image (jpg/png)]"
+# }
 
 ###
 //Membuat Kategori Berita
 POST http://localhost:5003/categories
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ4MTE3NjU3LCJleHAiOjE3NDgxMjQ4NTd9.s1_E82kOj35qHugOxvpuwPLt9g9iz6RBfFWKDwmUR9A
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwiY3JlYXRlZEF0IjoiMjAyNS0wNS0yMlQwOTowOTozNS4wMDBaIiwidXBkYXRlZEF0IjoiMjAyNS0wNS0yMlQwOTowOTozNS4wMDBaIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ4NDA0MDI2LCJleHAiOjE3NDg0MDU4MjZ9.K2pL3WcWm546QAxuxo8ov2IwROA8zkeNKUx5Qhwn124
 
+{
+  "category": "Isu Global"
+}
+
+###
+//Mengecek apakah kategori berhasil dibuat
+GET http://localhost:5003/categories/100
+
+###
+//Mengedit Kategori
+PUT http://localhost:5003/categories/10
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwiY3JlYXRlZEF0IjoiMjAyNS0wNS0yMlQwOTowOTozNS4wMDBaIiwidXBkYXRlZEF0IjoiMjAyNS0wNS0yMlQwOTowOTozNS4wMDBaIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ4NDA0MDI2LCJleHAiOjE3NDg0MDU4MjZ9.K2pL3WcWm546QAxuxo8ov2IwROA8zkeNKUx5Qhwn124
 
 {
   "category": "Lingkungan"
 }
 
 ###
-//Mengecek apakah kategori berhasil dibuat
-GET http://localhost:5003/categories
-
-###
-//Mengedit Kategori
-PUT http://localhost:5003/categories/8
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ4MTE3NjU3LCJleHAiOjE3NDgxMjQ4NTd9.s1_E82kOj35qHugOxvpuwPLt9g9iz6RBfFWKDwmUR9A
-
-{
-  "category": "Linglung"
-}
-
-###
 //Menghapus Kategori
-DELETE http://localhost:5003/categories/8
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ4MTE3NjU3LCJleHAiOjE3NDgxMjQ4NTd9.s1_E82kOj35qHugOxvpuwPLt9g9iz6RBfFWKDwmUR9A
+DELETE http://localhost:5003/categories/100
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwiY3JlYXRlZEF0IjoiMjAyNS0wNS0yMlQwOTowOTozNS4wMDBaIiwidXBkYXRlZEF0IjoiMjAyNS0wNS0yMlQwOTowOTozNS4wMDBaIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ4NDA0MDI2LCJleHAiOjE3NDg0MDU4MjZ9.K2pL3WcWm546QAxuxo8ov2IwROA8zkeNKUx5Qhwn124
 
 ###
 //Menambahkan Data Berita
 POST http://localhost:5003/news 
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ4MTE3NjU3LCJleHAiOjE3NDgxMjQ4NTd9.s1_E82kOj35qHugOxvpuwPLt9g9iz6RBfFWKDwmUR9A
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwiY3JlYXRlZEF0IjoiMjAyNS0wNS0yMlQwOTowOTozNS4wMDBaIiwidXBkYXRlZEF0IjoiMjAyNS0wNS0yMlQwOTowOTozNS4wMDBaIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ4NDA0MDI2LCJleHAiOjE3NDg0MDU4MjZ9.K2pL3WcWm546QAxuxo8ov2IwROA8zkeNKUx5Qhwn124
 
 //image_small:"/uploads/wleowelo.png"
 {
   "author": "UIA Channel",
-  "title": "3 Tersangka Kasus Kredit Sritex Dijebloskan ke Rutan Salemba",
-  "url": "https://www.cnnindonesia.com/nasional/20250521222134-12-1231792/3-tersangka-kasus-kredit-sritex-dijebloskan-ke-rutan-salemba",
-  "description": "Tiga tersangka kasus korupsi pemberian fasilitas kredit PT Sritex, ditahan di Rutan Salemba, Jakarta.",
+  "title": "Anggota TNI AL Pembunuh Sales Mobil di Aceh Divonis Bui Seumur Hidup",
+  "url": "https://www.cnnindonesia.com/nasional/20250527194454-12-1233885/anggota-tni-al-pembunuh-sales-mobil-di-aceh-divonis-bui-seumur-hidup",
+  "description": "Anggota TNI AL Dede Irawan divonis seumur hidup atas pembunuhan sales mobil di Aceh.",
   "iso_date": "2025-05-21T15:35:24.000Z",
-  "image_small": "https://akcdn.detik.net.id/visual/2025/05/21/dirut-pt-sritex-iwan-setiawan-lukminto-ditahan-kejagung-1747841622564_169.jpeg?w=360&q=90",
-  "image_large": "https://akcdn.detik.net.id/visual/2025/05/21/dirut-pt-sritex-iwan-setiawan-lukminto-ditahan-kejagung-1747841622564_169.jpeg?w=360&q=100",
+  "image_small": "https://akcdn.detik.net.id/visual/2020/06/22/ilustrasi-penusukan-4_169.jpeg?w=360&q=90",
+  "image_large": "https://akcdn.detik.net.id/visual/2020/06/22/ilustrasi-penusukan-4_169.jpeg?w=360&q=100",
   "categoryId": 3
 }
 
 
 ###
 //Hapus Data Berita
-DELETE http://localhost:5003/news/10
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ4MTE3NjU3LCJleHAiOjE3NDgxMjQ4NTd9.s1_E82kOj35qHugOxvpuwPLt9g9iz6RBfFWKDwmUR9A
+DELETE http://localhost:5003/news/100
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwiY3JlYXRlZEF0IjoiMjAyNS0wNS0yMlQwOTowOTozNS4wMDBaIiwidXBkYXRlZEF0IjoiMjAyNS0wNS0yMlQwOTowOTozNS4wMDBaIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ4NDA0MDI2LCJleHAiOjE3NDg0MDU4MjZ9.K2pL3WcWm546QAxuxo8ov2IwROA8zkeNKUx5Qhwn124
 
 //Edit Data Berita
 ###
 PUT http://localhost:5003/news/11
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ4MTE3NjU3LCJleHAiOjE3NDgxMjQ4NTd9.s1_E82kOj35qHugOxvpuwPLt9g9iz6RBfFWKDwmUR9A
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwiY3JlYXRlZEF0IjoiMjAyNS0wNS0yMlQwOTowOTozNS4wMDBaIiwidXBkYXRlZEF0IjoiMjAyNS0wNS0yMlQwOTowOTozNS4wMDBaIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ4NDA0MDI2LCJleHAiOjE3NDg0MDU4MjZ9.K2pL3WcWm546QAxuxo8ov2IwROA8zkeNKUx5Qhwn124
 
 {
   "author": "Cublacks News",

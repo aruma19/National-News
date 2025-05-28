@@ -4,7 +4,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import { BASE_URL } from "../utils";
 
-const SidebarAdmin = () => {
+const SidebarAdmin = ({ isOpen, toggleSidebar }) => {
     const navigate = useNavigate();
 
     const handleLogout = async () => {
@@ -52,129 +52,184 @@ const SidebarAdmin = () => {
     };
 
     return (
-        <aside
-  style={{
-    position: "fixed",
-    top: 0,
-    left: 0,
-    height: "100vh",
-    width: "230px",
-    background: "linear-gradient(180deg, #0f2027 0%, #203a43 50%, #2c5364 100%)",
-    padding: "1.8rem 1.5rem",
-    boxShadow: "3px 0 15px rgba(0,0,0,0.3)",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-between",
-    fontFamily: "'Inter', sans-serif",
-    color: "#f9f9f9",
-    zIndex: 1000,
-  }}
->
-  <div>
-    <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        gap: "10px",
-        padding: "0.9rem 0",
-        marginBottom: "2rem",
-        borderRadius: "14px",
-        background: "linear-gradient(90deg, #4b6cb7 0%, #182848 100%)",
-        color: "#f9f9f9",
-        fontWeight: "600",
-        fontSize: "1rem",
-        boxShadow: "0 6px 15px rgba(75, 108, 183, 0.4)",
-        userSelect: "none",
-      }}
-    >
-      <i className="fas fa-user-shield" style={{ fontSize: "18px" }}></i>
-      BERITA NASIONAL
-    </div>
+        <>
+            {/* Overlay untuk mobile */}
+            {isOpen && (
+                <div
+                    style={{
+                        position: "fixed",
+                        top: 0,
+                        left: 0,
+                        width: "100vw",
+                        height: "100vh",
+                        backgroundColor: "rgba(0, 0, 0, 0.5)",
+                        zIndex: 999,
+                        display: window.innerWidth <= 768 ? "block" : "none",
+                    }}
+                    onClick={toggleSidebar}
+                />
+            )}
 
-    <nav>
-      <ul
-        style={{
-          listStyle: "none",
-          padding: 0,
-          margin: 0,
-          display: "flex",
-          flexDirection: "column",
-          gap: "1rem",
-        }}
-      >
-        {[
-          { to: "/dashboardAdmin", label: "Home", icon: "fas fa-home" },
-          { to: "/addnews", label: "Tambah Catatan", icon: "fas fa-plus" },
-          { to: "/categorylist", label: "Daftar Kategori", icon: "fas fa-list" },
-        ].map(({ to, label, icon }) => (
-          <li key={to}>
-            <NavLink
-              to={to}
-              style={({ isActive }) => ({
-                display: "flex",
-                alignItems: "center",
-                gap: "10px",
-                padding: "10px 18px",
-                borderRadius: "12px",
-                fontWeight: isActive ? "700" : "500",
-                backgroundColor: isActive ? "#4b6cb7" : "transparent",
-                color: isActive ? "#f9f9f9" : "#cbd5e1",
-                textDecoration: "none",
-                boxShadow: isActive
-                  ? "0 3px 8px rgba(75, 108, 183, 0.5)"
-                  : "none",
-                transition: "all 0.2s ease-in-out",
-                fontSize: "0.95rem",
-                cursor: "pointer",
-              })}
-              end
-            >
-              <i
-                className={icon}
+            {/* Sidebar */}
+            <aside
                 style={{
-                  width: "20px",
-                  textAlign: "center",
-                  fontSize: "15px",
+                    position: "fixed",
+                    top: 0,
+                    left: isOpen ? 0 : "-280px",
+                    height: "100vh",
+                    width: "280px",
+                    background: "linear-gradient(180deg, #0f2027 0%, #203a43 50%, #2c5364 100%)",
+                    padding: "1.5rem",
+                    boxShadow: "3px 0 15px rgba(0,0,0,0.3)",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between",
+                    fontFamily: "'Inter', sans-serif",
+                    color: "#f9f9f9",
+                    zIndex: 1000,
+                    transition: "left 0.3s ease-in-out",
+                    overflowY: "auto",
                 }}
-              />
-              {label}
-            </NavLink>
-          </li>
-        ))}
-      </ul>
-    </nav>
-  </div>
+            >
+                <div>
+                    {/* Header dengan tombol close untuk mobile */}
+                    <div
+                        style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                            marginBottom: "2rem",
+                        }}
+                    >
+                        <div
+                            style={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                gap: "10px",
+                                padding: "0.9rem 1rem",
+                                borderRadius: "14px",
+                                background: "linear-gradient(90deg, #4b6cb7 0%, #182848 100%)",
+                                color: "#f9f9f9",
+                                fontWeight: "600",
+                                fontSize: "0.9rem",
+                                boxShadow: "0 6px 15px rgba(75, 108, 183, 0.4)",
+                                userSelect: "none",
+                                flex: 1,
+                            }}
+                        >
+                            <i className="fas fa-user-shield" style={{ fontSize: "16px" }}></i>
+                            BERITA NASIONAL
+                        </div>
+                        
+                        {/* Tombol close untuk mobile */}
+                        <button
+                            onClick={toggleSidebar}
+                            style={{
+                                display: window.innerWidth <= 768 ? "block" : "none",
+                                background: "transparent",
+                                border: "none",
+                                color: "#f9f9f9",
+                                fontSize: "1.5rem",
+                                cursor: "pointer",
+                                padding: "0.5rem",
+                                marginLeft: "0.5rem",
+                            }}
+                        >
+                            <i className="fas fa-times"></i>
+                        </button>
+                    </div>
 
-  <div>
-    <button
-      onClick={handleLogout}
-      type="button"
-      style={{
-        width: "100%",
-        padding: "0.8rem 0",
-        borderRadius: "14px",
-        border: "none",
-        background: "linear-gradient(90deg, #4b6cb7 0%, #182848 100%)",
-        color: "#f9f9f9",
-        fontWeight: "600",
-        fontSize: "0.9rem",
-        cursor: "pointer",
-        boxShadow: "0 6px 15px rgba(75, 108, 183, 0.4)",
-        transition: "opacity 0.3s ease",
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.opacity = "0.9";
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.opacity = "1";
-      }}
-    >
-      <i className="fas fa-sign-out-alt" style={{ marginRight: "6px" }}></i>
-      Log Out
-    </button>
-  </div>
-</aside>
+                    <nav>
+                        <ul
+                            style={{
+                                listStyle: "none",
+                                padding: 0,
+                                margin: 0,
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: "1rem",
+                            }}
+                        >
+                            {[
+                                { to: "/dashboardAdmin", label: "Home", icon: "fas fa-home" },
+                                { to: "/addnews", label: "Tambah Catatan", icon: "fas fa-plus" },
+                                { to: "/categorylist", label: "Daftar Kategori", icon: "fas fa-list" },
+                            ].map(({ to, label, icon }) => (
+                                <li key={to}>
+                                    <NavLink
+                                        to={to}
+                                        style={({ isActive }) => ({
+                                            display: "flex",
+                                            alignItems: "center",
+                                            gap: "10px",
+                                            padding: "12px 18px",
+                                            borderRadius: "12px",
+                                            fontWeight: isActive ? "700" : "500",
+                                            backgroundColor: isActive ? "#4b6cb7" : "transparent",
+                                            color: isActive ? "#f9f9f9" : "#cbd5e1",
+                                            textDecoration: "none",
+                                            boxShadow: isActive
+                                                ? "0 3px 8px rgba(75, 108, 183, 0.5)"
+                                                : "none",
+                                            transition: "all 0.2s ease-in-out",
+                                            fontSize: "0.95rem",
+                                            cursor: "pointer",
+                                        })}
+                                        onClick={() => {
+                                            // Auto close sidebar di mobile setelah klik menu
+                                            if (window.innerWidth <= 768) {
+                                                toggleSidebar();
+                                            }
+                                        }}
+                                        end
+                                    >
+                                        <i
+                                            className={icon}
+                                            style={{
+                                                width: "20px",
+                                                textAlign: "center",
+                                                fontSize: "15px",
+                                            }}
+                                        />
+                                        {label}
+                                    </NavLink>
+                                </li>
+                            ))}
+                        </ul>
+                    </nav>
+                </div>
+
+                <div>
+                    <button
+                        onClick={handleLogout}
+                        type="button"
+                        style={{
+                            width: "100%",
+                            padding: "0.8rem 0",
+                            borderRadius: "14px",
+                            border: "none",
+                            background: "linear-gradient(90deg, #4b6cb7 0%, #182848 100%)",
+                            color: "#f9f9f9",
+                            fontWeight: "600",
+                            fontSize: "0.9rem",
+                            cursor: "pointer",
+                            boxShadow: "0 6px 15px rgba(75, 108, 183, 0.4)",
+                            transition: "opacity 0.3s ease",
+                        }}
+                        onMouseEnter={(e) => {
+                            e.currentTarget.style.opacity = "0.9";
+                        }}
+                        onMouseLeave={(e) => {
+                            e.currentTarget.style.opacity = "1";
+                        }}
+                    >
+                        <i className="fas fa-sign-out-alt" style={{ marginRight: "6px" }}></i>
+                        Log Out
+                    </button>
+                </div>
+            </aside>
+        </>
     );
 };
 
