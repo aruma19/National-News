@@ -9,6 +9,7 @@ import Detail from "./pages/user/Detail";
 import LikedNews from "./pages/user/LikedNews";
 import ProfileUser from "./pages/user/ProfileUser";
 //Admin
+import DashboardAdmin from "./pages/admin/DashboardAdmin";
 import AddNews from "./pages/admin/AddNews";
 import EditNews from "./pages/admin/EditNews";
 import CategoryList from "./pages/admin/CategoryList";
@@ -43,6 +44,12 @@ function App() {
         } />
 
         {/* Admin */}
+        <Route path="/dashboardAdmin" element={
+          <>
+            <SidebarAdmin />
+            <DashboardAdmin />
+          </>
+        } />
         <Route path="/addnews" element={
           <>
             <SidebarAdmin />
