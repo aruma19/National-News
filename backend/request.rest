@@ -11,17 +11,19 @@ Content-Type: application/json
 }
 
 ###
+//Mencoba Register mengggunakan akun lain
 POST http://localhost:5003/register
 Content-Type: application/json
 
 {
-    "username": "mantap",
-    "email": "mantap@gmail.com",
+    "username": "ulalaaa",
+    "email": "ulala@gmail.com",
     "gender": "Female",
-    "password": "mantap123"
+    "password": "ulala123"
 }
 
 ###
+//Mencoba Register mengggunakan akun lain
 POST http://localhost:5003/register
 Content-Type: application/json
 
@@ -41,49 +43,51 @@ Content-Type: application/json
     "email": "farskuy@gmail.com",
     "password": "farskuy"
 }
+
 ###
+//Login Akun User yang lain
 POST http://localhost:5003/login
 Content-Type: application/json
 
 {
-    "email": "denskuy@gmail.com",
-    "password": "denskuy123"
+    "email": "inces@gmail.com",
+    "password": "inces"
 }
 
 ###
 //Logout Akun User
 POST http://localhost:5003/logout
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwidXNlcm5hbWUiOiJkZW5za3V5IiwiZW1haWwiOiJkZW5za3V5QGdtYWlsLmNvbSIsImdlbmRlciI6Ik1hbGUiLCJwcm9maWxlVXNlciI6IiIsImNyZWF0ZWRBdCI6IjIwMjUtMDUtMjVUMDM6Mzk6NDQuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjUtMDUtMjVUMDM6Mzk6NDQuMDAwWiIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzQ4MTQ0Mzk2LCJleHAiOjE3NDgxNDYxOTZ9.IMBtuoHZiKCpZkWKrXq2i7ysiEBzeZ2Gw0boWI1KFxw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJmYXJza3V5eSIsImVtYWlsIjoiZmFyc2t1eUBnbWFpbC5jb20iLCJnZW5kZXIiOiJGZW1hbGUiLCJjcmVhdGVkQXQiOiIyMDI1LTA1LTIxVDE0OjU2OjE3LjAwMFoiLCJ1cGRhdGVkQXQiOiIyMDI1LTA1LTI3VDIzOjU4OjQxLjAwMFoiLCJyb2xlIjoidXNlciIsImlhdCI6MTc0ODM5MDMyNCwiZXhwIjoxNzQ4MzkyMTI0fQ.S8w_BzKccNdYG-lST3HC0JCx5hw6rPZa1XWbrvrs7S4
 
 ###
 //Update Data User
 PUT http://localhost:5003/user/update
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwidXNlcm5hbWUiOiJpbmNlc3NzIiwiZW1haWwiOiJpbmNlc3NzQGdtYWlsLmNvbSIsImdlbmRlciI6IkZlbWFsZSIsInByb2ZpbGVVc2VyIjoiIiwiY3JlYXRlZEF0IjoiMjAyNS0wNS0yMlQwOToyMzozOC4wMDBaIiwidXBkYXRlZEF0IjoiMjAyNS0wNS0yMlQxNjoyMzoyNC4wMDBaIiwicm9sZSI6InVzZXIiLCJpYXQiOjE3NDc5MzEzNzgsImV4cCI6MTc0NzkzMzE3OH0.-iQsVmFI1I-Hb6Xm8ulApWX9zkFO82WGHcf1f1LL9ZQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJmYXJza3V5IiwiZW1haWwiOiJmYXJza3V5QGdtYWlsLmNvbSIsImdlbmRlciI6Ik1hbGUiLCJjcmVhdGVkQXQiOiIyMDI1LTA1LTIxVDE0OjU2OjE3LjAwMFoiLCJ1cGRhdGVkQXQiOiIyMDI1LTA1LTI3VDIzOjQ0OjMyLjAwMFoiLCJyb2xlIjoidXNlciIsImlhdCI6MTc0ODM5MDEyMywiZXhwIjoxNzQ4MzkxOTIzfQ.vPooI9M7kfahi1QHPRdMLduPtWpL_Bq3_KClLfTst60
 Content-Type: application/json
 
 {
-    "username": "inces",
-    "email": "inces@gmail.com",
-    "gender": "Female",
-    "password": "inces",
+    "username": "farskuyy",
+    "email": "farskuy@gmail.com",
+    "gender": "Male",
+    "password": "farskuy"
 }
 
 ###
 //Menambahkan Komentar pada suatu berita
 POST http://localhost:5003/comments
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwidXNlcm5hbWUiOiJpbmNlcyIsImVtYWlsIjoiaW5jZXNAZ21haWwuY29tIiwiZ2VuZGVyIjoiRmVtYWxlIiwiY3JlYXRlZEF0IjoiMjAyNS0wNS0yMlQwOToyMzozOC4wMDBaIiwidXBkYXRlZEF0IjoiMjAyNS0wNS0yMlQwOTozNjo0MC4wMDBaIiwicm9sZSI6InVzZXIiLCJpYXQiOjE3NDc5MDY2MzYsImV4cCI6MTc0NzkwODQzNn0.5gxGdZ79ve7lXyL6H6VOle1M82JxU2ebY68S2fx82DI
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwidXNlcm5hbWUiOiJpbmNlcyIsImVtYWlsIjoiaW5jZXNAZ21haWwuY29tIiwiZ2VuZGVyIjoiRmVtYWxlIiwiY3JlYXRlZEF0IjoiMjAyNS0wNS0yMlQwOToyMzozOC4wMDBaIiwidXBkYXRlZEF0IjoiMjAyNS0wNS0yN1QyMzo1ODo1OS4wMDBaIiwicm9sZSI6InVzZXIiLCJpYXQiOjE3NDgzOTA0NjAsImV4cCI6MTc0ODM5MjI2MH0.Jc9HfbQQ65wE3DrZKx_vzJxuvbz2MsJuUTD4Uqd81vQ
 
 {
-  "newsId": 1,
-  "content": "Kalo Menurutku sih gini ya bro. awaoonajkfdnajkfbndkjlnvadsjkffnsbdkjlfndskjlfnasdjkfnbakjlfbndskjlfnbksdjnfkjf nmsbvkjsd c nflsdfnjklsdanfljksd sldf"
+  "newsId": 13,
+  "content": "Woilah"
 }
 
 //Menghapus Komentar dari suatu berita
 ###
 DELETE http://localhost:5003/comments/4
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwidXNlcm5hbWUiOiJpbmNlcyIsImVtYWlsIjoiaW5jZXNAZ21haWwuY29tIiwiZ2VuZGVyIjoiRmVtYWxlIiwiY3JlYXRlZEF0IjoiMjAyNS0wNS0yMlQwOToyMzozOC4wMDBaIiwidXBkYXRlZEF0IjoiMjAyNS0wNS0yMlQwOTozNjo0MC4wMDBaIiwicm9sZSI6InVzZXIiLCJpYXQiOjE3NDc5MDY2MzYsImV4cCI6MTc0NzkwODQzNn0.5gxGdZ79ve7lXyL6H6VOle1M82JxU2ebY68S2fx82DI
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwidXNlcm5hbWUiOiJpbmNlcyIsImVtYWlsIjoiaW5jZXNAZ21haWwuY29tIiwiZ2VuZGVyIjoiRmVtYWxlIiwiY3JlYXRlZEF0IjoiMjAyNS0wNS0yMlQwOToyMzozOC4wMDBaIiwidXBkYXRlZEF0IjoiMjAyNS0wNS0yN1QyMzo1ODo1OS4wMDBaIiwicm9sZSI6InVzZXIiLCJpYXQiOjE3NDgzOTA0NjAsImV4cCI6MTc0ODM5MjI2MH0.Jc9HfbQQ65wE3DrZKx_vzJxuvbz2MsJuUTD4Uqd81vQ
 
 //Mengedit Komentar dari sebuah berita
 ###
