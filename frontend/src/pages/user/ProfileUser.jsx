@@ -168,8 +168,8 @@ const ProfileUser = () => {
             }}
           >
             <option value="">Pilih Gender</option>
-            <option value="Male">Laki-laki</option>
-            <option value="Female">Perempuan</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
           </select>
         </div>
 
