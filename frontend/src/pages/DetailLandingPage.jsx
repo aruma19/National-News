@@ -28,7 +28,7 @@ const DetailLandingPage = () => {
   };
 
   const handleBackClick = () => {
-    navigate("/landing");
+    navigate("/");
   };
 
   const handleLoginClick = () => {
