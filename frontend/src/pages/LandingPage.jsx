@@ -47,7 +47,7 @@ const LandingPage = () => {
   const fetchPublicCategories = async () => {
     try {
       // Menggunakan endpoint publik tanpa token
-      const response = await axios.get(`${BASE_URL}/categories`);
+      const response = await axios.get(`${BASE_URL}/categories/public`);
       setCategories(response.data);
     } catch (error) {
       console.error("Gagal mengambil kategori berita", error);
