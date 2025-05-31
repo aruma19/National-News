@@ -10,6 +10,7 @@ import { verifyToken } from "../middleware/VerifyToken.js";
 
 const router = express.Router();
 
+router.get("/categories/public", getCategories);
 router.get("/categories", getCategories);
 router.get("/categories/:id", getCategoryById);
 router.post("/categories", verifyToken,createCategory);
