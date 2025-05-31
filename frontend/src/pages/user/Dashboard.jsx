@@ -26,7 +26,7 @@ const Dashboard = () => {
     const token = localStorage.getItem("accessToken");
 
     if (!token) {
-      window.location.href = "/";
+      window.location.href = "/login";
       return;
     }
 
@@ -37,13 +37,13 @@ const Dashboard = () => {
 
       if (timeLeft <= 0) {
         localStorage.removeItem("accessToken");
-        window.location.href = "/";
+        window.location.href = "/login";
         return;
       }
 
       const logoutTimer = setTimeout(() => {
         localStorage.removeItem("accessToken");
-        window.location.href = "/";
+        window.location.href = "/login";
       }, timeLeft * 1000);
 
       fetchNews(token);
@@ -52,7 +52,7 @@ const Dashboard = () => {
       return () => clearTimeout(logoutTimer);
     } catch (err) {
       localStorage.removeItem("accessToken");
-      window.location.href = "/";
+      window.location.href = "/login";
     }
   }, []);
 

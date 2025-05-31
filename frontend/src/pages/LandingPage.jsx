@@ -31,14 +31,53 @@ const LandingPage = () => {
   const fetchPublicNews = async () => {
     setLoading(true);
     try {
-      // Menggunakan endpoint publik tanpa token
-      const response = await axios.get(`${BASE_URL}/news`);
-      setNewsList(response.data);
+      // Coba beberapa endpoint yang mungkin tersedia
+      let response;
+      
+      try {
+        // Coba endpoint publik tanpa token
+        response = await axios.get(`${BASE_URL}/news/public`);
+      } catch (error) {
+        // Jika gagal, coba endpoint biasa tanpa authorization
+        try {
+          response = await axios.get(`${BASE_URL}/news`);
+        } catch (error2) {
+          // Jika masih gagal, coba dengan axios config default
+          response = await axios.get(`${BASE_URL}/news`, {
+            headers: {
+              'Content-Type': 'application/json',
+            }
+          });
+        }
+      }
+      
+      console.log('Response data:', response.data); // Debug log
+      
+      // Handle jika response.data adalah array langsung atau wrapped dalam object
+      const newsData = Array.isArray(response.data) ? response.data : 
+                      (response.data.data ? response.data.data : 
+                       response.data.news ? response.data.news : []);
+      
+      setNewsList(newsData);
+      
+      if (newsData.length === 0) {
+        console.warn('No news data received from API');
+      }
+      
     } catch (error) {
+      console.error('Error fetching news:', error);
+      
+      // Tampilkan error yang lebih spesifik
+      const errorMessage = error.response?.data?.message || 
+                          error.response?.statusText || 
+                          error.message || 
+                          "Terjadi kesalahan saat mengambil data berita.";
+      
       Swal.fire({
         icon: "error",
         title: "Gagal Memuat Berita",
-        text: "Terjadi kesalahan saat mengambil data berita. Silakan coba lagi.",
+        text: errorMessage,
+        footer: error.response?.status ? `Status: ${error.response.status}` : ''
       });
     }
     setLoading(false);
@@ -46,36 +85,74 @@ const LandingPage = () => {
 
   const fetchPublicCategories = async () => {
     try {
-      // Menggunakan endpoint publik tanpa token
-      const response = await axios.get(`${BASE_URL}/categories`);
-      setCategories(response.data);
+      let response;
+      
+      try {
+        // Coba endpoint publik untuk kategori
+        response = await axios.get(`${BASE_URL}/categories/public`);
+      } catch (error) {
+        try {
+          response = await axios.get(`${BASE_URL}/categories`);
+        } catch (error2) {
+          response = await axios.get(`${BASE_URL}/categories`, {
+            headers: {
+              'Content-Type': 'application/json',
+            }
+          });
+        }
+      }
+      
+      console.log('Categories response:', response.data); // Debug log
+      
+      // Handle struktur data yang berbeda
+      const categoriesData = Array.isArray(response.data) ? response.data : 
+                            (response.data.data ? response.data.data : 
+                             response.data.categories ? response.data.categories : []);
+      
+      setCategories(categoriesData);
+      
     } catch (error) {
       console.error("Gagal mengambil kategori berita", error);
+      // Tidak perlu alert untuk kategori, biarkan kosong saja
     }
   };
 
   const filteredNews = newsList.filter((news) => {
     const searchLower = searchTerm.toLowerCase();
 
-    const formattedDate = new Date(news.iso_date)
-      .toLocaleDateString("id-ID", {
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-      })
-      .toLowerCase();
+    // Pastikan news object memiliki properti yang diperlukan
+    if (!news) return false;
+
+    let formattedDate = '';
+    try {
+      if (news.iso_date || news.created_at || news.date) {
+        const dateToFormat = news.iso_date || news.created_at || news.date;
+        formattedDate = new Date(dateToFormat)
+          .toLocaleDateString("id-ID", {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+          })
+          .toLowerCase();
+      }
+    } catch (dateError) {
+      console.warn('Error formatting date for news:', news.id, dateError);
+    }
 
     const matchesSearch =
-      news.title?.toLowerCase().includes(searchLower) ||
-      news.author?.toLowerCase().includes(searchLower) ||
-      news.category?.category?.toLowerCase().includes(searchLower) ||
-      news.description?.toLowerCase().includes(searchLower) ||
+      (news.title && news.title.toLowerCase().includes(searchLower)) ||
+      (news.author && news.author.toLowerCase().includes(searchLower)) ||
+      (news.category?.category && news.category.category.toLowerCase().includes(searchLower)) ||
+      (news.description && news.description.toLowerCase().includes(searchLower)) ||
+      (news.content && news.content.toLowerCase().includes(searchLower)) ||
       formattedDate.includes(searchLower);
 
     const matchesCategory =
-      selectedCategory === "All" || news.category?.category === selectedCategory;
+      selectedCategory === "All" || 
+      (news.category?.category === selectedCategory) ||
+      (news.category_name === selectedCategory);
 
     return matchesSearch && matchesCategory;
   });
@@ -176,6 +253,18 @@ const LandingPage = () => {
           📰 Berita Terbaru
         </h2>
 
+        {/* Debug info - hapus setelah berhasil */}
+        {!loading && (
+          <div style={{ 
+            fontSize: "0.8rem", 
+            color: "#666", 
+            marginBottom: "1rem",
+            textAlign: "center"
+          }}>
+            Total berita: {newsList.length} | Berita yang ditampilkan: {filteredNews.length}
+          </div>
+        )}
+
         {/* Filter Bar - Responsive */}
         <div
           style={{
@@ -236,8 +325,8 @@ const LandingPage = () => {
             >
               <option value="All">Semua Kategori</option>
               {categories.map((cat) => (
-                <option key={cat.id} value={cat.category}>
-                  {cat.category}
+                <option key={cat.id} value={cat.category || cat.name}>
+                  {cat.category || cat.name}
                 </option>
               ))}
             </select>
@@ -263,7 +352,43 @@ const LandingPage = () => {
             </div>
           </div>
         )}
-        {!loading && filteredNews.length === 0 && (
+        
+        {!loading && newsList.length === 0 && (
+          <div style={{ textAlign: "center", marginTop: "3rem" }}>
+            <p
+              style={{
+                color: "#ef4444",
+                fontWeight: "600",
+                fontSize: isMobile ? "1rem" : "1.1rem",
+                fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+                marginBottom: "1rem",
+              }}
+            >
+              Tidak dapat memuat data berita dari server.
+            </p>
+            <button
+              onClick={() => {
+                fetchPublicNews();
+                fetchPublicCategories();
+              }}
+              style={{
+                backgroundColor: "#1e40af",
+                color: "white",
+                border: "none",
+                borderRadius: "20px",
+                padding: "0.6rem 1.5rem",
+                fontSize: "0.9rem",
+                fontWeight: "600",
+                cursor: "pointer",
+                fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+              }}
+            >
+              Coba Lagi
+            </button>
+          </div>
+        )}
+        
+        {!loading && newsList.length > 0 && filteredNews.length === 0 && (
           <p
             style={{
               textAlign: "center",
@@ -318,10 +443,10 @@ const LandingPage = () => {
                 }
               }}
             >
-              {news.image_small && (
+              {(news.image_small || news.image || news.thumbnail) && (
                 <div style={{ flexShrink: 0 }}>
                   <img
-                    src={news.image_small}
+                    src={news.image_small || news.image || news.thumbnail}
                     alt={news.title}
                     style={{
                       objectFit: "cover",
@@ -329,6 +454,9 @@ const LandingPage = () => {
                       height: isMobile ? "180px" : "150px",
                       borderTopLeftRadius: "12px",
                       borderTopRightRadius: "12px",
+                    }}
+                    onError={(e) => {
+                      e.target.style.display = 'none';
                     }}
                   />
                 </div>
@@ -345,7 +473,7 @@ const LandingPage = () => {
                     margin: "0 0 0.8rem 0",
                   }}
                 >
-                  {news.title}
+                  {news.title || "Judul tidak tersedia"}
                 </h3>
                 <p
                   style={{
@@ -357,7 +485,7 @@ const LandingPage = () => {
                   }}
                 >
                   {news.author || "Admin"} &nbsp;&bull;&nbsp;{" "}
-                  {news.category?.category || "Umum"}
+                  {news.category?.category || news.category_name || "Umum"}
                 </p>
                 <p
                   style={{
@@ -367,13 +495,20 @@ const LandingPage = () => {
                     margin: 0,
                   }}
                 >
-                  {new Date(news.iso_date).toLocaleDateString("id-ID", {
-                    day: "numeric",
-                    month: "long",
-                    year: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
+                  {(() => {
+                    try {
+                      const dateToFormat = news.iso_date || news.created_at || news.date;
+                      return dateToFormat ? new Date(dateToFormat).toLocaleDateString("id-ID", {
+                        day: "numeric",
+                        month: "long",
+                        year: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      }) : "Tanggal tidak tersedia";
+                    } catch {
+                      return "Tanggal tidak tersedia";
+                    }
+                  })()}
                 </p>
               </div>
             </div>
