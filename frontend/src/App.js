@@ -1,6 +1,9 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import SidebarAdmin from "./components/SidebarAdmin";
+//Landing Pages
+import LandingPage from "./pages/landing/LandingPage";
+import DetailLandingPage from "./pages/landing/DetailLandingPage";
 //User
 import Register from "./pages/user/Register";
 import Login from "./pages/user/Login";
@@ -20,8 +23,12 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* Landing Pages - Public */}
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/detail-landing/:id" element={<DetailLandingPage />} />
+
         {/* User */}
-        <Route path="/" element={<Login />} /> { }
+        <Route path="/login" element={<Login />} /> { }
         <Route path="/register" element={<Register />} /> { }
         <Route path="/dashboard" element={
           <>

@@ -25,7 +25,7 @@ const RegisterUser = () => {
         title: "Registrasi Berhasil",
         text: "Silakan login untuk melanjutkan.",
       });
-      navigate("/");
+      navigate("/login");
     } catch (error) {
       Swal.fire({
         icon: "error",
@@ -277,7 +277,7 @@ const RegisterUser = () => {
           >
             Sudah punya akun?{" "}
             <button
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/login")}
               style={{
                 background: "none",
                 border: "none",

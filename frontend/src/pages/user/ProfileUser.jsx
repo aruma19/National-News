@@ -30,7 +30,7 @@ const ProfileUser = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
-    if (!token) return navigate("/");
+    if (!token) return navigate("/login");
 
     fetchProfile(token);
   }, []);

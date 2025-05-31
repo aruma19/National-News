@@ -34,13 +34,13 @@ const Detail = () => {
 
       if (timeLeft <= 0) {
         localStorage.removeItem("accessToken");
-        navigate("/");
+        navigate("/login");
         return;
       }
 
       const timer = setTimeout(() => {
         localStorage.removeItem("accessToken");
-        navigate("/");
+        navigate("/login");
       }, timeLeft * 1000);
 
       fetchNewsDetail();
@@ -50,7 +50,7 @@ const Detail = () => {
       return () => clearTimeout(timer);
     } catch (err) {
       localStorage.removeItem("accessToken");
-      navigate("/");
+      navigate("/login");
     }
   }, [id, navigate, token]);
 

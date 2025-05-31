@@ -57,6 +57,44 @@ const Login = () => {
     >
       <div
         style={{
+          position: "absolute",
+          top: "20px",
+          left: "20px",
+          zIndex: 1000,
+        }}
+      >
+        <button
+          onClick={() => navigate("/")}
+          style={{
+            backgroundColor: "rgba(255, 255, 255, 0.9)",
+            border: "1px solid #e0e0e0",
+            borderRadius: "50%",
+            width: "45px",
+            height: "45px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            cursor: "pointer",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+            transition: "all 0.3s ease",
+            fontSize: "1.2rem",
+          }}
+          onMouseEnter={(e) => {
+            e.target.style.backgroundColor = "#f5f5f5";
+            e.target.style.transform = "scale(1.1)";
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.backgroundColor = "rgba(255, 255, 255, 0.9)";
+            e.target.style.transform = "scale(1)";
+          }}
+          title="Kembali ke Halaman Utama"
+        >
+          ←
+        </button>
+      </div>
+
+      <div
+        style={{
           backgroundColor: "#f9f9f9",
           borderRadius: "20px",
           boxShadow: "0 15px 30px rgba(0,0,0,0.1)",
@@ -243,6 +281,7 @@ const Login = () => {
           </button>
         </div>
       </div>
+
     </div>
   );
 };
