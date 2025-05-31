@@ -16,7 +16,7 @@ const DashboardAdmin = ({ sidebarOpen, toggleSidebar }) => {
     const token = localStorage.getItem("accessToken");
 
     if (!token) {
-      window.location.href = "/";
+      window.location.href = "/login";
       return;
     }
 
@@ -27,13 +27,13 @@ const DashboardAdmin = ({ sidebarOpen, toggleSidebar }) => {
 
       if (timeLeft <= 0) {
         localStorage.removeItem("accessToken");
-        window.location.href = "/";
+        window.location.href = "/login";
         return;
       }
 
       const logoutTimer = setTimeout(() => {
         localStorage.removeItem("accessToken");
-        window.location.href = "/";
+        window.location.href = "/login";
       }, timeLeft * 1000);
 
       fetchNews(token);
@@ -43,7 +43,7 @@ const DashboardAdmin = ({ sidebarOpen, toggleSidebar }) => {
       return () => clearTimeout(logoutTimer);
     } catch (err) {
       localStorage.removeItem("accessToken");
-      window.location.href = "/";
+      window.location.href = "/login";
     }
   }, []);
 

@@ -12,7 +12,7 @@ const EditCategory = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
-    if (!token) return navigate("/admin/login");
+    if (!token) return navigate("/login");
 
     const fetchCategory = async () => {
       try {

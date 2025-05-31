@@ -65,7 +65,7 @@ const SidebarAdmin = () => {
                     color: "#f9f9f9",
                 });
 
-                navigate("/");
+                navigate("/login");
             }
         }
     };

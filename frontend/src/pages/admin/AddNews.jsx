@@ -21,7 +21,7 @@ const AddNews = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
-    if (!token) return navigate("/admin/login");
+    if (!token) return navigate("/login");
 
     axios
       .get(`${BASE_URL}/categories`, {

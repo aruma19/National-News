@@ -21,7 +21,7 @@ const EditNews = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
-    if (!token) return navigate("/admin/login");
+    if (!token) return navigate("/login");
 
     fetchNewsById(token);
     fetchCategories(token);
