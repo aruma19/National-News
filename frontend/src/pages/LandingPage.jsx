@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
-import { BASE_URL } from "../../utils";
+import { BASE_URL } from "../utils";
 
 const LandingPage = () => {
   const navigate = useNavigate();
