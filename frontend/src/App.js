@@ -2,8 +2,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import SidebarAdmin from "./components/SidebarAdmin";
 //Landing Pages
-import LandingPage from "./pages/landing/LandingPage";
-import DetailLandingPage from "./pages/landing/DetailLandingPage";
+import LandingPage from "./pages/LandingPage";
+import DetailLandingPage from "./pages/DetailLandingPage";
 //User
 import Register from "./pages/user/Register";
 import Login from "./pages/user/Login";
