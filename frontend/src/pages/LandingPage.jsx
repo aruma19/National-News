@@ -32,7 +32,7 @@ const LandingPage = () => {
     setLoading(true);
     try {
       // Menggunakan endpoint publik tanpa token
-      const response = await axios.get(`${BASE_URL}/news/public`);
+      const response = await axios.get(`${BASE_URL}/news`);
       setNewsList(response.data);
     } catch (error) {
       Swal.fire({
@@ -47,7 +47,7 @@ const LandingPage = () => {
   const fetchPublicCategories = async () => {
     try {
       // Menggunakan endpoint publik tanpa token
-      const response = await axios.get(`${BASE_URL}/categories/public`);
+      const response = await axios.get(`${BASE_URL}/categories`);
       setCategories(response.data);
     } catch (error) {
       console.error("Gagal mengambil kategori berita", error);
@@ -81,7 +81,7 @@ const LandingPage = () => {
   });
 
   const handleNewsClick = (newsId) => {
-    navigate(`/detail-landing/${newsId}`);
+    navigate(`/detail-landing/${newsId}`);  
   };
 
   const handleLoginClick = () => {
