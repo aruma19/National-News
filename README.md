@@ -17,12 +17,12 @@ Authorization: Bearer <your_jwt_token>
 ---
 
 ## 📋 Table of Contents
-- [User Features](#user-features)
-- [Admin Features](#admin-features)
-- [News Features](#news-features)
-- [Comment Features](#comment-features)
-- [Like Features](#like-features)
-- [Category Features](#category-features)
+- [User Features](#-user-features)
+- [Admin Features](#-admin-features)
+- [News Features](#-news-features)
+- [Comment Features](#-comment-features)
+- [Like Features](#-like-features)
+- [Category Features](#-category-features)
 
 ---
 
