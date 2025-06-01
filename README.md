@@ -29,12 +29,13 @@ Authorization: Bearer <your_jwt_token>
 ## 👤 User Features
 
 ### Register User
+Mendaftarkan akun sesuai dengan variabel data nya
+
 ```http
 POST /register
 Content-Type: application/json
 ```
 
-**Request Body:**
 ```json
 {
     "username": "farskuy",
