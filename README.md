@@ -51,7 +51,6 @@ POST /login
 Content-Type: application/json
 ```
 
-**Request Body:**
 ```json
 {
     "email": "farskuy@gmail.com",
@@ -72,7 +71,6 @@ Authorization: Bearer <token>
 Content-Type: application/json
 ```
 
-**Request Body:**
 ```json
 {
     "username": "farskuyy",
@@ -92,7 +90,6 @@ POST /register/admin
 Content-Type: application/json
 ```
 
-**Request Body:**
 ```json
 {
     "username": "admin4",
@@ -107,7 +104,6 @@ POST /login
 Content-Type: application/json
 ```
 
-**Request Body:**
 ```json
 {
     "email": "admin@gmail.com",
@@ -144,7 +140,6 @@ Authorization: Bearer <admin_token>
 Content-Type: application/json
 ```
 
-**Request Body:**
 ```json
 {
     "author": "UIA Channel",
@@ -200,7 +195,6 @@ Authorization: Bearer <token>
 Content-Type: application/json
 ```
 
-**Request Body:**
 ```json
 {
     "newsId": 13,
@@ -215,7 +209,6 @@ Authorization: Bearer <token>
 Content-Type: application/json
 ```
 
-**Request Body:**
 ```json
 {
     "newsId": 1,
@@ -240,7 +233,6 @@ Authorization: Bearer <token>
 Content-Type: application/json
 ```
 
-**Request Body:**
 ```json
 {
     "newsId": 6
@@ -292,7 +284,6 @@ Authorization: Bearer <admin_token>
 Content-Type: application/json
 ```
 
-**Request Body:**
 ```json
 {
     "category": "Isu Global"
@@ -306,7 +297,6 @@ Authorization: Bearer <admin_token>
 Content-Type: application/json
 ```
 
-**Request Body:**
 ```json
 {
     "category": "Lingkungan"
