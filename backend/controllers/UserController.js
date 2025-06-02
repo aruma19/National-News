@@ -61,7 +61,7 @@ async function loginHandler(req, res) {
     safeUserData.role = role;
 
     const accessToken = jwt.sign(safeUserData, process.env.ACCESS_TOKEN_SECRET, {
-      expiresIn: "10m",
+      expiresIn: "1m",
     });
     const refreshToken = jwt.sign(safeUserData, process.env.REFRESH_TOKEN_SECRET, {
       expiresIn: "1d",
@@ -167,7 +167,7 @@ async function getNewToken(req, res) {
     const accessToken = jwt.sign(
       { id: user.id, email: user.email, role: user.role, username: user.username },
       process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: '10m' }
+      { expiresIn: '1m' }
     );
 
     res.json({ accessToken });

@@ -31,20 +31,12 @@ const Dashboard = () => {
       const timeLeft = decoded.exp - now;
 
       if (timeLeft <= 0) {
-        localStorage.removeItem("accessToken");
-        window.location.href = "/login";
+        // Jangan auto logout, biarkan axiosInstance memicu refresh otomatis
         return;
       }
 
-      const logoutTimer = setTimeout(() => {
-        localStorage.removeItem("accessToken");
-        window.location.href = "/login";
-      }, timeLeft * 1000);
-
       fetchNews(token);
       fetchCategories(token);
-
-      return () => clearTimeout(logoutTimer);
     } catch (err) {
       localStorage.removeItem("accessToken");
       window.location.href = "/login";
@@ -248,8 +240,8 @@ const Dashboard = () => {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: isMobile 
-              ? "1fr" 
+            gridTemplateColumns: isMobile
+              ? "1fr"
               : "repeat(3, 1fr)",
             gap: isMobile ? "1rem" : "1.5rem",
             marginTop: "1.5rem",
