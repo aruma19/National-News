@@ -159,26 +159,31 @@ async function getMe(req, res) {
 
 async function getNewToken(req, res) {
   const refreshToken = req.cookies.refreshToken;
-  if (!refreshToken) return res.sendStatus(401);
+  if (!refreshToken) {
+    console.log("No refresh token sent");
+    return res.sendStatus(401);
+  }
 
   jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
-    if (err) return res.sendStatus(403);
+    if (err) {
+      console.log("Refresh token invalid:", err);
+      return res.sendStatus(403);
+    }
+
+    console.log("Refresh token user payload:", user);
 
     const accessToken = jwt.sign(
-      {
-        id: user.id,
-        email: user.email,
-        role: user.role,
-        username: user.username,
-        timestamp: Date.now(), // Tambahkan field dinamis agar token beda
-      },
+      { id: user.id, email: user.email, role: user.role, username: user.username },
       process.env.ACCESS_TOKEN_SECRET,
       { expiresIn: '1m' }
     );
 
+    console.log("New access token generated:", accessToken);
+
     res.json({ accessToken });
   });
 };
+
 
 
 export { registerUser, loginHandler, logout, registerAdmin, updateUser, getMe, getNewToken };
