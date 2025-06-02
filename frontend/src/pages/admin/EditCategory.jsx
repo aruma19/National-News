@@ -12,15 +12,10 @@ const EditCategory = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-    if (!token) return navigate("/login");
-
     const fetchCategory = async () => {
       try {
-        const res = await axios.get(`${BASE_URL}/categories/${id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setCategory(res.data.category);
+        const response = await strictInstance.get(`/categories/${id}`);
+        setCategory(response.data.category);
       } catch (err) {
         Swal.fire("Gagal", "Kategori tidak ditemukan", "error");
       }
@@ -34,18 +29,12 @@ const EditCategory = () => {
 
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, [id, navigate]);
+  }, [id]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const token = localStorage.getItem("accessToken");
-
     try {
-      await axios.put(
-        `${BASE_URL}/categories/${id}`,
-        { category },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await strictInstance.put(`/categories/${id}`, { category });
       Swal.fire("Sukses", "Kategori berhasil diperbarui", "success").then(() =>
         navigate("/categorylist")
       );

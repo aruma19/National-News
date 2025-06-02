@@ -21,46 +21,17 @@ const Detail = () => {
   const [userId, setUserId] = useState(null);
 
   useEffect(() => {
-    if (!token) {
-      navigate("/dashboard");
-      return;
-    }
+    const token = localStorage.getItem("accessToken");
+    fetchNewsDetail();
+    fetchLikesAndStatus();
+    fetchComments();
 
-    try {
-      const decoded = jwtDecode(token);
-      setUserId(decoded.id);
-
-      const now = Date.now() / 1000;
-      const timeLeft = decoded.exp - now;
-
-      if (timeLeft <= 0) {
-        localStorage.removeItem("accessToken");
-        navigate("/login");
-        return;
-      }
-
-      const timer = setTimeout(() => {
-        localStorage.removeItem("accessToken");
-        navigate("/login");
-      }, timeLeft * 1000);
-
-      fetchNewsDetail();
-      fetchLikesAndStatus();
-      fetchComments();
-
-      return () => clearTimeout(timer);
-    } catch (err) {
-      localStorage.removeItem("accessToken");
-      navigate("/login");
-    }
   }, [id, navigate, token]);
 
   const fetchNewsDetail = async () => {
     try {
-      const res = await axios.get(`${BASE_URL}/news/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setNews(res.data);
+      const response = await strictInstance.get(`/news/${id}`);
+      setNews(response.data);
     } catch (error) {
       Swal.fire("Error", "Gagal mengambil data berita", "error");
     } finally {
@@ -70,14 +41,10 @@ const Detail = () => {
 
   const fetchLikesAndStatus = async () => {
     try {
-      const resCount = await axios.get(`${BASE_URL}/news/likesCount/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setLikes(resCount.data.count || 0);
+      const response = await strictInstance.get(`/news/likesCount/${id}`);
+      setLikes(response.data.count || 0);
 
-      const resStatus = await axios.get(`${BASE_URL}/news/liked/check/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const resStatus = await strictInstance.get(`/news/liked/check/${id}`);
       setHasLiked(resStatus.data.liked);
     } catch (err) {
       console.error("Error fetching like data", err);
@@ -87,18 +54,12 @@ const Detail = () => {
   const handleLikeToggle = async () => {
     try {
       if (hasLiked) {
-        await axios.delete(`${BASE_URL}/news/liked/${id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        await strictInstance.delete(`/news/liked/${id}`);
         setLikes((prev) => (prev > 0 ? prev - 1 : 0));
         setHasLiked(false);
         Swal.fire("Berhasil", "Berita dihapus dari suka", "success");
       } else {
-        await axios.post(
-          `${BASE_URL}/news/liked`,
-          { newsId: Number(id) },
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
+        await strictInstance.post(`/news/liked`, { newsId: Number(id) });
         setLikes((prev) => prev + 1);
         setHasLiked(true);
         Swal.fire("Berhasil", "Berita disukai!", "success");
@@ -110,10 +71,8 @@ const Detail = () => {
 
   const fetchComments = async () => {
     try {
-      const res = await axios.get(`${BASE_URL}/comments/news/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setComments(res.data);
+      const response = await strictInstance.get(`/comments/news/${id}`);
+      setComments(response.data);
     } catch (err) {
       console.error("Error fetching comments", err);
     }
@@ -126,11 +85,10 @@ const Detail = () => {
     }
 
     try {
-      await axios.post(
-        `${BASE_URL}/comments`,
-        { newsId: Number(id), content: newComment },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await strictInstance.post(`/comments`, {
+        newsId: Number(id),
+        content: newComment,
+      });
       Swal.fire("Berhasil", "Komentar ditambahkan", "success");
       setNewComment("");
       fetchComments();
@@ -148,11 +106,7 @@ const Detail = () => {
     }
 
     try {
-      await axios.put(
-        `${BASE_URL}/comments/${commentId}`,
-        { content: updatedContent },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await strictInstance.put(`/comments/${commentId}`, {content: updatedContent});
       Swal.fire("Berhasil", "Komentar diperbarui", "success");
       fetchComments();
     } catch (err) {
@@ -173,9 +127,7 @@ const Detail = () => {
     if (!confirm.isConfirmed) return;
 
     try {
-      await axios.delete(`${BASE_URL}/comments/${commentId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await strictInstance.delete(`/comments/${commentId}`);
       Swal.fire("Berhasil", "Komentar dihapus", "success");
       setComments((prev) => prev.filter((c) => c.id !== commentId));
     } catch (err) {

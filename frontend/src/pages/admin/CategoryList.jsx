@@ -18,10 +18,8 @@ const CategoryList = () => {
   const fetchCategories = async () => {
     const token = localStorage.getItem("accessToken");
     try {
-      const res = await axios.get(`${BASE_URL}/categories`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setCategories(res.data);
+      const response = await strictInstance.get("/categories");
+      setCategories(response.data);
     } catch (err) {
       console.error("Gagal ambil kategori:", err);
     }
@@ -39,9 +37,7 @@ const CategoryList = () => {
 
     if (confirm.isConfirmed) {
       try {
-        await axios.delete(`${BASE_URL}/categories/${id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        await strictInstance.delete(`/categories/${id}`);
         Swal.fire("Dihapus!", "Kategori berhasil dihapus.", "success");
         fetchCategories();
       } catch (err) {
@@ -57,11 +53,7 @@ const CategoryList = () => {
 
     setLoading(true);
     try {
-      await axios.post(
-        `${BASE_URL}/categories`,
-        { category: newCategory },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await strictInstance.post("/categories", { category: newCategory });
       setNewCategory("");
       Swal.fire("Sukses", "Kategori berhasil ditambahkan", "success");
       fetchCategories();

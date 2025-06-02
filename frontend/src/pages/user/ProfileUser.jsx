@@ -31,17 +31,13 @@ const ProfileUser = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
-    if (!token) return navigate("/login");
-
     fetchProfile(token);
   }, []);
 
   const fetchProfile = async (token) => {
     try {
-      const res = await axios.get(`${BASE_URL}/me`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const { username, email, gender } = res.data;
+      const response = await strictInstance.get("/me");
+      const { username, email, gender } = response.data;
       setFormData({ username, email, gender, password: "" });
     } catch (error) {
       Swal.fire("Error", "Gagal mengambil data profil", "error");
@@ -58,12 +54,7 @@ const ProfileUser = () => {
     const token = localStorage.getItem("accessToken");
 
     try {
-      await axios.put(`${BASE_URL}/user/update`, formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
+      await strictInstance.put("/user/update", formData);
 
       Swal.fire({
         icon: "success",

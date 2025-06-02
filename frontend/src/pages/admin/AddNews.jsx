@@ -23,10 +23,8 @@ const AddNews = () => {
     const token = localStorage.getItem("accessToken");
     if (!token) return navigate("/login");
 
-    axios
-      .get(`${BASE_URL}/categories`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+    strictInstance
+      .get(`/categories`)
       .then((res) => setCategories(res.data))
       .catch((err) => console.error("Gagal ambil kategori:", err));
   }, [navigate]);
@@ -43,11 +41,8 @@ const AddNews = () => {
     const token = localStorage.getItem("accessToken");
 
     try {
-      await axios.post(`${BASE_URL}/news`, formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
+      await strictInstance.post(`/news`, formData, {
+        headers: { "Content-Type": "application/json" },
       });
 
       Swal.fire("Berhasil!", "Berita berhasil ditambahkan", "success");

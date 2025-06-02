@@ -22,18 +22,14 @@ const EditNews = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
-    if (!token) return navigate("/login");
-
     fetchNewsById(token);
     fetchCategories(token);
   }, [id]);
 
   const fetchNewsById = async (token) => {
     try {
-      const res = await axios.get(`${BASE_URL}/news/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setNews(res.data);
+      const response = await strictInstance.get(`/news/${id}`);
+      setNews(response.data);
     } catch (error) {
       Swal.fire("Error", "Gagal mengambil data berita", "error");
     }
@@ -41,10 +37,8 @@ const EditNews = () => {
 
   const fetchCategories = async (token) => {
     try {
-      const res = await axios.get(`${BASE_URL}/categories`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setCategories(res.data);
+      const response = await strictInstance.get("/categories");
+      setCategories(response.data);
     } catch (error) {
       console.error("Gagal mengambil kategori", error);
     }
@@ -60,12 +54,7 @@ const EditNews = () => {
     const token = localStorage.getItem("accessToken");
 
     try {
-      await axios.put(`${BASE_URL}/news/${id}`, news, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
+      await strictInstance.put(`/news/${id}`, news);
       Swal.fire("Sukses", "Berita berhasil diperbarui", "success").then(() =>
         navigate("/dashboardAdmin")
       );

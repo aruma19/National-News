@@ -22,34 +22,12 @@ const LikedNews = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
-    if (!token) {
-      window.location.href = "/";
-      return;
-    }
-
-    try {
-      const decoded = jwtDecode(token);
-      const now = Date.now() / 1000;
-      if (decoded.exp < now) {
-        localStorage.removeItem("accessToken");
-        window.location.href = "/";
-        return;
-      }
-
-      fetchLikedNews(token, decoded.id);
-    } catch (error) {
-      localStorage.removeItem("accessToken");
-      window.location.href = "/";
-    }
+    fetchLikedNews(token, decoded.id);
   }, []);
 
   const fetchLikedNews = async (token, id) => {
     try {
-      const response = await axios.get(`${BASE_URL}/news/liked/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await strictInstance.get(`/news/liked/${id}`);
       setLikedNews(response.data);
     } catch (error) {
       Swal.fire({
@@ -67,12 +45,7 @@ const LikedNews = () => {
     if (!token) return;
 
     try {
-      await axios.delete(`${BASE_URL}/news/liked/${newsId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
+      await strictInstance.delete(`/news/liked/${newsId}`);
       setLikedNews((prev) => prev.filter((news) => news.id !== newsId));
 
       Swal.fire({

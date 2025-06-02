@@ -23,11 +23,6 @@ const DetailAdmin = () => {
   const token = localStorage.getItem("accessToken");
 
   useEffect(() => {
-    if (!token) {
-      navigate("/dashboardAdmin");
-      return;
-    }
-
     try {
       const decoded = jwtDecode(token);
       setRole(decoded.role);
