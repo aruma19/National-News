@@ -3,6 +3,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { BASE_URL } from "../../utils";
 import jwtDecode from "jwt-decode";
+import strictInstance from "../../utils/axiosInstance";
 
 const Dashboard = () => {
   const [newsList, setNewsList] = useState([]);
