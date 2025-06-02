@@ -32,7 +32,7 @@ const Dashboard = () => {
   const fetchNews = async () => {
     setLoading(true);
     try {
-      const response = await axiosInstance.get("/news");
+      const response = await strictInstance.get("/news");
       setNewsList(response.data);
     } catch (error) {
       Swal.fire({
@@ -48,7 +48,7 @@ const Dashboard = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await axiosInstance.get("/categories");
+      const response = await strictInstance.get("/categories");
       setCategories(response.data);
     } catch (error) {
       console.error("Gagal mengambil kategori berita", error);
