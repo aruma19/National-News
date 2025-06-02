@@ -25,11 +25,11 @@ const Dashboard = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
-      fetchNews(token);
-      fetchCategories(token);
+      fetchNews();
+      fetchCategories();
   }, []);
 
-  const fetchNews = async (token) => {
+  const fetchNews = async () => {
     setLoading(true);
     try {
       const response = await axiosInstance.get("/news");
@@ -46,7 +46,7 @@ const Dashboard = () => {
     setLoading(false);
   };
 
-  const fetchCategories = async (token) => {
+  const fetchCategories = async () => {
     try {
       const response = await axiosInstance.get("/categories");
       setCategories(response.data);
