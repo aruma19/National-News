@@ -61,7 +61,7 @@ async function loginHandler(req, res) {
     safeUserData.role = role;
 
     const accessToken = jwt.sign(safeUserData, process.env.ACCESS_TOKEN_SECRET, {
-      expiresIn: "15s",
+      expiresIn: "30s",
     });
     const refreshToken = jwt.sign(safeUserData, process.env.REFRESH_TOKEN_SECRET, {
       expiresIn: "1m",
