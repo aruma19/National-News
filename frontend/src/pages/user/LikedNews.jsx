@@ -22,7 +22,7 @@ const LikedNews = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
-    fetchLikedNews(token, decoded.id);
+    fetchLikedNews(token, id);
   }, []);
 
   const fetchLikedNews = async (token, id) => {
