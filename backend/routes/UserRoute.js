@@ -8,10 +8,12 @@ import {
   getMe
 } from "../controllers/UserController.js";
 import { verifyToken } from "../middleware/VerifyToken.js";
+import { refreshToken } from "../controllers/RefreshToken.js";
 
 
 const router = express.Router();
 
+router.get("/token", refreshToken);
 router.post("/register", registerUser);
 router.post("/register/admin", registerAdmin);
 router.post("/login", loginHandler);

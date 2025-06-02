@@ -24,44 +24,14 @@ const Dashboard = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
-
-    if (!token) {
-      window.location.href = "/login";
-      return;
-    }
-
-    try {
-      const decoded = jwtDecode(token);
-      const now = Date.now() / 1000;
-      const timeLeft = decoded.exp - now;
-
-      if (timeLeft <= 0) {
-        localStorage.removeItem("accessToken");
-        window.location.href = "/login";
-        return;
-      }
-
-      const logoutTimer = setTimeout(() => {
-        localStorage.removeItem("accessToken");
-        window.location.href = "/login";
-      }, timeLeft * 1000);
-
       fetchNews(token);
       fetchCategories(token);
-
-      return () => clearTimeout(logoutTimer);
-    } catch (err) {
-      localStorage.removeItem("accessToken");
-      window.location.href = "/login";
-    }
   }, []);
 
   const fetchNews = async (token) => {
     setLoading(true);
     try {
-      const response = await axios.get(`${BASE_URL}/news`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axiosInstance.get("/news");
       setNewsList(response.data);
     } catch (error) {
       Swal.fire({
@@ -77,9 +47,7 @@ const Dashboard = () => {
 
   const fetchCategories = async (token) => {
     try {
-      const response = await axios.get(`${BASE_URL}/categories`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axiosInstance.get("/categories");
       setCategories(response.data);
     } catch (error) {
       console.error("Gagal mengambil kategori berita", error);

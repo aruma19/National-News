@@ -1,7 +1,7 @@
 import axios from "axios";
 import { BASE_URL } from "../utils";
 
-const instance = axios.create({
+const strictInstance = axios.create({
   baseURL: BASE_URL,
   withCredentials: true,
   headers: {
@@ -9,15 +9,16 @@ const instance = axios.create({
   },
 });
 
-instance.interceptors.response.use(
+strictInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
 
     if (
-      error.response?.status === 401 &&
-      !originalRequest._retry &&
-      !originalRequest.url.includes("/login") &&
+      error.response?.status === 401 ||
+      error.response?.status === 403 ||
+      !originalRequest._retry ||
+      !originalRequest.url.includes("/login") ||
       !originalRequest.url.includes("/token")
     ) {
       originalRequest._retry = true;
@@ -30,10 +31,10 @@ instance.interceptors.response.use(
         localStorage.setItem("accessToken", newAccessToken);
 
         // Update Authorization header for future requests
-        instance.defaults.headers.Authorization = `Bearer ${newAccessToken}`;
+        strictInstance.defaults.headers.Authorization = `Bearer ${newAccessToken}`;
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
 
-        return instance(originalRequest);
+        return strictInstance(originalRequest);
       } catch (err) {
         console.error("Token refresh failed:", err);
         localStorage.removeItem("accessToken");
@@ -46,4 +47,4 @@ instance.interceptors.response.use(
   }
 );
 
-export default instance;
+export default strictInstance;

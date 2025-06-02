@@ -61,10 +61,10 @@ async function loginHandler(req, res) {
     safeUserData.role = role;
 
     const accessToken = jwt.sign(safeUserData, process.env.ACCESS_TOKEN_SECRET, {
-      expiresIn: "30m",
+      expiresIn: "30s",
     });
     const refreshToken = jwt.sign(safeUserData, process.env.REFRESH_TOKEN_SECRET, {
-      expiresIn: "1d",
+      expiresIn: "1m",
     });
 
     // Simpan token ke user/admin sesuai role
