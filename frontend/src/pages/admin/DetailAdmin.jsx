@@ -5,265 +5,6 @@ import { BASE_URL } from "../../utils";
 import Swal from "sweetalert2";
 import jwtDecode from "jwt-decode";
 
-const styles = {
-  container: {
-    fontFamily: "Inter, sans-serif",
-    backgroundColor: "#f5f8fc",
-    padding: "1rem",
-    minHeight: "100vh",
-    color: "#0a1f44",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "flex-start",
-    // Responsive padding
-    "@media (min-width: 768px)": {
-      padding: "2rem",
-    },
-  },
-  box: {
-    background: "linear-gradient(to bottom right, #ffffff, #f7fbff)",
-    borderRadius: "12px",
-    padding: "16px",
-    boxShadow: "0 8px 20px rgba(13, 30, 74, 0.08)",
-    width: "100%",
-    maxWidth: "800px", // Membatasi lebar maksimal
-    margin: "0 auto",
-    // Responsive styling
-    "@media (min-width: 768px)": {
-      borderRadius: "16px",
-      padding: "28px",
-      boxShadow: "0 12px 30px rgba(13, 30, 74, 0.12)",
-      maxWidth: "900px", // Sedikit lebih lebar untuk desktop
-    },
-  },
-  backButton: {
-    backgroundColor: "#ffffff",
-    color: "#1a2a6c",
-    fontWeight: 600,
-    border: "2px solid #3861ff",
-    padding: "8px 16px",
-    borderRadius: 8,
-    fontSize: "0.85rem",
-    cursor: "pointer",
-    marginBottom: 16,
-    boxShadow: "0 4px 12px rgba(56, 97, 255, 0.2)",
-    transition: "transform 0.2s ease, box-shadow 0.2s ease",
-    width: "auto",
-    display: "inline-flex",
-    alignItems: "center",
-    gap: "6px",
-    // Responsive styling
-    "@media (min-width: 768px)": {
-      padding: "10px 22px",
-      borderRadius: 10,
-      fontSize: "0.95rem",
-      marginBottom: 24,
-    },
-  },
-  title: {
-    fontWeight: 700,
-    fontSize: "1.5rem",
-    color: "#0b1a40",
-    textShadow: "0 1px 3px rgba(11, 26, 64, 0.15)",
-    letterSpacing: "0.02em",
-    textAlign: "center",
-    marginBottom: "1rem",
-    lineHeight: "1.3",
-    // Responsive font size
-    "@media (min-width: 768px)": {
-      fontSize: "2rem",
-      marginBottom: "1.5rem",
-      lineHeight: "1.2",
-    },
-  },
-  imageWrapper: {
-    borderRadius: "8px",
-    overflow: "hidden",
-    boxShadow: "0 4px 12px rgba(11, 26, 64, 0.08)",
-    marginBottom: "1rem",
-    // Responsive styling
-    "@media (min-width: 768px)": {
-      borderRadius: "12px",
-      boxShadow: "0 6px 18px rgba(11, 26, 64, 0.1)",
-      marginBottom: "1.5rem",
-    },
-  },
-  image: {
-    width: "100%",
-    height: "auto",
-    display: "block",
-    borderRadius: "8px",
-    // Responsive styling
-    "@media (min-width: 768px)": {
-      borderRadius: "12px",
-    },
-  },
-  meta: {
-    fontSize: "0.85rem",
-    color: "#42548b",
-    fontWeight: 500,
-    marginBottom: "0.5rem",
-    lineHeight: "1.4",
-    // Responsive font size
-    "@media (min-width: 768px)": {
-      fontSize: "0.95rem",
-      marginBottom: "0.75rem",
-    },
-  },
-  strong: {
-    color: "#1b2c60",
-  },
-  contentSection: {
-    backgroundColor: "#f9fbff",
-    padding: "1.2rem 1rem",
-    borderRadius: "10px",
-    boxShadow: "0 3px 10px rgba(11, 26, 64, 0.05)",
-    marginBottom: "1.5rem",
-    color: "#273861",
-    fontSize: "0.95rem",
-    textAlign: "justify",
-    lineHeight: "1.6",
-    // Responsive styling
-    "@media (min-width: 768px)": {
-      padding: "1.8rem 2rem",
-      borderRadius: "14px",
-      boxShadow: "0 4px 14px rgba(11, 26, 64, 0.07)",
-      marginBottom: "2.3rem",
-      fontSize: "1.05rem",
-    },
-  },
-  contentTitle: {
-    fontSize: "1.1rem",
-    fontWeight: 600,
-    marginBottom: "0.5rem",
-    color: "#1a2a6c",
-    // Responsive font size
-    "@media (min-width: 768px)": {
-      fontSize: "1.25rem",
-      marginBottom: "0.75rem",
-    },
-  },
-  commentBox: {
-    marginTop: "1.5rem",
-    // Responsive margin
-    "@media (min-width: 768px)": {
-      marginTop: "2rem",
-    },
-  },
-  textarea: {
-    width: "100%",
-    padding: "0.6rem",
-    borderRadius: "6px",
-    border: "1px solid #cbd5e0",
-    fontSize: "0.9rem",
-    marginBottom: "0.6rem",
-    resize: "vertical",
-    minHeight: "80px",
-    boxSizing: "border-box",
-    // Responsive styling
-    "@media (min-width: 768px)": {
-      padding: "0.75rem",
-      borderRadius: "8px",
-      fontSize: "1rem",
-      marginBottom: "0.75rem",
-      minHeight: "100px",
-    },
-  },
-  buttonPrimary: {
-    backgroundColor: "#3861ff",
-    color: "#fff",
-    padding: "0.6rem 1.2rem",
-    borderRadius: "6px",
-    fontWeight: "600",
-    border: "none",
-    cursor: "pointer",
-    marginBottom: "1rem",
-    fontSize: "0.9rem",
-    width: "100%",
-    // Responsive styling
-    "@media (min-width: 768px)": {
-      padding: "0.5rem 1rem",
-      marginBottom: "1.25rem",
-      fontSize: "1rem",
-      width: "auto",
-    },
-  },
-  commentCard: {
-    backgroundColor: "#ffffff",
-    borderRadius: "8px",
-    boxShadow: "0 2px 8px rgba(11, 26, 64, 0.04)",
-    padding: "0.8rem",
-    marginBottom: "0.8rem",
-    // Responsive styling
-    "@media (min-width: 768px)": {
-      borderRadius: "12px",
-      boxShadow: "0 2px 10px rgba(11, 26, 64, 0.06)",
-      padding: "1rem",
-      marginBottom: "1rem",
-    },
-  },
-  commentContent: {
-    fontSize: "0.9rem",
-    lineHeight: "1.5",
-    marginBottom: "0.5rem",
-    // Responsive font size
-    "@media (min-width: 768px)": {
-      fontSize: "1rem",
-    },
-  },
-  commentActions: {
-    marginTop: "0.5rem",
-    display: "flex",
-    flexWrap: "wrap",
-    gap: "0.5rem",
-  },
-  buttonSmall: {
-    fontSize: "0.8rem",
-    padding: "0.3rem 0.6rem",
-    borderRadius: "5px",
-    border: "none",
-    cursor: "pointer",
-    minWidth: "60px",
-    // Responsive styling
-    "@media (min-width: 768px)": {
-      fontSize: "0.85rem",
-      padding: "0.35rem 0.75rem",
-      borderRadius: "6px",
-    },
-  },
-  buttonWarning: {
-    backgroundColor: "#f6ad55",
-    color: "#fff",
-  },
-  buttonDanger: {
-    backgroundColor: "#e53e3e",
-    color: "#fff",
-  },
-  loadingText: {
-    textAlign: "center",
-    marginTop: "2rem",
-    fontSize: "1rem",
-    color: "#42548b",
-  },
-};
-
-// CSS-in-JS media queries helper
-const useMediaQuery = (query) => {
-  const [matches, setMatches] = useState(false);
-
-  useEffect(() => {
-    const media = window.matchMedia(query);
-    if (media.matches !== matches) {
-      setMatches(media.matches);
-    }
-    const listener = () => setMatches(media.matches);
-    media.addListener(listener);
-    return () => media.removeListener(listener);
-  }, [matches, query]);
-
-  return matches;
-};
-
 const DetailAdmin = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -272,9 +13,6 @@ const DetailAdmin = () => {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
   const [likeCount, setLikeCount] = useState(0);
-
-  // Media query hooks
-  const isDesktop = useMediaQuery("(min-width: 768px)");
 
   // Untuk cek user login dan adminId untuk kontrol edit/delete komentar
   const [adminId, setAdminId] = useState(null);
@@ -419,8 +157,17 @@ const DetailAdmin = () => {
     }
   };
 
-  if (loading) return <div style={styles.loadingText}>Memuat...</div>;
-  if (!news) return <div style={styles.loadingText}>Berita tidak ditemukan.</div>;
+  // Fungsi untuk format waktu komentar
+  const formatCommentDate = (dateString) => {
+    const d = new Date(dateString);
+    return d.toLocaleString("id-ID", {
+      dateStyle: "medium",
+      timeStyle: "short",
+    });
+  };
+
+  if (loading) return <p className="loading-text">Memuat...</p>;
+  if (!news) return <p className="loading-text">Berita tidak ditemukan.</p>;
 
   const formattedDate = new Date(news.iso_date || news.createdAt).toLocaleString("id-ID", {
     dateStyle: "long",
@@ -428,115 +175,338 @@ const DetailAdmin = () => {
   });
 
   return (
-    <div style={styles.container}>
-      <div style={styles.box}>
-        {/* Tombol Back */}
+    <>
+      <style>
+        {`
+          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+          * {
+            box-sizing: border-box;
+          }
+          body {
+            font-family: 'Inter', sans-serif;
+            background: transparent;
+            color: #0a1f44;
+            margin: 0;
+            padding: 32px 0;
+          }
+          .container {
+            width: 90%;
+            min-width: 520px;
+            max-width: 600px;
+            margin: 0 auto;
+            overflow-y: auto;
+            background: linear-gradient(to bottom right, #ffffff, #f8faff);
+            border-radius: 16px;
+            padding: 20px 28px;
+            box-shadow: 0 12px 30px rgba(13, 30, 74, 0.12);
+            color: #1a2a6c;
+            line-height: 1.65;
+          }
+          h1.title {
+            font-weight: 700;
+            font-size: 2rem;
+            margin-bottom: 1.25rem;
+            text-align: center;
+            color: #0b1a40;
+            text-shadow: 0 1px 3px rgba(11, 26, 64, 0.15);
+            letter-spacing: 0.02em;
+          }
+          .image-container {
+            width: 100%;
+            max-height: 360px;
+            overflow: hidden;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 6px 18px rgba(11, 26, 64, 0.1);
+          }
+          .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 12px;
+            transition: transform 0.35s ease;
+          }
+          .image-container img:hover {
+            transform: scale(1.03);
+          }
+          .meta-info {
+            font-size: 0.9rem;
+            color: #42548b;
+            margin-bottom: 0.75rem;
+            text-align: center;
+            font-weight: 500;
+          }
+          .meta-info strong {
+            color: #1b2c60;
+          }
+          .content-section {
+            background: #f9fbff;
+            padding: 1.8rem 2rem;
+            border-radius: 14px;
+            box-shadow: 0 4px 14px rgba(11, 26, 64, 0.07);
+            margin-bottom: 2.3rem;
+            color: #273861;
+            font-size: 1.05rem;
+            text-align: justify;
+          }
+          .content-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: #1a2a6c;
+          }
+          a {
+            color: #3861ff;
+            font-weight: 600;
+            text-decoration: none;
+            word-break: break-all;
+          }
+          a:hover {
+            text-decoration: underline;
+          }
+          .comments-section {
+            margin-top: 2rem;
+          }
+          .comment-input {
+            width: 100%;
+            min-height: 80px;
+            padding: 14px 18px;
+            border-radius: 12px;
+            border: 1.8px solid #d3d9f8;
+            font-size: 1rem;
+            resize: vertical;
+            font-family: 'Inter', sans-serif;
+            color: #1a2a6c;
+            box-shadow: inset 0 2px 6px rgb(13 30 74 / 0.05);
+            transition: border-color 0.3s ease;
+            margin-bottom: 12px;
+          }
+          .comment-input:focus {
+            border-color: #3861ff;
+            outline: none;
+            box-shadow: 0 0 8px rgba(56, 97, 255, 0.3);
+          }
+          .btn-submit-comment {
+            background: linear-gradient(to right, #1a2a6c, #3861ff);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 28px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(56, 97, 255, 0.35);
+            transition: all 0.3s ease;
+          }
+          .btn-submit-comment:hover {
+            background: linear-gradient(to right, #0b1a40, #2543c1);
+            box-shadow: 0 12px 30px rgb(37 67 193 / 0.5);
+          }
+          .comments-list {
+            margin-top: 2rem;
+          }
+          .comment-item {
+            background: #e8f0ff;
+            padding: 14px 18px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 12px rgb(11 26 64 / 0.1);
+            position: relative;
+          }
+          .comment-content {
+            font-size: 1rem;
+            color: #0b1a40;
+            margin-bottom: 6px;
+            white-space: pre-wrap;
+            word-break: break-word;
+          }
+          .comment-meta {
+            font-size: 0.8rem;
+            color: #42548b;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          }
+          .comment-author {
+            font-weight: 600;
+          }
+          .comment-date {
+            font-style: italic;
+          }
+          .comment-actions button {
+            background: transparent;
+            border: none;
+            color: #3861ff;
+            cursor: pointer;
+            font-weight: 600;
+            margin-left: 12px;
+            transition: color 0.2s ease;
+            font-size: 0.85rem;
+          }
+          .comment-actions button:hover {
+            color: #0b1a40;
+            text-decoration: underline;
+          }
+          .loading-text {
+            font-size: 1.3rem;
+            color: #42548b;
+            text-align: center;
+            margin-top: 120px;
+          }
+          .btn-back {
+            background-color: #ffffff;
+            color: #1a2a6c;
+            font-weight: 600;
+            border: 2px solid #3861ff;
+            padding: 10px 22px;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 12px rgba(56, 97, 255, 0.2);
+          }
+
+          .btn-back:hover {
+            background-color: #3861ff;
+            color: #ffffff;
+            box-shadow: 0 10px 24px rgba(56, 97, 255, 0.35);
+          }
+
+          @media (min-width: 1200px) {
+            .container {
+              max-width: 540px;
+            }
+          }
+
+          @media (max-width: 480px) {
+            .container {
+              padding: 16px 20px;
+            }
+            h1.title {
+              font-size: 1.65rem;
+            }
+            .btn-back {
+              padding: 8px 16px;
+              font-size: 0.9rem;
+            }
+          }
+        `}
+      </style>
+
+      <div className="container" role="main" aria-labelledby="news-title">
         <button
-          style={styles.backButton}
           onClick={() => navigate("/dashboardAdmin")}
+          className="btn-back"
+          aria-label="Kembali ke Dashboard Admin"
         >
-          ← Kembali {isDesktop && "ke Dashboard"}
+          ← Kembali ke Dashboard
         </button>
         
-        <h1 style={styles.title}>{news.title}</h1>
+        <h1 className="title" id="news-title">{news.title}</h1>
 
         {news.image_large && (
-          <div style={styles.imageWrapper}>
+          <div className="image-container" aria-label={`Gambar berita: ${news.title}`}>
             <img
               src={news.image_large.startsWith("http") ? news.image_large : `${BASE_URL}${news.image_large}`}
               alt={news.title}
-              style={styles.image}
+              loading="lazy"
+              style={{ width: '100%', height: 'auto', maxHeight: 'auto', objectFit: 'contain' }}
             />
           </div>
         )}
 
-        <div style={styles.meta}>
-          Ditulis oleh <strong style={styles.strong}>{news.author || "Admin"}</strong>
-          {isDesktop && " | "}
-          {!isDesktop && <br />}
-          Kategori: <strong style={styles.strong}>{news.category?.category || "Umum"}</strong>
-        </div>
-        <div style={styles.meta}>Tanggal: {formattedDate}</div>
+        <p className="meta-info">
+          Ditulis oleh <strong>{news.author || "Admin"}</strong> | Kategori:{" "}
+          <strong>{news.category?.category || "Umum"}</strong>
+        </p>
+        <p className="meta-info">Tanggal: {formattedDate}</p>
 
         {news.url && (
-          <div style={styles.meta}>
-            <strong style={styles.strong}>URL:</strong>{" "}
-            <a 
-              href={news.url} 
-              target="_blank" 
-              rel="noopener noreferrer"
-              style={{ 
-                wordBreak: "break-all",
-                color: "#3861ff",
-                textDecoration: "underline"
-              }}
-            >
+          <p className="meta-info">
+            <strong>URL:</strong>{" "}
+            <a href={news.url} target="_blank" rel="noopener noreferrer">
               {news.url}
             </a>
-          </div>
+          </p>
         )}
 
-        <div style={styles.contentSection}>
-          <h2 style={styles.contentTitle}>Deskripsi</h2>
-          <div style={styles.commentContent}>{news.description}</div>
-        </div>
+        <section className="content-section" aria-label="Deskripsi berita">
+          <h2 className="content-title">Deskripsi</h2>
+          <p>{news.description}</p>
+        </section>
 
         {news.content && (
-          <div style={styles.contentSection}>
-            <h2 style={styles.contentTitle}>Konten Lengkap</h2>
-            <div style={styles.commentContent}>{news.content}</div>
-          </div>
+          <section className="content-section" aria-label="Konten lengkap berita">
+            <h2 className="content-title">Konten Lengkap</h2>
+            <p>{news.content}</p>
+          </section>
         )}
 
-        {/* Komentar Section */}
-        <div style={styles.commentBox}>
-          <h3 style={styles.contentTitle}>Komentar</h3>
+        <section className="comments-section" aria-label="Bagian komentar">
+          <h2 className="content-title">Komentar</h2>
           <textarea
-            style={styles.textarea}
+            className="comment-input"
+            aria-label="Tulis komentar"
             placeholder="Tulis komentar..."
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
+            rows={3}
           />
-          <button style={styles.buttonPrimary} onClick={handleAddComment}>
+          <button
+            className="btn-submit-comment"
+            onClick={handleAddComment}
+            aria-disabled={newComment.trim() === ""}
+          >
             Kirim Komentar
           </button>
 
-          <div>
-            {comments.length === 0 && (
-              <div style={styles.meta}>Belum ada komentar.</div>
-            )}
+          <div className="comments-list" role="list" aria-live="polite" aria-relevant="additions removals">
+            {comments.length === 0 && <p>Belum ada komentar.</p>}
             {comments.map((comment) => (
-              <div key={comment.id} style={styles.commentCard}>
-                <div style={styles.commentContent}>
-                  <strong>{comment.user?.username || comment.admin?.username || "Anonim"}</strong>:
+              <article
+                className="comment-item"
+                key={comment.id}
+                role="listitem"
+                aria-label={`Komentar dari ${comment.user?.username || comment.admin?.username || "Anonim"}`}
+              >
+                <div className="comment-content">
+                  <strong>{comment.user?.username || comment.admin?.username || "Anonim"}:</strong>
                 </div>
-                <div style={styles.commentContent}>{comment.content}</div>
-                <div style={styles.commentActions}>
-                  {((comment.userId && comment.userId === userId && role === "user") ||
-                    (comment.adminId && comment.adminId === adminId && role === "admin")) && (
-                    <button
-                      style={{ ...styles.buttonSmall, ...styles.buttonWarning }}
-                      onClick={() => handleEditComment(comment.id, comment.content)}
-                    >
-                      Edit
-                    </button>
-                  )}
-                  {(role === "admin" ||
-                    (comment.userId && comment.userId === userId && role === "user")) && (
-                    <button
-                      style={{ ...styles.buttonSmall, ...styles.buttonDanger }}
-                      onClick={() => handleDeleteComment(comment.id)}
-                    >
-                      Hapus
-                    </button>
-                  )}
+                <p className="comment-content">{comment.content}</p>
+                <div className="comment-meta">
+                  <span className="comment-date">
+                    {formatCommentDate(comment.updatedAt)}
+                    {comment.updatedAt !== comment.createdAt && " (diedit)"}
+                  </span>
+                  <span className="comment-actions">
+                    {((comment.userId && comment.userId === userId && role === "user") ||
+                      (comment.adminId && comment.adminId === adminId && role === "admin")) && (
+                      <button
+                        onClick={() => handleEditComment(comment.id, comment.content)}
+                        aria-label={`Edit komentar dari ${comment.user?.username || comment.admin?.username || "Anonim"}`}
+                      >
+                        Edit
+                      </button>
+                    )}
+                    {(role === "admin" ||
+                      (comment.userId && comment.userId === userId && role === "user")) && (
+                      <button
+                        onClick={() => handleDeleteComment(comment.id)}
+                        aria-label={`Hapus komentar dari ${comment.user?.username || comment.admin?.username || "Anonim"}`}
+                      >
+                        Hapus
+                      </button>
+                    )}
+                  </span>
                 </div>
-              </div>
+              </article>
             ))}
           </div>
-        </div>
+        </section>
       </div>
-    </div>
+    </>
   );
 };
 
