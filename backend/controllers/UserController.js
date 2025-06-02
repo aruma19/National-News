@@ -165,7 +165,13 @@ async function getNewToken(req, res) {
     if (err) return res.sendStatus(403);
 
     const accessToken = jwt.sign(
-      { id: user.id, email: user.email, role: user.role, username: user.username },
+      {
+        id: user.id,
+        email: user.email,
+        role: user.role,
+        username: user.username,
+        timestamp: Date.now(), // Tambahkan field dinamis agar token beda
+      },
       process.env.ACCESS_TOKEN_SECRET,
       { expiresIn: '1m' }
     );
@@ -175,4 +181,4 @@ async function getNewToken(req, res) {
 };
 
 
-export {registerUser,loginHandler, logout,  registerAdmin, updateUser, getMe, getNewToken};
+export { registerUser, loginHandler, logout, registerAdmin, updateUser, getMe, getNewToken };
