@@ -61,7 +61,7 @@ async function loginHandler(req, res) {
     safeUserData.role = role;
 
     const accessToken = jwt.sign(safeUserData, process.env.ACCESS_TOKEN_SECRET, {
-      expiresIn: "1m",
+      expiresIn: "30s",
     });
     const refreshToken = jwt.sign(safeUserData, process.env.REFRESH_TOKEN_SECRET, {
       expiresIn: "1d",
@@ -157,33 +157,5 @@ async function getMe(req, res) {
   }
 }
 
-async function getNewToken(req, res) {
-  const refreshToken = req.cookies.refreshToken;
-  if (!refreshToken) {
-    console.log("No refresh token sent");
-    return res.sendStatus(401);
-  }
 
-  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
-    if (err) {
-      console.log("Refresh token invalid:", err);
-      return res.sendStatus(403);
-    }
-
-    console.log("Refresh token user payload:", user);
-
-    const accessToken = jwt.sign(
-      { id: user.id, email: user.email, role: user.role, username: user.username },
-      process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: '1m' }
-    );
-
-    console.log("New access token generated:", accessToken);
-
-    res.json({ accessToken });
-  });
-};
-
-
-
-export { registerUser, loginHandler, logout, registerAdmin, updateUser, getMe, getNewToken };
+export {registerUser,loginHandler, logout,  registerAdmin, updateUser, getMe};

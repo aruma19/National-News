@@ -3,7 +3,6 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { BASE_URL } from "../../utils";
 import jwtDecode from "jwt-decode";
-import axiosInstance from "../../utils/axiosInstance";
 
 const Dashboard = () => {
   const [newsList, setNewsList] = useState([]);
@@ -25,6 +24,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
+
     if (!token) {
       window.location.href = "/login";
       return;
@@ -35,22 +35,33 @@ const Dashboard = () => {
       const now = Date.now() / 1000;
       const timeLeft = decoded.exp - now;
 
-      // Jangan lakukan apapun di sini. Token mungkin expired, tapi axiosInstance akan handle
-      fetchNews();
-      fetchCategories();
+      if (timeLeft <= 0) {
+        localStorage.removeItem("accessToken");
+        window.location.href = "/login";
+        return;
+      }
+
+      const logoutTimer = setTimeout(() => {
+        localStorage.removeItem("accessToken");
+        window.location.href = "/login";
+      }, timeLeft * 1000);
+
+      fetchNews(token);
+      fetchCategories(token);
+
+      return () => clearTimeout(logoutTimer);
     } catch (err) {
-      // Jangan langsung logout — token mungkin expired, axiosInstance akan coba refresh
-      console.warn("Token tidak valid, tapi axiosInstance akan coba refresh jika dibutuhkan");
-      fetchNews();
-      fetchCategories();
+      localStorage.removeItem("accessToken");
+      window.location.href = "/login";
     }
   }, []);
 
   const fetchNews = async (token) => {
     setLoading(true);
     try {
-      const response = await axiosInstance.get("/news");
-
+      const response = await axios.get(`${BASE_URL}/news`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setNewsList(response.data);
     } catch (error) {
       Swal.fire({
@@ -66,7 +77,9 @@ const Dashboard = () => {
 
   const fetchCategories = async (token) => {
     try {
-      const response = await axiosInstance.get("/categories");
+      const response = await axios.get(`${BASE_URL}/categories`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setCategories(response.data);
     } catch (error) {
       console.error("Gagal mengambil kategori berita", error);
@@ -243,8 +256,8 @@ const Dashboard = () => {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: isMobile
-              ? "1fr"
+            gridTemplateColumns: isMobile 
+              ? "1fr" 
               : "repeat(3, 1fr)",
             gap: isMobile ? "1rem" : "1.5rem",
             marginTop: "1.5rem",
