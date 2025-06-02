@@ -25,21 +25,24 @@ const Dashboard = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
+    if (!token) {
+      window.location.href = "/login";
+      return;
+    }
+
     try {
       const decoded = jwtDecode(token);
       const now = Date.now() / 1000;
       const timeLeft = decoded.exp - now;
 
-      if (timeLeft <= 0) {
-        // Jangan auto logout, biarkan axiosInstance memicu refresh otomatis
-        return;
-      }
-
-      fetchNews(token);
-      fetchCategories(token);
+      // Jangan lakukan apapun di sini. Token mungkin expired, tapi axiosInstance akan handle
+      fetchNews();
+      fetchCategories();
     } catch (err) {
-      localStorage.removeItem("accessToken");
-      window.location.href = "/login";
+      // Jangan langsung logout — token mungkin expired, axiosInstance akan coba refresh
+      console.warn("Token tidak valid, tapi axiosInstance akan coba refresh jika dibutuhkan");
+      fetchNews();
+      fetchCategories();
     }
   }, []);
 
