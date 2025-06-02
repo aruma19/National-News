@@ -3,6 +3,7 @@ import axios from "axios";
 import jwtDecode from "jwt-decode";
 import Swal from "sweetalert2";
 import { BASE_URL } from "../../utils";
+import strictInstance from "../../utils/axiosInstance";
 
 const LikedNews = () => {
   const [likedNews, setLikedNews] = useState([]);

@@ -3,6 +3,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { useParams, useNavigate } from "react-router-dom";
 import { BASE_URL } from "../../utils";
+import strictInstance from "../../utils/axiosInstance";
 
 const EditCategory = () => {
   const { id } = useParams();

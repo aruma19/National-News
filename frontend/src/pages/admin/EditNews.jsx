@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { BASE_URL } from "../../utils";
+import strictInstance from "../../utils/axiosInstance";
 
 const EditNews = () => {
   const { id } = useParams();

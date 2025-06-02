@@ -3,6 +3,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { BASE_URL } from "../../utils";
 import { useNavigate } from "react-router-dom";
+import strictInstance from "../../utils/axiosInstance";
 
 const AddNews = () => {
   const navigate = useNavigate();

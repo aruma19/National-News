@@ -5,6 +5,7 @@ import Swal from "sweetalert2";
 import { BASE_URL } from "../../utils";
 import { useNavigate } from "react-router-dom";
 import profileIcon from "../../assets/6522516.png";
+import strictInstance from "../../utils/axiosInstance";
 
 const ProfileUser = () => {
   const [formData, setFormData] = useState({

@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 import { BASE_URL } from "../../utils";
 import jwtDecode from "jwt-decode";
 import { Link } from "react-router-dom";
+import strictInstance from "../../utils/axiosInstance";
 
 const DashboardAdmin = ({ sidebarOpen, toggleSidebar }) => {
   const [newsList, setNewsList] = useState([]);
@@ -14,47 +15,14 @@ const DashboardAdmin = ({ sidebarOpen, toggleSidebar }) => {
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
-
-    if (!token) {
-      window.location.href = "/login";
-      return;
-    }
-
-    try {
-      const decoded = jwtDecode(token);
-      const now = Date.now() / 1000;
-      const timeLeft = decoded.exp - now;
-
-      if (timeLeft <= 0) {
-        localStorage.removeItem("accessToken");
-        window.location.href = "/login";
-        return;
-      }
-
-      const logoutTimer = setTimeout(() => {
-        localStorage.removeItem("accessToken");
-        window.location.href = "/login";
-      }, timeLeft * 1000);
-
       fetchNews(token);
       fetchCategories(token);
-      console.log(jwtDecode(token));
-
-      return () => clearTimeout(logoutTimer);
-    } catch (err) {
-      localStorage.removeItem("accessToken");
-      window.location.href = "/login";
-    }
   }, []);
 
   const fetchNews = async (token) => {
     setLoading(true);
     try {
-      const response = await axios.get(`${BASE_URL}/news`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await strictInstance.get("/news");
       setNewsList(response.data);
     } catch (error) {
       Swal.fire({
@@ -68,11 +36,7 @@ const DashboardAdmin = ({ sidebarOpen, toggleSidebar }) => {
 
   const fetchCategories = async (token) => {
     try {
-      const response = await axios.get(`${BASE_URL}/categories`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await strictInstance.get("/categories");
       setCategories(response.data);
     } catch (error) {
       console.error("Gagal mengambil kategori", error);
@@ -119,12 +83,7 @@ const DashboardAdmin = ({ sidebarOpen, toggleSidebar }) => {
 
     if (confirmed.isConfirmed) {
       try {
-        await axios.delete(`${BASE_URL}/news/${id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
+        await strictInstance.delete(`/news/${id}`);
         setNewsList(newsList.filter((item) => item.id !== id));
         Swal.fire("Berhasil!", "Berita telah dihapus.", "success");
       } catch (error) {

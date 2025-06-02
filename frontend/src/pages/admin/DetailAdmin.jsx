@@ -4,6 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { BASE_URL } from "../../utils";
 import Swal from "sweetalert2";
 import jwtDecode from "jwt-decode";
+import strictInstance from "../../utils/axiosInstance";
 
 const DetailAdmin = () => {
   const { id } = useParams();
