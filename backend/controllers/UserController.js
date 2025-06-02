@@ -61,7 +61,7 @@ async function loginHandler(req, res) {
     safeUserData.role = role;
 
     const accessToken = jwt.sign(safeUserData, process.env.ACCESS_TOKEN_SECRET, {
-      expiresIn: "30m",
+      expiresIn: "10m",
     });
     const refreshToken = jwt.sign(safeUserData, process.env.REFRESH_TOKEN_SECRET, {
       expiresIn: "1d",
@@ -157,5 +157,22 @@ async function getMe(req, res) {
   }
 }
 
+async function getNewToken(req, res) {
+  const refreshToken = req.cookies.refreshToken;
+  if (!refreshToken) return res.sendStatus(401);
 
-export {registerUser,loginHandler, logout,  registerAdmin, updateUser, getMe};
+  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403);
+
+    const accessToken = jwt.sign(
+      { id: user.id, email: user.email, role: user.role, username: user.username },
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: '10m' }
+    );
+
+    res.json({ accessToken });
+  });
+};
+
+
+export {registerUser,loginHandler, logout,  registerAdmin, updateUser, getMe, getNewToken};

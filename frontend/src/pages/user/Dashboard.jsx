@@ -3,6 +3,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { BASE_URL } from "../../utils";
 import jwtDecode from "jwt-decode";
+import axiosInstance from "../utils/axiosInstance";
 
 const Dashboard = () => {
   const [newsList, setNewsList] = useState([]);
@@ -23,13 +24,6 @@ const Dashboard = () => {
   }, []);
 
   useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-
-    if (!token) {
-      window.location.href = "/login";
-      return;
-    }
-
     try {
       const decoded = jwtDecode(token);
       const now = Date.now() / 1000;
@@ -59,9 +53,8 @@ const Dashboard = () => {
   const fetchNews = async (token) => {
     setLoading(true);
     try {
-      const response = await axios.get(`${BASE_URL}/news`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axiosInstance.get("/news");
+
       setNewsList(response.data);
     } catch (error) {
       Swal.fire({
@@ -77,9 +70,7 @@ const Dashboard = () => {
 
   const fetchCategories = async (token) => {
     try {
-      const response = await axios.get(`${BASE_URL}/categories`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axiosInstance.get("/categories");
       setCategories(response.data);
     } catch (error) {
       console.error("Gagal mengambil kategori berita", error);

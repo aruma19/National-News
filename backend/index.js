@@ -5,7 +5,6 @@ import LikeRoute from "./routes/LikeRoute.js";
 import NewRoute from "./routes/NewRoute.js";
 import CommentRoute from './routes/CommentRoute.js';
 import CategoryRoute from "./routes/CategoryRoute.js";
-import AdminRoute from "./routes/AdminRoute.js";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import db from "./config/Database.js";
@@ -33,7 +32,6 @@ app.use(NewRoute);
 app.use(LikeRoute);
 app.use(CategoryRoute);
 app.use(CommentRoute);
-app.use(AdminRoute);
 
 const port = process.env.PORT;
 
