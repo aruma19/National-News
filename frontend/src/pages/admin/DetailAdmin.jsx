@@ -12,6 +12,9 @@ const styles = {
     padding: "1rem",
     minHeight: "100vh",
     color: "#0a1f44",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "flex-start",
     // Responsive padding
     "@media (min-width: 768px)": {
       padding: "2rem",
@@ -22,14 +25,15 @@ const styles = {
     borderRadius: "12px",
     padding: "16px",
     boxShadow: "0 8px 20px rgba(13, 30, 74, 0.08)",
-    maxWidth: "100%",
+    width: "100%",
+    maxWidth: "800px", // Membatasi lebar maksimal
     margin: "0 auto",
     // Responsive styling
     "@media (min-width: 768px)": {
       borderRadius: "16px",
       padding: "28px",
       boxShadow: "0 12px 30px rgba(13, 30, 74, 0.12)",
-      maxWidth: "900px",
+      maxWidth: "900px", // Sedikit lebih lebar untuk desktop
     },
   },
   backButton: {

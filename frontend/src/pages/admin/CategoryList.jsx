@@ -81,9 +81,9 @@ const CategoryList = () => {
 
   const containerStyle = {
     maxWidth: "900px",
-    width: isMobile ? "calc(100vw - 40px)" : "calc(100vw - 260px)",
-    marginLeft: isMobile ? "20px" : "350px",
-    marginRight: isMobile ? "20px" : "auto",
+    width: isMobile ? "calc(100vw - 40px)" : "calc(100vw - 280px)",
+    marginLeft: isMobile ? "auto" : "270px",
+    marginRight: "auto",
     marginTop: "30px",
     padding: isMobile ? 15 : 20,
     background: "linear-gradient(145deg, #f0f4ff, #d9e2ff)",
