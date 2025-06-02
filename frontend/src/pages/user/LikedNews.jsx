@@ -22,7 +22,12 @@ const LikedNews = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
-    fetchLikedNews(token, id);
+
+    if (token) {
+      const decoded = jwtDecode(token);
+      const userId = decoded.id; // atau decoded.user.id tergantung struktur token
+      fetchLikedNews(token, userId);
+    }
   }, []);
 
   const fetchLikedNews = async (token, id) => {
@@ -152,13 +157,13 @@ const LikedNews = () => {
             >
               {likedNews.length} berita yang kamu sukai
             </p>
-            
+
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: isMobile 
-                  ? "1fr" 
-                  : window.innerWidth <= 1024 
+                gridTemplateColumns: isMobile
+                  ? "1fr"
+                  : window.innerWidth <= 1024
                     ? "repeat(auto-fit, minmax(300px, 1fr))"
                     : "repeat(auto-fit, minmax(350px, 1fr))",
                 gap: isMobile ? "1.5rem" : "2rem",
@@ -231,7 +236,7 @@ const LikedNews = () => {
                       </div>
                     </div>
                   )}
-                  
+
                   <div
                     style={{
                       padding: isMobile ? "1.25rem" : "1.5rem",
@@ -256,7 +261,7 @@ const LikedNews = () => {
                     >
                       {news.title}
                     </h3>
-                    
+
                     <div
                       style={{
                         display: "flex",
@@ -292,7 +297,7 @@ const LikedNews = () => {
                         })}
                       </span>
                     </div>
-                    
+
                     <p
                       style={{
                         color: "#4b5563",
@@ -312,7 +317,7 @@ const LikedNews = () => {
                         .replace(/<\/?[^>]+(>|$)/g, "")}
                       ...
                     </p>
-                    
+
                     <div
                       style={{
                         display: "flex",
@@ -346,7 +351,7 @@ const LikedNews = () => {
                       >
                         📖 Baca
                       </button>
-                      
+
                       <button
                         onClick={() => handleUnlike(news.id)}
                         style={{
