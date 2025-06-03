@@ -433,7 +433,6 @@ const DetailAdmin = () => {
 
           <div className="comments-list" role="list" aria-live="polite" aria-relevant="additions removals">
             {comments.length === 0 && <p>Belum ada komentar.</p>}
-            // Ganti bagian ini di dalam comments.map():
             {comments.map((comment) => {
               // Tentukan username dan ID berdasarkan apakah komentar dari user atau admin
               const commentAuthor = comment.user?.username || comment.admin?.username || "Anonim";

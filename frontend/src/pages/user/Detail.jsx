@@ -18,15 +18,30 @@ const Detail = () => {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
 
-  const [userId, setUserId] = useState(jwtDecode(token).id);
+  const [userId, setUserId] = useState(null);
 
   useEffect(() => {
-    const token = localStorage.getItem("accessToken");
+  const token = localStorage.getItem("accessToken");
+  
+  // Cek apakah token ada dan valid
+  if (!token) {
+    navigate("/login");
+    return;
+  }
+
+  try {
+    const decoded = jwtDecode(token);
+    setUserId(decoded.id);
+    
     fetchNewsDetail();
     fetchLikesAndStatus();
     fetchComments();
-
-  }, [id, navigate, token]);
+  } catch (err) {
+    console.error("Token tidak valid:", err);
+    localStorage.removeItem("accessToken");
+    navigate("/login");
+  }
+}, [id, navigate]);
 
   const fetchNewsDetail = async () => {
     try {
@@ -473,55 +488,49 @@ const Detail = () => {
             Kirim Komentar
           </button>
 
-          // Perbaikan pada bagian komentar - ganti logika ownership
-          {comments.map((comment) => {
-            const commentAuthor = comment.user?.username || comment.admin?.username || "Anonim";
+          <div className="comments-list" role="list" aria-live="polite" aria-relevant="additions removals">
+            {comments.length === 0 && <p>Belum ada komentar.</p>}
+            {comments.map((comment) => {
+  const commentAuthor = comment.user?.username || comment.admin?.username || "Anonim";
+  const commentAuthorId = comment.userId; // Hanya cek userId untuk user
+  const isOwner = commentAuthorId === userId;
 
-            // Perbaikan: Cek ownership berdasarkan userId dan role
-            const currentUserToken = jwtDecode(localStorage.getItem("accessToken"));
-            const currentUserId = currentUserToken.id;
-            const currentUserRole = currentUserToken.role; // Asumsi ada field role di JWT
-
-            // User hanya bisa edit komentar yang dia buat sendiri sebagai user
-            // Admin bisa edit komentar yang dia buat sendiri sebagai admin
-            const isOwner = (comment.userId === currentUserId && comment.userId !== null) ||
-              (comment.adminId === currentUserId && comment.adminId !== null && currentUserRole === 'admin');
-
-            return (
-              <article
-                className="comment-item"
-                key={comment.id}
-                role="listitem"
-                aria-label={`Komentar dari ${commentAuthor}`}
-              >
-                <p className="comment-content">{comment.content}</p>
-                <div className="comment-meta">
-                  <span className="comment-author">{commentAuthor}</span>
-                  <span className="comment-date">
-                    {formatCommentDate(comment.updatedAt)}
-                    {comment.updatedAt !== comment.createdAt && " (diedit)"}
-                  </span>
-                  {/* Hanya tampilkan tombol edit/hapus untuk komentar user sendiri */}
-                  {isOwner && (
-                    <span className="comment-actions">
-                      <button
-                        onClick={() => handleEditComment(comment.id, comment.content)}
-                        aria-label={`Edit komentar dari ${commentAuthor}`}
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => handleDeleteComment(comment.id)}
-                        aria-label={`Hapus komentar dari ${commentAuthor}`}
-                      >
-                        Hapus
-                      </button>
-                    </span>
-                  )}
-                </div>
-              </article>
-            );
-          })}
+  return (
+    <article
+      className="comment-item"
+      key={comment.id}
+      role="listitem"
+      aria-label={`Komentar dari ${commentAuthor}`}
+    >
+      <p className="comment-content">{comment.content}</p>
+      <div className="comment-meta">
+        <span className="comment-author">{commentAuthor}</span>
+        <span className="comment-date">
+          {formatCommentDate(comment.updatedAt)}
+          {comment.updatedAt !== comment.createdAt && " (diedit)"}
+        </span>
+        {/* Hanya tampilkan tombol edit/hapus untuk komentar user sendiri */}
+        {isOwner && (
+          <span className="comment-actions">
+            <button
+              onClick={() => handleEditComment(comment.id, comment.content)}
+              aria-label={`Edit komentar dari ${commentAuthor}`}
+            >
+              Edit
+            </button>
+            <button
+              onClick={() => handleDeleteComment(comment.id)}
+              aria-label={`Hapus komentar dari ${commentAuthor}`}
+            >
+              Hapus
+            </button>
+          </span>
+        )}
+      </div>
+    </article>
+  );
+})}
+          </div>
         </section>
       </div>
     </>

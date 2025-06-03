@@ -42,48 +42,24 @@ const SidebarAdmin = () => {
         });
 
         if (result.isConfirmed) {
-            // Tampilkan loading
-            Swal.fire({
-                title: 'Logging out...',
-                allowOutsideClick: false,
-                allowEscapeKey: false,
-                showConfirmButton: false,
-                background: "#16213e",
-                color: "#f9f9f9",
-                didOpen: () => {
-                    Swal.showLoading();
-                }
-            });
-
             try {
-                // Set timeout untuk request logout (3 detik)
-                const logoutPromise = strictInstance.delete("/logout");
-                const timeoutPromise = new Promise((_, reject) =>
-                    setTimeout(() => reject(new Error('Timeout')), 3000)
-                );
-
-                await Promise.race([logoutPromise, timeoutPromise]);
+                await strictInstance.delete("/logout");
             } catch (error) {
                 console.warn("Logout error:", error?.response?.data || error.message);
-                // Lanjutkan logout meskipun ada error
             } finally {
-                // Cleanup lokal storage dan redirect
                 localStorage.removeItem("accessToken");
                 delete strictInstance.defaults.headers.common["Authorization"];
 
                 Swal.fire({
                     icon: "success",
                     title: "<span style='font-size:16px;'>Logout Berhasil</span>",
-                    timer: 1000, // Kurangi timer dari 1500 ke 1000
+                    timer: 1500,
                     showConfirmButton: false,
                     background: "#16213e",
                     color: "#f9f9f9",
                 });
 
-                // Redirect langsung tanpa menunggu Swal selesai
-                setTimeout(() => {
-                    navigate("/login");
-                }, 500);
+                navigate("/login");
             }
         }
     };
