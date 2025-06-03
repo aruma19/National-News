@@ -59,9 +59,7 @@ const DetailAdmin = () => {
   // Ambil komentar
   const fetchComments = async () => {
     try {
-      const res = await axios.get(`${BASE_URL}/comments/news/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await strictInstance.get(`/comments/news/${id}`);
       setComments(res.data);
     } catch (err) {
       console.error("Error fetching comments", err);
@@ -76,11 +74,10 @@ const DetailAdmin = () => {
     }
 
     try {
-      await axios.post(
-        `${BASE_URL}/comments`,
-        { newsId: Number(id), content: newComment },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await strictInstance.post(`/comments`, {
+        newsId: Number(id),
+        content: newComment,
+      });
       Swal.fire("Berhasil", "Komentar ditambahkan", "success");
       setNewComment("");
       fetchComments();
@@ -99,11 +96,7 @@ const DetailAdmin = () => {
     }
 
     try {
-      await axios.put(
-        `${BASE_URL}/comments/${commentId}`,
-        { content: updatedContent },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await strictInstance.put(`/comments/${commentId}`, { content: updatedContent });
       Swal.fire("Berhasil", "Komentar diperbarui", "success");
       fetchComments();
     } catch (err) {
@@ -125,9 +118,7 @@ const DetailAdmin = () => {
     if (!confirm.isConfirmed) return;
 
     try {
-      await axios.delete(`${BASE_URL}/comments/${commentId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await strictInstance.delete(`/comments/${commentId}`);
       Swal.fire("Berhasil", "Komentar dihapus", "success");
       setComments((prev) => prev.filter((c) => c.id !== commentId));
     } catch (err) {
@@ -381,7 +372,7 @@ const DetailAdmin = () => {
         >
           ← Kembali ke Dashboard
         </button>
-        
+
         <h1 className="title" id="news-title">{news.title}</h1>
 
         {news.image_large && (
@@ -442,45 +433,53 @@ const DetailAdmin = () => {
 
           <div className="comments-list" role="list" aria-live="polite" aria-relevant="additions removals">
             {comments.length === 0 && <p>Belum ada komentar.</p>}
-            {comments.map((comment) => (
-              <article
-                className="comment-item"
-                key={comment.id}
-                role="listitem"
-                aria-label={`Komentar dari ${comment.user?.username || comment.admin?.username || "Anonim"}`}
-              >
-                <div className="comment-content">
-                  <strong>{comment.user?.username || comment.admin?.username || "Anonim"}:</strong>
-                </div>
-                <p className="comment-content">{comment.content}</p>
-                <div className="comment-meta">
-                  <span className="comment-date">
-                    {formatCommentDate(comment.updatedAt)}
-                    {comment.updatedAt !== comment.createdAt && " (diedit)"}
-                  </span>
-                  <span className="comment-actions">
-                    {((comment.userId && comment.userId === userId && role === "user") ||
-                      (comment.adminId && comment.adminId === adminId && role === "admin")) && (
-                      <button
-                        onClick={() => handleEditComment(comment.id, comment.content)}
-                        aria-label={`Edit komentar dari ${comment.user?.username || comment.admin?.username || "Anonim"}`}
-                      >
-                        Edit
-                      </button>
-                    )}
-                    {(role === "admin" ||
-                      (comment.userId && comment.userId === userId && role === "user")) && (
-                      <button
-                        onClick={() => handleDeleteComment(comment.id)}
-                        aria-label={`Hapus komentar dari ${comment.user?.username || comment.admin?.username || "Anonim"}`}
-                      >
-                        Hapus
-                      </button>
-                    )}
-                  </span>
-                </div>
-              </article>
-            ))}
+            {comments.map((comment) => {
+              // Tentukan username dan ID berdasarkan apakah komentar dari user atau admin
+              const commentAuthor = comment.user?.username || comment.admin?.username || "Anonim";
+              const commentAuthorId = comment.userId || comment.adminId;
+              const currentUserId = role === "admin" ? adminId : userId;
+              const isOwner = commentAuthorId === currentUserId;
+
+              return (
+                <article
+                  className="comment-item"
+                  key={comment.id}
+                  role="listitem"
+                  aria-label={`Komentar dari ${commentAuthor}`}
+                >
+                  <div className="comment-content">
+                    <strong>{commentAuthor}:</strong>
+                  </div>
+                  <p className="comment-content">{comment.content}</p>
+                  <div className="comment-meta">
+                    <span className="comment-date">
+                      {formatCommentDate(comment.updatedAt)}
+                      {comment.updatedAt !== comment.createdAt && " (diedit)"}
+                    </span>
+                    <span className="comment-actions">
+                      {/* User/Admin bisa edit komentar mereka sendiri */}
+                      {isOwner && (
+                        <button
+                          onClick={() => handleEditComment(comment.id, comment.content)}
+                          aria-label={`Edit komentar dari ${commentAuthor}`}
+                        >
+                          Edit
+                        </button>
+                      )}
+                      {/* Admin bisa hapus semua komentar, user hanya komentar sendiri */}
+                      {(role === "admin" || isOwner) && (
+                        <button
+                          onClick={() => handleDeleteComment(comment.id)}
+                          aria-label={`Hapus komentar dari ${commentAuthor}`}
+                        >
+                          Hapus
+                        </button>
+                      )}
+                    </span>
+                  </div>
+                </article>
+              );
+            })}
           </div>
         </section>
       </div>

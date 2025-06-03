@@ -167,7 +167,7 @@ const SidebarAdmin = () => {
                         >
                             {[
                                 { to: "/dashboardAdmin", label: "Home", icon: "fas fa-home" },
-                                { to: "/addnews", label: "Tambah Catatan", icon: "fas fa-plus" },
+                                { to: "/addnews", label: "Tambah Berita", icon: "fas fa-plus" },
                                 { to: "/categorylist", label: "Daftar Kategori", icon: "fas fa-list" },
                             ].map(({ to, label, icon }) => (
                                 <li key={to}>

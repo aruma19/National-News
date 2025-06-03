@@ -106,7 +106,7 @@ const Detail = () => {
     }
 
     try {
-      await strictInstance.put(`/comments/${commentId}`, {content: updatedContent});
+      await strictInstance.put(`/comments/${commentId}`, { content: updatedContent });
       Swal.fire("Berhasil", "Komentar diperbarui", "success");
       fetchComments();
     } catch (err) {
@@ -476,34 +476,37 @@ const Detail = () => {
           <div className="comments-list" role="list" aria-live="polite" aria-relevant="additions removals">
             {comments.length === 0 && <p>Belum ada komentar.</p>}
             {comments.map((comment) => {
-              if (!comment.user) return null;
-              console.log('userId:', userId, 'comment.user.id:', comment.user.id, 'comment:', comment);
+              // Hapus filter yang tidak perlu dan handle both user dan admin comments
+              const commentAuthor = comment.user?.username || comment.admin?.username || "Anonim";
+              const commentAuthorId = comment.userId || comment.adminId;
+              const isOwner = commentAuthorId === userId;
 
               return (
                 <article
                   className="comment-item"
                   key={comment.id}
                   role="listitem"
-                  aria-label={`Komentar dari ${comment.user.username}`}
+                  aria-label={`Komentar dari ${commentAuthor}`}
                 >
                   <p className="comment-content">{comment.content}</p>
                   <div className="comment-meta">
-                    <span className="comment-author">{comment.user.username}</span>
+                    <span className="comment-author">{commentAuthor}</span>
                     <span className="comment-date">
                       {formatCommentDate(comment.updatedAt)}
                       {comment.updatedAt !== comment.createdAt && " (diedit)"}
                     </span>
-                    {comment.userId === userId && (
+                    {/* Hanya tampilkan tombol edit/hapus untuk komentar user sendiri */}
+                    {isOwner && (
                       <span className="comment-actions">
                         <button
                           onClick={() => handleEditComment(comment.id, comment.content)}
-                          aria-label={`Edit komentar dari ${comment.user.username}`}
+                          aria-label={`Edit komentar dari ${commentAuthor}`}
                         >
                           Edit
                         </button>
                         <button
                           onClick={() => handleDeleteComment(comment.id)}
-                          aria-label={`Hapus komentar dari ${comment.user.username}`}
+                          aria-label={`Hapus komentar dari ${commentAuthor}`}
                         >
                           Hapus
                         </button>
