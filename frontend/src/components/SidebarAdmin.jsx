@@ -48,7 +48,7 @@ const SidebarAdmin = () => {
                 console.warn("Logout error:", error?.response?.data || error.message);
             } finally {
                 localStorage.removeItem("accessToken");
-                delete axios.defaults.headers.common["Authorization"];
+                delete strictInstance.defaults.headers.common["Authorization"];
 
                 Swal.fire({
                     icon: "success",
