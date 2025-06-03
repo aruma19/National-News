@@ -49,6 +49,7 @@ const DetailAdmin = () => {
         navigate("/login");
       }, timeLeft * 1000);
 
+      fetchNews();
       fetchNewsDetail();
       fetchComments();
 
@@ -58,6 +59,23 @@ const DetailAdmin = () => {
       navigate("/login");
     }
   }, [id, navigate, token]);
+
+  const fetchNews = async (token) => {
+    setLoading(true);
+    try {
+      const response = await strictInstance.get("/news");
+      setNewsList(response.data);
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Gagal Memuat Berita",
+        text:
+          error.response?.data?.message ||
+          "Terjadi kesalahan saat mengambil data berita. Silakan coba lagi.",
+      });
+    }
+    setLoading(false);
+  };
 
   // Ambil detail berita
   const fetchNewsDetail = async () => {
