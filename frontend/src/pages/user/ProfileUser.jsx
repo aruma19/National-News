@@ -14,7 +14,6 @@ const ProfileUser = () => {
     gender: "",
     password: "",
   });
-  const [photo, setPhoto] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
 
   const navigate = useNavigate();
@@ -38,17 +37,11 @@ const ProfileUser = () => {
   const fetchProfile = async (token) => {
     try {
       const response = await strictInstance.get("/me");
-      const { username, email, gender, photo } = response.data;
+      const { username, email, gender } = response.data;
       setFormData({ username, email, gender, password: "" });
-      setPhoto(photo);
     } catch (error) {
       Swal.fire("Error", "Gagal mengambil data profil", "error");
     }
-  };
-
-  const handlePhotoChange = (e) => {
-    const file = e.target.files[0];
-    setPhoto(file);
   };
 
   const handleChange = (e) => {
@@ -60,19 +53,8 @@ const ProfileUser = () => {
     e.preventDefault();
     const token = localStorage.getItem("accessToken");
 
-    const form = new FormData();
-    form.append("username", formData.username);
-    form.append("email", formData.email);
-    form.append("gender", formData.gender);
-    if (formData.password.trim() !== "") {
-    form.append("password", formData.password);
-    }
-    if (photo instanceof File) {
-      form.append("photo", photo);
-    }
-
     try {
-      await strictInstance.put("/user/update", form);
+      await strictInstance.put("/user/update", formData);
 
       Swal.fire({
         icon: "success",
@@ -103,6 +85,7 @@ const ProfileUser = () => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        transition: "margin-left 0.3s ease, padding 0.3s ease",
       }}
     >
       <div
@@ -114,29 +97,29 @@ const ProfileUser = () => {
           maxWidth: isMobile ? "100%" : "420px",
           boxShadow: "0 12px 24px rgba(0,0,0,0.4)",
           textAlign: "center",
+          boxSizing: "border-box",
         }}
       >
         <div style={{ marginBottom: "1.5rem" }}>
           <img
-          src={photo ? `${baseURL}/uploads/profile/${photo}` : profileIcon}
-          alt="profile"
-          style={{
-          width: isMobile ? "110px" : "130px",
-          height: isMobile ? "1100px" : "130px",
-          borderRadius: "50%",
-          backgroundColor: "white",
-          objectFit: "cover",
-            boxShadow: "0 6px 16px rgba(0,0,0,0.6)",
-          border: "3px solid #f9f9f9",
-         }}
-        />
+            src={profileIcon}
+            alt="profile"
+            style={{
+              width: isMobile ? "70px" : "80px",
+              height: isMobile ? "70px" : "80px",
+              borderRadius: "50%",
+              backgroundColor: "white",
+              objectFit: "cover",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.5)",
+            }}
+          />
         </div>
 
-        <h2
-          style={{
-            fontSize: isMobile ? "1.5rem" : "1.8rem",
-            fontWeight: "600",
-            marginBottom: "1.5rem",
+        <h2 
+          style={{ 
+            fontSize: isMobile ? "1.5rem" : "1.8rem", 
+            fontWeight: "600", 
+            marginBottom: "1.5rem" 
           }}
         >
           Profil Saya
@@ -152,63 +135,53 @@ const ProfileUser = () => {
           }}
         >
           {[
-  { label: "Username", name: "username", type: "text" },
-  { label: "Email", name: "email", type: "email" },
-  { label: "Password Baru (Opsional)", name: "password", type: "password" }
-].map(({ label, name, type }) => (
-  <div key={name}>
-    <label
-      style={{
-        fontSize: isMobile ? "15px" : "14px",
-        marginBottom: "0.3rem",
-        display: "block",
-        fontWeight: "500"
-      }}
-    >
-      {label}
-    </label>
-
-    {name === "password" ? (
-      <input
-        type="password"
-        name="password"
-        placeholder="Kosongkan jika tidak ingin ganti"
-        defaultValue=""
-        onChange={handleChange}
-        style={{
-          width: "100%",
-          padding: isMobile ? "12px 16px" : "8px 12px",
-          borderRadius: "8px",
-          border: "1px solid #2c5364",
-          backgroundColor: "#203a43",
-          color: "#f9f9f9",
-          fontSize: isMobile ? "16px" : "14px",
-          outline: "none",
-        }}
-      />
-    ) : (
-      <input
-        type={type}
-        name={name}
-        value={formData[name]}
-        onChange={handleChange}
-        style={{
-          width: "100%",
-          padding: isMobile ? "12px 16px" : "8px 12px",
-          borderRadius: "8px",
-          border: "1px solid #2c5364",
-          backgroundColor: "#203a43",
-          color: "#f9f9f9",
-          fontSize: isMobile ? "16px" : "14px",
-          outline: "none",
-        }}
-      />
-    )}
-  </div>
-))}
+            { label: "Username", name: "username", type: "text" },
+            { label: "Email", name: "email", type: "email" },
+            { label: "Password Baru (Opsional)", name: "password", type: "password" },
+          ].map(({ label, name, type }) => (
+            <div key={name}>
+              <label 
+                style={{ 
+                  fontSize: isMobile ? "15px" : "14px", 
+                  marginBottom: "0.3rem", 
+                  display: "block",
+                  fontWeight: "500"
+                }}
+              >
+                {label}
+              </label>
+              <input
+                type={type}
+                name={name}
+                value={formData[name]}
+                onChange={handleChange}
+                style={{
+                  width: "100%",
+                  padding: isMobile ? "12px 16px" : "8px 12px",
+                  borderRadius: "8px",
+                  border: "1px solid #2c5364",
+                  backgroundColor: "#203a43",
+                  color: "#f9f9f9",
+                  fontSize: isMobile ? "16px" : "14px",
+                  boxSizing: "border-box",
+                  outline: "none",
+                  transition: "border-color 0.3s ease",
+                }}
+                onFocus={(e) => (e.target.style.borderColor = "#4b6cb7")}
+                onBlur={(e) => (e.target.style.borderColor = "#2c5364")}
+              />
+            </div>
+          ))}
 
           <div>
-            <label style={{ fontSize: isMobile ? "15px" : "14px", marginBottom: "0.3rem", display: "block", fontWeight: "500" }}>
+            <label 
+              style={{ 
+                fontSize: isMobile ? "15px" : "14px", 
+                marginBottom: "0.3rem", 
+                display: "block",
+                fontWeight: "500"
+              }}
+            >
               Gender
             </label>
             <select
@@ -223,33 +196,18 @@ const ProfileUser = () => {
                 backgroundColor: "#203a43",
                 color: "#f9f9f9",
                 fontSize: isMobile ? "16px" : "14px",
+                boxSizing: "border-box",
                 outline: "none",
+                cursor: "pointer",
+                transition: "border-color 0.3s ease",
               }}
+              onFocus={(e) => (e.target.style.borderColor = "#4b6cb7")}
+              onBlur={(e) => (e.target.style.borderColor = "#2c5364")}
             >
-              <option value="" disabled hidden>Pilih Gender</option>
+              <option value="">Pilih Gender</option>
               <option value="Male">Male</option>
               <option value="Female">Female</option>
             </select>
-          </div>
-
-          <div>
-            <label style={{ fontSize: isMobile ? "15px" : "14px", marginBottom: "0.3rem", display: "block", fontWeight: "500" }}>
-              Foto Profil (Opsional)
-            </label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handlePhotoChange}
-              style={{
-                width: "100%",
-                padding: "8px",
-                borderRadius: "8px",
-                backgroundColor: "#203a43",
-                color: "#f9f9f9",
-                fontSize: "14px",
-                border: "1px solid #2c5364",
-              }}
-            />
           </div>
 
           <button
@@ -265,20 +223,22 @@ const ProfileUser = () => {
               fontSize: isMobile ? "1.1rem" : "0.95rem",
               cursor: "pointer",
               boxShadow: "0 4px 10px rgba(75, 108, 183, 0.4)",
+              transition: "opacity 0.3s ease, transform 0.2s ease",
               width: "100%",
+              boxSizing: "border-box",
             }}
             onMouseEnter={(e) => {
-            if (!isMobile) {
-            e.currentTarget.style.opacity = "0.9";
-            e.currentTarget.style.transform = "translateY(-1px)";
-           }
+              if (!isMobile) {
+                e.currentTarget.style.opacity = "0.9";
+                e.currentTarget.style.transform = "translateY(-1px)";
+              }
             }}
             onMouseLeave={(e) => {
-             if (!isMobile) {
-            e.currentTarget.style.opacity = "1";
-             e.currentTarget.style.transform = "translateY(0)";
-            }
-          }}
+              if (!isMobile) {
+                e.currentTarget.style.opacity = "1";
+                e.currentTarget.style.transform = "translateY(0)";
+              }
+            }}
           >
             Simpan Perubahan
           </button>
