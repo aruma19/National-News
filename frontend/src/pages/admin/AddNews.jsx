@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import Swal from "sweetalert2";
+import { BASE_URL } from "../../utils";
 import { useNavigate } from "react-router-dom";
 import strictInstance from "../../utils/axiosInstance";
 
@@ -16,28 +18,15 @@ const AddNews = () => {
     categoryId: "",
   });
   const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // PERBAIKAN: Hapus manual token check, langsung call function
-    const fetchCategories = async () => {
-      try {
-        // PERBAIKAN: Langsung gunakan strictInstance tanpa manual token
-        const res = await strictInstance.get(`/categories`);
-        setCategories(res.data);
-      } catch (err) {
-        console.error("Error fetching categories:", err);
-        // PERBAIKAN: Better error handling
-        if (err.response?.status === 401) {
-          // Token issue will be handled by interceptor
-          console.log("Token expired, interceptor will handle refresh");
-        } else {
-          Swal.fire("Error", "Gagal mengambil data kategori", "error");
-        }
-      }
-    };
+    const token = localStorage.getItem("accessToken");
+    if (!token) return navigate("/login");
 
-    fetchCategories();
+    strictInstance
+      .get(`/categories`)
+      .then((res) => setCategories(res.data))
+      .catch((err) => console.error("Gagal ambil kategori:", err));
   }, [navigate]);
 
   const handleChange = (e) => {
@@ -49,21 +38,9 @@ const AddNews = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // PERBAIKAN: Validation sebelum submit
-    if (!formData.title.trim()) {
-      Swal.fire("Peringatan", "Judul berita tidak boleh kosong", "warning");
-      return;
-    }
-    
-    if (!formData.categoryId) {
-      Swal.fire("Peringatan", "Silakan pilih kategori", "warning");
-      return;
-    }
+    const token = localStorage.getItem("accessToken");
 
-    setLoading(true);
     try {
-      // PERBAIKAN: Hapus manual token retrieval, langsung gunakan strictInstance
       await strictInstance.post(`/news`, formData, {
         headers: { "Content-Type": "application/json" },
       });
@@ -71,22 +48,11 @@ const AddNews = () => {
       Swal.fire("Berhasil!", "Berita berhasil ditambahkan", "success");
       navigate("/dashboardAdmin");
     } catch (error) {
-      console.error("Error adding news:", error);
-      // PERBAIKAN: Better error handling
-      if (error.response?.status === 401) {
-        // Token issue will be handled by interceptor
-        Swal.fire("Gagal", "Sesi telah berakhir, silakan login kembali", "error");
-      } else if (error.response?.status === 400) {
-        Swal.fire("Gagal", "Data tidak valid, periksa kembali input Anda", "error");
-      } else {
-        Swal.fire(
-          "Gagal",
-          error.response?.data?.message || "Terjadi kesalahan saat menambah berita",
-          "error"
-        );
-      }
-    } finally {
-      setLoading(false);
+      Swal.fire(
+        "Gagal",
+        error.response?.data?.message || "Terjadi kesalahan",
+        "error"
+      );
     }
   };
 
@@ -186,7 +152,7 @@ const AddNews = () => {
     borderRadius: 8,
     border: "2px solid #1a2a6c",
     fontSize: "0.9rem",
-    backgroundColor: loading ? "#f5f5f5" : "white",
+    backgroundColor: "white",
     outline: "none",
     transition: "0.3s",
     boxSizing: "border-box",
@@ -205,7 +171,7 @@ const AddNews = () => {
 
   const selectStyle = {
     ...inputStyle,
-    cursor: loading ? "not-allowed" : "pointer",
+    cursor: "pointer",
     appearance: "none",
     backgroundImage: `url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e")`,
     backgroundRepeat: "no-repeat",
@@ -215,18 +181,17 @@ const AddNews = () => {
   };
 
   const submitButtonStyle = {
-    background: loading ? "#6b7280" : "linear-gradient(135deg, #3861ff, #1a2a6c)",
+    background: "linear-gradient(135deg, #3861ff, #1a2a6c)",
     color: "white",
     fontWeight: 700,
     border: "none",
     borderRadius: 10,
     padding: "12px 24px",
     fontSize: "0.9rem",
-    cursor: loading ? "not-allowed" : "pointer",
-    boxShadow: loading ? "none" : "0 6px 18px rgba(56, 97, 255, 0.6)",
+    cursor: "pointer",
+    boxShadow: "0 6px 18px rgba(56, 97, 255, 0.6)",
     transition: "all 0.3s ease",
     width: "100%",
-    opacity: loading ? 0.7 : 1,
     '@media (min-width: 768px)': {
       fontSize: "1rem",
       padding: "12px 30px",
@@ -244,12 +209,12 @@ const AddNews = () => {
   };
 
   const formFields = [
-    { label: "Author", name: "author", type: "text", required: false },
-    { label: "Judul *", name: "title", type: "text", required: true },
-    { label: "URL", name: "url", type: "text", required: false },
-    { label: "Tanggal & Waktu (ISO)", name: "iso_date", type: "datetime-local", required: false },
-    { label: "Gambar Kecil (URL)", name: "image_small", type: "text", required: false },
-    { label: "Gambar Besar (URL)", name: "image_large", type: "text", required: false },
+    { label: "Author", name: "author", type: "text" },
+    { label: "Judul", name: "title", type: "text" },
+    { label: "URL", name: "url", type: "text" },
+    { label: "Tanggal & Waktu (ISO)", name: "iso_date", type: "datetime-local" },
+    { label: "Gambar Kecil (URL)", name: "image_small", type: "text" },
+    { label: "Gambar Besar (URL)", name: "image_large", type: "text" },
   ];
 
   return (
@@ -259,19 +224,6 @@ const AddNews = () => {
           <button
             onClick={() => navigate("/dashboardAdmin")}
             style={backButtonStyle}
-            disabled={loading}
-            onMouseEnter={(e) => {
-              if (!loading) {
-                e.target.style.transform = "translateY(-2px)";
-                e.target.style.boxShadow = "0 6px 16px rgba(56, 97, 255, 0.3)";
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (!loading) {
-                e.target.style.transform = "translateY(0)";
-                e.target.style.boxShadow = "0 4px 12px rgba(56, 97, 255, 0.2)";
-              }
-            }}
           >
             ← Kembali
           </button>
@@ -283,7 +235,7 @@ const AddNews = () => {
         </div>
 
         <form onSubmit={handleSubmit}>
-          {formFields.map(({ label, name, type, required }) => (
+          {formFields.map(({ label, name, type }) => (
             <div key={name} style={fieldStyle}>
               <label htmlFor={name} style={labelStyle}>
                 {label}
@@ -294,14 +246,10 @@ const AddNews = () => {
                 type={type}
                 value={formData[name]}
                 onChange={handleChange}
-                required={required}
-                disabled={loading}
                 style={inputStyle}
                 onFocus={(e) => {
-                  if (!loading) {
-                    e.target.style.borderColor = "#3861ff";
-                    e.target.style.boxShadow = "0 0 6px rgba(56, 97, 255, 0.3)";
-                  }
+                  e.target.style.borderColor = "#3861ff";
+                  e.target.style.boxShadow = "0 0 6px rgba(56, 97, 255, 0.3)";
                 }}
                 onBlur={(e) => {
                   e.target.style.borderColor = "#1a2a6c";
@@ -321,14 +269,10 @@ const AddNews = () => {
               value={formData.description}
               onChange={handleChange}
               rows={4}
-              disabled={loading}
               style={textareaStyle}
-              placeholder="Masukkan deskripsi berita..."
               onFocus={(e) => {
-                if (!loading) {
-                  e.target.style.borderColor = "#3861ff";
-                  e.target.style.boxShadow = "0 0 6px rgba(56, 97, 255, 0.3)";
-                }
+                e.target.style.borderColor = "#3861ff";
+                e.target.style.boxShadow = "0 0 6px rgba(56, 97, 255, 0.3)";
               }}
               onBlur={(e) => {
                 e.target.style.borderColor = "#1a2a6c";
@@ -339,7 +283,7 @@ const AddNews = () => {
 
           <div style={fieldStyle}>
             <label htmlFor="categoryId" style={labelStyle}>
-              Kategori *
+              Kategori
             </label>
             <select
               id="categoryId"
@@ -347,13 +291,10 @@ const AddNews = () => {
               value={formData.categoryId}
               onChange={handleChange}
               required
-              disabled={loading}
               style={selectStyle}
               onFocus={(e) => {
-                if (!loading) {
-                  e.target.style.borderColor = "#3861ff";
-                  e.target.style.boxShadow = "0 0 6px rgba(56, 97, 255, 0.3)";
-                }
+                e.target.style.borderColor = "#3861ff";
+                e.target.style.boxShadow = "0 0 6px rgba(56, 97, 255, 0.3)";
               }}
               onBlur={(e) => {
                 e.target.style.borderColor = "#1a2a6c";
@@ -372,22 +313,17 @@ const AddNews = () => {
           <div style={buttonContainerStyle}>
             <button
               type="submit"
-              disabled={loading}
               style={submitButtonStyle}
               onMouseEnter={(e) => {
-                if (!loading) {
-                  e.target.style.background = "linear-gradient(135deg, #1a2a6c, #3861ff)";
-                  e.target.style.boxShadow = "0 8px 24px rgba(26, 42, 108, 0.6)";
-                }
+                e.target.style.background = "linear-gradient(135deg, #1a2a6c, #3861ff)";
+                e.target.style.boxShadow = "0 8px 24px rgba(26, 42, 108, 0.6)";
               }}
               onMouseLeave={(e) => {
-                if (!loading) {
-                  e.target.style.background = "linear-gradient(135deg, #3861ff, #1a2a6c)";
-                  e.target.style.boxShadow = "0 6px 18px rgba(56, 97, 255, 0.6)";
-                }
+                e.target.style.background = "linear-gradient(135deg, #3861ff, #1a2a6c)";
+                e.target.style.boxShadow = "0 6px 18px rgba(56, 97, 255, 0.6)";
               }}
             >
-              {loading ? "Menyimpan..." : "Simpan"}
+              Simpan
             </button>
           </div>
         </form>

@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import Swal from "sweetalert2";
+import { BASE_URL } from "../../utils";
+import jwtDecode from "jwt-decode";
 import { Link } from "react-router-dom";
 import strictInstance from "../../utils/axiosInstance";
 
@@ -11,43 +14,32 @@ const DashboardAdmin = ({ sidebarOpen, toggleSidebar }) => {
   const [selectedCategory, setSelectedCategory] = useState("All");
 
   useEffect(() => {
-    // PERBAIKAN: Hapus manual token retrieval, langsung call function
-    fetchNews();
-    fetchCategories();
+    const token = localStorage.getItem("accessToken");
+      fetchNews(token);
+      fetchCategories(token);
   }, []);
 
-  const fetchNews = async () => {
+  const fetchNews = async (token) => {
     setLoading(true);
     try {
-      // PERBAIKAN: Langsung gunakan strictInstance tanpa parameter token
       const response = await strictInstance.get("/news");
       setNewsList(response.data);
     } catch (error) {
-      console.error("Error fetching news:", error);
-      // PERBAIKAN: Error handling yang lebih baik
-      if (error.response?.status === 401) {
-        // Token issue will be handled by interceptor
-        console.log("Token expired, interceptor will handle refresh");
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Gagal mengambil data berita",
-          text: error.response?.data?.message || "Terjadi kesalahan saat mengambil data.",
-        });
-      }
-    } finally {
-      setLoading(false);
+      Swal.fire({
+        icon: "error",
+        title: "Gagal mengambil data berita",
+        text: error.response?.data?.message || "Terjadi kesalahan saat mengambil data.",
+      });
     }
+    setLoading(false);
   };
 
-  const fetchCategories = async () => {
+  const fetchCategories = async (token) => {
     try {
-      // PERBAIKAN: Langsung gunakan strictInstance tanpa parameter token
       const response = await strictInstance.get("/categories");
       setCategories(response.data);
     } catch (error) {
-      console.error("Error fetching categories:", error);
-      // Interceptor will handle 401 automatically
+      console.error("Gagal mengambil kategori", error);
     }
   };
 
@@ -78,41 +70,28 @@ const DashboardAdmin = ({ sidebarOpen, toggleSidebar }) => {
     });
 
   const handleDelete = async (id) => {
-    // PERBAIKAN: Hapus manual token retrieval
+    const token = localStorage.getItem("accessToken");
+
     const confirmed = await Swal.fire({
       title: "Yakin ingin menghapus?",
       text: "Data yang dihapus tidak bisa dikembalikan!",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#ef4444",
-      cancelButtonColor: "#6b7280",
       confirmButtonText: "Ya, hapus!",
       cancelButtonText: "Batal",
     });
 
     if (confirmed.isConfirmed) {
       try {
-        // PERBAIKAN: Langsung gunakan strictInstance tanpa manual token
         await strictInstance.delete(`/news/${id}`);
         setNewsList(newsList.filter((item) => item.id !== id));
         Swal.fire("Berhasil!", "Berita telah dihapus.", "success");
       } catch (error) {
-        console.error("Error deleting news:", error);
-        // PERBAIKAN: Better error handling
-        if (error.response?.status === 401) {
-          // Token issue will be handled by interceptor
-          Swal.fire("Error", "Sesi telah berakhir, silakan login kembali", "error");
-        } else if (error.response?.status === 404) {
-          Swal.fire("Error", "Berita tidak ditemukan", "error");
-          // Refresh news list to sync with server
-          fetchNews();
-        } else {
-          Swal.fire({
-            icon: "error",
-            title: "Gagal menghapus",
-            text: error.response?.data?.message || "Terjadi kesalahan saat menghapus.",
-          });
-        }
+        Swal.fire({
+          icon: "error",
+          title: "Gagal menghapus",
+          text: error.response?.data?.message || "Terjadi kesalahan saat menghapus.",
+        });
       }
     }
   };
@@ -236,7 +215,6 @@ const DashboardAdmin = ({ sidebarOpen, toggleSidebar }) => {
                 boxShadow: "0 3px 8px rgba(30, 64, 175, 0.1)",
                 fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
                 boxSizing: "border-box",
-                outline: "none",
               }}
               onFocus={(e) => (e.target.style.borderColor = "#1e40af")}
               onBlur={(e) => (e.target.style.borderColor = "#a5b4fc")}
@@ -259,7 +237,6 @@ const DashboardAdmin = ({ sidebarOpen, toggleSidebar }) => {
                 fontWeight: "600",
                 boxSizing: "border-box",
                 cursor: "pointer",
-                outline: "none",
               }}
             >
               <option value="All">Semua Kategori</option>
@@ -275,30 +252,12 @@ const DashboardAdmin = ({ sidebarOpen, toggleSidebar }) => {
         {/* Loading & Empty */}
         {loading && (
           <div style={{ textAlign: "center", marginTop: "2rem" }}>
-            <div
-              style={{
-                display: "inline-block",
-                padding: "0.8rem 2rem",
-                backgroundColor: "#1e40af",
-                color: "white",
-                borderRadius: "25px",
-                fontWeight: "600",
-                fontSize: "1rem",
-              }}
-            >
-              Memuat berita...
-            </div>
+            <p>Memuat berita...</p>
           </div>
         )}
         
         {!loading && filteredNews.length === 0 && (
-          <p style={{ 
-            textAlign: "center", 
-            color: "#6b7280", 
-            marginTop: "2rem", 
-            fontStyle: "italic",
-            fontSize: "1.1rem",
-          }}>
+          <p style={{ textAlign: "center", color: "#6b7280", marginTop: "2rem", fontStyle: "italic" }}>
             Tidak ada berita yang cocok dengan pencarian atau kategori.
           </p>
         )}
@@ -329,16 +288,12 @@ const DashboardAdmin = ({ sidebarOpen, toggleSidebar }) => {
                 flexDirection: "column",
               }}
               onMouseEnter={(e) => {
-                if (window.innerWidth > 768) {
-                  e.currentTarget.style.transform = "translateY(-6px)";
-                  e.currentTarget.style.boxShadow = "0 16px 32px rgba(30, 64, 175, 0.15)";
-                }
+                e.currentTarget.style.transform = "translateY(-6px)";
+                e.currentTarget.style.boxShadow = "0 16px 32px rgba(30, 64, 175, 0.15)";
               }}
               onMouseLeave={(e) => {
-                if (window.innerWidth > 768) {
-                  e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.boxShadow = "0 8px 16px rgba(30, 64, 175, 0.1)";
-                }
+                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.boxShadow = "0 8px 16px rgba(30, 64, 175, 0.1)";
               }}
             >
               <Link
@@ -374,21 +329,11 @@ const DashboardAdmin = ({ sidebarOpen, toggleSidebar }) => {
                   {news.title}
                 </h3>
                 
-                <p style={{ 
-                  color: "#4b5563", 
-                  fontSize: "0.85rem", 
-                  marginBottom: "0.5rem",
-                  fontWeight: "500",
-                }}>
+                <p style={{ color: "#4b5563", fontSize: "0.85rem", marginBottom: "0.5rem" }}>
                   {news.author || "Admin"} | {news.category?.category || "Umum"}
                 </p>
                 
-                <p style={{ 
-                  color: "#6b7280", 
-                  fontSize: "0.8rem", 
-                  marginBottom: "1rem",
-                  fontStyle: "italic",
-                }}>
+                <p style={{ color: "#6b7280", fontSize: "0.8rem", marginBottom: "1rem" }}>
                   {new Date(news.iso_date).toLocaleDateString("id-ID", {
                     day: "numeric",
                     month: "long",
@@ -419,13 +364,6 @@ const DashboardAdmin = ({ sidebarOpen, toggleSidebar }) => {
                       display: "flex",
                       alignItems: "center",
                       gap: "0.25rem",
-                      transition: "background-color 0.3s ease",
-                    }}
-                    onMouseEnter={(e) => {
-                      e.target.style.backgroundColor = "#f59e0b";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.target.style.backgroundColor = "#fbbf24";
                     }}
                   >
                     ✏️ Edit
@@ -448,13 +386,6 @@ const DashboardAdmin = ({ sidebarOpen, toggleSidebar }) => {
                       display: "flex",
                       alignItems: "center",
                       gap: "0.25rem",
-                      transition: "background-color 0.3s ease",
-                    }}
-                    onMouseEnter={(e) => {
-                      e.target.style.backgroundColor = "#dc2626";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.target.style.backgroundColor = "#ef4444";
                     }}
                   >
                     🗑️ Hapus

@@ -1,44 +1,27 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import Swal from "sweetalert2";
 import { useParams, useNavigate } from "react-router-dom";
+import { BASE_URL } from "../../utils";
 import strictInstance from "../../utils/axiosInstance";
 
 const EditCategory = () => {
   const { id } = useParams();
   const [category, setCategory] = useState("");
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-  const [loading, setLoading] = useState(false);
-  const [fetchLoading, setFetchLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCategory = async () => {
-      setFetchLoading(true);
       try {
-        // PERBAIKAN: Langsung gunakan strictInstance tanpa manual token
         const response = await strictInstance.get(`/categories/${id}`);
         setCategory(response.data.category);
       } catch (err) {
-        console.error("Error fetching category:", err);
-        // PERBAIKAN: Better error handling
-        if (err.response?.status === 404) {
-          Swal.fire("Gagal", "Kategori tidak ditemukan", "error").then(() => {
-            navigate("/categorylist");
-          });
-        } else if (err.response?.status === 401) {
-          // Token issue will be handled by interceptor
-          console.log("Token expired, interceptor will handle refresh");
-        } else {
-          Swal.fire("Gagal", "Terjadi kesalahan saat mengambil data kategori", "error");
-        }
-      } finally {
-        setFetchLoading(false);
+        Swal.fire("Gagal", "Kategori tidak ditemukan", "error");
       }
     };
 
-    if (id) {
-      fetchCategory();
-    }
+    fetchCategory();
 
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
@@ -46,45 +29,17 @@ const EditCategory = () => {
 
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, [id, navigate]);
+  }, [id]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    if (!category.trim()) {
-      Swal.fire("Peringatan", "Nama kategori tidak boleh kosong", "warning");
-      return;
-    }
-
-    setLoading(true);
     try {
-      // PERBAIKAN: Langsung gunakan strictInstance tanpa manual token
-      await strictInstance.put(`/categories/${id}`, { 
-        category: category.trim() 
-      });
-      
+      await strictInstance.put(`/categories/${id}`, { category });
       Swal.fire("Sukses", "Kategori berhasil diperbarui", "success").then(() =>
         navigate("/categorylist")
       );
     } catch (err) {
-      console.error("Error updating category:", err);
-      // PERBAIKAN: Better error handling
-      if (err.response?.status === 400) {
-        Swal.fire("Gagal", "Data kategori tidak valid", "error");
-      } else if (err.response?.status === 401) {
-        // Token issue will be handled by interceptor
-        Swal.fire("Gagal", "Sesi telah berakhir, silakan login kembali", "error");
-      } else if (err.response?.status === 404) {
-        Swal.fire("Gagal", "Kategori tidak ditemukan", "error").then(() => {
-          navigate("/categorylist");
-        });
-      } else if (err.response?.status === 409) {
-        Swal.fire("Gagal", "Kategori dengan nama tersebut sudah ada", "error");
-      } else {
-        Swal.fire("Gagal", "Kategori gagal diperbarui", "error");
-      }
-    } finally {
-      setLoading(false);
+      Swal.fire("Gagal", "Kategori gagal diperbarui", "error");
     }
   };
 
@@ -127,7 +82,6 @@ const EditCategory = () => {
     outline: "none",
     boxSizing: "border-box",
     transition: "border-color 0.3s ease",
-    backgroundColor: loading ? "#f5f5f5" : "white",
   };
 
   const buttonContainerStyle = {
@@ -146,69 +100,45 @@ const EditCategory = () => {
     fontWeight: 600,
     padding: isMobile ? "12px 24px" : "10px 20px",
     borderRadius: 8,
-    cursor: loading ? "not-allowed" : "pointer",
+    cursor: "pointer",
     fontSize: isMobile ? "0.9rem" : "1rem",
     width: isMobile ? "100%" : "auto",
     transition: "all 0.3s ease",
-    opacity: loading ? 0.7 : 1,
   };
 
   const submitButtonStyle = {
-    backgroundColor: loading ? "#6b7280" : "#1a2a6c",
+    backgroundColor: "#1a2a6c",
     color: "white",
-    border: `2px solid ${loading ? "#6b7280" : "#1a2a6c"}`,
+    border: "2px solid #1a2a6c",
     fontWeight: 600,
     padding: isMobile ? "12px 24px" : "10px 20px",
     borderRadius: 8,
-    cursor: loading ? "not-allowed" : "pointer",
+    cursor: "pointer",
     fontSize: isMobile ? "0.9rem" : "1rem",
     width: isMobile ? "100%" : "auto",
     transition: "all 0.3s ease",
-    opacity: loading ? 0.7 : 1,
   };
-
-  if (fetchLoading) {
-    return (
-      <div style={containerStyle}>
-        <div style={{ textAlign: "center", padding: "2rem" }}>
-          <div
-            style={{
-              display: "inline-block",
-              padding: "0.8rem 2rem",
-              backgroundColor: "#1a2a6c",
-              color: "white",
-              borderRadius: "25px",
-              fontWeight: "600",
-              fontSize: "1rem",
-            }}
-          >
-            Memuat data kategori...
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div style={containerStyle}>
-      <h2 style={titleStyle}>Edit Kategori</h2>
+      <h2 style={titleStyle}>
+        Edit Kategori
+      </h2>
 
       <form onSubmit={handleSubmit}>
         <div style={{ marginBottom: isMobile ? 16 : 20 }}>
-          <label style={labelStyle}>Nama Kategori</label>
+          <label style={labelStyle}>
+            Nama Kategori
+          </label>
           <input
             type="text"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
             required
-            disabled={loading}
             style={inputStyle}
-            placeholder="Masukkan nama kategori"
             onFocus={(e) => {
-              if (!loading) {
-                e.target.style.borderColor = "#3861ff";
-                e.target.style.boxShadow = "0 0 0 3px rgba(56, 97, 255, 0.1)";
-              }
+              e.target.style.borderColor = "#3861ff";
+              e.target.style.boxShadow = "0 0 0 3px rgba(56, 97, 255, 0.1)";
             }}
             onBlur={(e) => {
               e.target.style.borderColor = "#1a2a6c";
@@ -222,18 +152,13 @@ const EditCategory = () => {
             type="button"
             style={backButtonStyle}
             onClick={() => navigate("/categorylist")}
-            disabled={loading}
             onMouseEnter={(e) => {
-              if (!loading) {
-                e.target.style.backgroundColor = "#1a2a6c";
-                e.target.style.color = "white";
-              }
+              e.target.style.backgroundColor = "#1a2a6c";
+              e.target.style.color = "white";
             }}
             onMouseLeave={(e) => {
-              if (!loading) {
-                e.target.style.backgroundColor = "#f8f9fa";
-                e.target.style.color = "#1a2a6c";
-              }
+              e.target.style.backgroundColor = "#f8f9fa";
+              e.target.style.color = "#1a2a6c";
             }}
           >
             Kembali
@@ -242,21 +167,16 @@ const EditCategory = () => {
           <button
             type="submit"
             style={submitButtonStyle}
-            disabled={loading}
             onMouseEnter={(e) => {
-              if (!loading) {
-                e.target.style.backgroundColor = "#3861ff";
-                e.target.style.borderColor = "#3861ff";
-              }
+              e.target.style.backgroundColor = "#3861ff";
+              e.target.style.borderColor = "#3861ff";
             }}
             onMouseLeave={(e) => {
-              if (!loading) {
-                e.target.style.backgroundColor = "#1a2a6c";
-                e.target.style.borderColor = "#1a2a6c";
-              }
+              e.target.style.backgroundColor = "#1a2a6c";
+              e.target.style.borderColor = "#1a2a6c";
             }}
           >
-            {loading ? "Menyimpan..." : "Simpan Perubahan"}
+            Simpan Perubahan
           </button>
         </div>
       </form>

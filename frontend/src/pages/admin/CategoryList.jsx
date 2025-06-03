@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "../../utils";
 import strictInstance from "../../utils/axiosInstance";
 
 const CategoryList = () => {
   const [categories, setCategories] = useState([]);
   const [newCategory, setNewCategory] = useState("");
   const [loading, setLoading] = useState(false);
-  const [fetchLoading, setFetchLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -15,93 +16,49 @@ const CategoryList = () => {
   }, []);
 
   const fetchCategories = async () => {
-    setFetchLoading(true);
+    const token = localStorage.getItem("accessToken");
     try {
-      // PERBAIKAN: Hapus manual token retrieval, langsung gunakan strictInstance
       const response = await strictInstance.get("/categories");
       setCategories(response.data);
     } catch (err) {
-      console.error("Error fetching categories:", err);
-      // PERBAIKAN: Better error handling
-      if (err.response?.status === 401) {
-        // Token issue will be handled by interceptor
-        console.log("Token expired, interceptor will handle refresh");
-      } else {
-        Swal.fire("Error", "Gagal mengambil data kategori", "error");
-      }
-    } finally {
-      setFetchLoading(false);
+      console.error("Gagal ambil kategori:", err);
     }
   };
 
   const handleDelete = async (id) => {
-    // PERBAIKAN: Hapus manual token retrieval
+    const token = localStorage.getItem("accessToken");
     const confirm = await Swal.fire({
       title: "Yakin ingin hapus?",
       text: "Data yang dihapus tidak dapat dikembalikan!",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#e63946",
-      cancelButtonColor: "#6c757d",
       confirmButtonText: "Ya, hapus!",
-      cancelButtonText: "Batal",
     });
 
     if (confirm.isConfirmed) {
       try {
-        // PERBAIKAN: Langsung gunakan strictInstance tanpa manual token
         await strictInstance.delete(`/categories/${id}`);
         Swal.fire("Dihapus!", "Kategori berhasil dihapus.", "success");
-        await fetchCategories(); // Refresh categories list
+        fetchCategories();
       } catch (err) {
-        console.error("Error deleting category:", err);
-        // PERBAIKAN: Better error handling
-        if (err.response?.status === 400) {
-          Swal.fire("Gagal!", "Kategori tidak dapat dihapus karena masih digunakan.", "error");
-        } else if (err.response?.status === 401) {
-          // Token issue will be handled by interceptor
-          Swal.fire("Gagal!", "Sesi telah berakhir, silakan login kembali.", "error");
-        } else if (err.response?.status === 404) {
-          Swal.fire("Gagal!", "Kategori tidak ditemukan.", "error");
-          await fetchCategories(); // Refresh to sync with server
-        } else {
-          Swal.fire("Gagal!", "Kategori gagal dihapus.", "error");
-        }
+        Swal.fire("Gagal!", "Kategori gagal dihapus.", "error");
       }
     }
   };
 
   const handleAddCategory = async (e) => {
     e.preventDefault();
-    
-    if (!newCategory.trim()) {
-      Swal.fire("Peringatan", "Nama kategori tidak boleh kosong", "warning");
-      return;
-    }
+    const token = localStorage.getItem("accessToken");
+    if (!newCategory.trim()) return;
 
     setLoading(true);
     try {
-      // PERBAIKAN: Hapus manual token retrieval, langsung gunakan strictInstance
-      await strictInstance.post("/categories", { 
-        category: newCategory.trim() 
-      });
-      
+      await strictInstance.post("/categories", { category: newCategory });
       setNewCategory("");
       Swal.fire("Sukses", "Kategori berhasil ditambahkan", "success");
-      await fetchCategories(); // Refresh categories list
+      fetchCategories();
     } catch (err) {
-      console.error("Error adding category:", err);
-      // PERBAIKAN: Better error handling
-      if (err.response?.status === 400) {
-        Swal.fire("Error", "Data kategori tidak valid", "error");
-      } else if (err.response?.status === 401) {
-        // Token issue will be handled by interceptor
-        Swal.fire("Error", "Sesi telah berakhir, silakan login kembali", "error");
-      } else if (err.response?.status === 409) {
-        Swal.fire("Error", "Kategori dengan nama tersebut sudah ada", "error");
-      } else {
-        Swal.fire("Error", "Gagal menambahkan kategori", "error");
-      }
+      Swal.fire("Error", "Gagal menambahkan kategori", "error");
     } finally {
       setLoading(false);
     }
@@ -199,7 +156,6 @@ const CategoryList = () => {
     outline: "none",
     transition: "0.3s",
     boxSizing: "border-box",
-    backgroundColor: loading ? "#f5f5f5" : "white",
     '@media (min-width: 768px)': {
       fontSize: "0.95rem",
       padding: "12px 14px",
@@ -207,7 +163,7 @@ const CategoryList = () => {
   };
 
   const buttonStyle = {
-    background: loading ? "#6b7280" : "linear-gradient(135deg, #3861ff, #1a2a6c)",
+    background: "linear-gradient(135deg, #3861ff, #1a2a6c)",
     color: "white",
     border: "none",
     borderRadius: 8,
@@ -249,41 +205,6 @@ const CategoryList = () => {
     }
   };
 
-  // Loading Component
-  const LoadingComponent = () => (
-    <div style={{ textAlign: "center", padding: "2rem" }}>
-      <div
-        style={{
-          display: "inline-block",
-          padding: "0.8rem 2rem",
-          backgroundColor: "#1a2a6c",
-          color: "white",
-          borderRadius: "25px",
-          fontWeight: "600",
-          fontSize: "1rem",
-        }}
-      >
-        Memuat data kategori...
-      </div>
-    </div>
-  );
-
-  // Empty State Component
-  const EmptyStateComponent = () => (
-    <div style={{ textAlign: "center", padding: "2rem" }}>
-      <p
-        style={{
-          color: "#6b7280",
-          fontStyle: "italic",
-          fontSize: "1.1rem",
-          margin: 0,
-        }}
-      >
-        Belum ada kategori yang tersedia
-      </p>
-    </div>
-  );
-
   // Mobile Layout (Cards)
   const renderMobileLayout = () => (
     <div style={containerStyle}>
@@ -292,14 +213,6 @@ const CategoryList = () => {
           <button
             onClick={() => navigate("/dashboardAdmin")}
             style={backButtonStyle}
-            onMouseEnter={(e) => {
-              e.target.style.transform = "translateY(-2px)";
-              e.target.style.boxShadow = "0 6px 16px rgba(56, 97, 255, 0.3)";
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.transform = "translateY(0)";
-              e.target.style.boxShadow = "0 4px 12px rgba(56, 97, 255, 0.2)";
-            }}
           >
             ← Kembali
           </button>
@@ -322,13 +235,10 @@ const CategoryList = () => {
               onChange={(e) => setNewCategory(e.target.value)}
               placeholder="Tambah kategori baru"
               required
-              disabled={loading}
               style={inputStyle}
               onFocus={(e) => {
-                if (!loading) {
-                  e.target.style.borderColor = "#3861ff";
-                  e.target.style.boxShadow = "0 0 6px rgba(56, 97, 255, 0.3)";
-                }
+                e.target.style.borderColor = "#3861ff";
+                e.target.style.boxShadow = "0 0 6px rgba(56, 97, 255, 0.3)";
               }}
               onBlur={(e) => {
                 e.target.style.borderColor = "#1a2a6c";
@@ -345,97 +255,75 @@ const CategoryList = () => {
           </form>
         </div>
 
-        {/* Loading State */}
-        {fetchLoading && <LoadingComponent />}
-
-        {/* Empty State */}
-        {!fetchLoading && categories.length === 0 && <EmptyStateComponent />}
-
         {/* Card Layout untuk Categories */}
-        {!fetchLoading && categories.length > 0 && (
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            {categories.map((cat, index) => (
-              <div key={cat.id} style={cardStyle}>
-                <div style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  marginBottom: "10px"
-                }}>
-                  <span style={{ fontWeight: "600", color: "#1a2a6c" }}>
-                    #{index + 1}
-                  </span>
-                </div>
-                
-                <div style={{ marginBottom: "15px" }}>
-                  <h3 style={{
-                    margin: 0,
-                    fontSize: "1.1rem",
-                    fontWeight: "600",
-                    color: "#0a1a3a"
-                  }}>
-                    {cat.category}
-                  </h3>
-                </div>
-                
-                <div style={{
-                  display: "flex",
-                  gap: "8px",
-                  flexWrap: "wrap"
-                }}>
-                  <button
-                    style={{
-                      backgroundColor: "#3861ff",
-                      color: "white",
-                      border: "none",
-                      borderRadius: 6,
-                      padding: "8px 16px",
-                      cursor: "pointer",
-                      fontWeight: 600,
-                      fontSize: "0.85rem",
-                      flex: "1",
-                      minWidth: "70px",
-                      transition: "background-color 0.3s ease",
-                    }}
-                    onClick={() => navigate(`/editcategory/${cat.id}`)}
-                    onMouseEnter={(e) => {
-                      e.target.style.backgroundColor = "#1a2a6c";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.target.style.backgroundColor = "#3861ff";
-                    }}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    style={{
-                      backgroundColor: "#e63946",
-                      color: "white",
-                      border: "none",
-                      borderRadius: 6,
-                      padding: "8px 16px",
-                      cursor: "pointer",
-                      fontWeight: 600,
-                      fontSize: "0.85rem",
-                      flex: "1",
-                      minWidth: "70px",
-                      transition: "background-color 0.3s ease",
-                    }}
-                    onClick={() => handleDelete(cat.id)}
-                    onMouseEnter={(e) => {
-                      e.target.style.backgroundColor = "#dc2626";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.target.style.backgroundColor = "#e63946";
-                    }}
-                  >
-                    Hapus
-                  </button>
-                </div>
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          {categories.map((cat, index) => (
+            <div key={cat.id} style={cardStyle}>
+              <div style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: "10px"
+              }}>
+                <span style={{ fontWeight: "600", color: "#1a2a6c" }}>
+                  #{index + 1}
+                </span>
               </div>
-            ))}
-          </div>
-        )}
+              
+              <div style={{ marginBottom: "15px" }}>
+                <h3 style={{
+                  margin: 0,
+                  fontSize: "1.1rem",
+                  fontWeight: "600",
+                  color: "#0a1a3a"
+                }}>
+                  {cat.category}
+                </h3>
+              </div>
+              
+              <div style={{
+                display: "flex",
+                gap: "8px",
+                flexWrap: "wrap"
+              }}>
+                <button
+                  style={{
+                    backgroundColor: "#3861ff",
+                    color: "white",
+                    border: "none",
+                    borderRadius: 6,
+                    padding: "8px 16px",
+                    cursor: "pointer",
+                    fontWeight: 600,
+                    fontSize: "0.85rem",
+                    flex: "1",
+                    minWidth: "70px"
+                  }}
+                  onClick={() => navigate(`/editcategory/${cat.id}`)}
+                >
+                  Edit
+                </button>
+                <button
+                  style={{
+                    backgroundColor: "#e63946",
+                    color: "white",
+                    border: "none",
+                    borderRadius: 6,
+                    padding: "8px 16px",
+                    cursor: "pointer",
+                    fontWeight: 600,
+                    fontSize: "0.85rem",
+                    flex: "1",
+                    minWidth: "70px"
+                  }}
+                  onClick={() => handleDelete(cat.id)}
+                >
+                  Hapus
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -448,14 +336,6 @@ const CategoryList = () => {
           <button
             onClick={() => navigate("/dashboardAdmin")}
             style={backButtonStyle}
-            onMouseEnter={(e) => {
-              e.target.style.transform = "translateY(-2px)";
-              e.target.style.boxShadow = "0 6px 16px rgba(56, 97, 255, 0.3)";
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.transform = "translateY(0)";
-              e.target.style.boxShadow = "0 4px 12px rgba(56, 97, 255, 0.2)";
-            }}
           >
             ← Kembali
           </button>
@@ -465,161 +345,107 @@ const CategoryList = () => {
           <div style={{ width: "100px" }} />
         </div>
 
-        {/* Loading State */}
-        {fetchLoading && <LoadingComponent />}
-
-        {/* Empty State */}
-        {!fetchLoading && categories.length === 0 && (
-          <div style={{ backgroundColor: "white", borderRadius: 12, padding: "2rem" }}>
-            <EmptyStateComponent />
-          </div>
-        )}
-
-        {/* Table for Categories */}
-        {!fetchLoading && (
-          <table style={tableStyle}>
-            <thead>
-              <tr style={{ backgroundColor: "#1a2a6c"}}>
-                <th style={{ padding: 12, textAlign: "left", color: "white" }}>No</th>
-                <th style={{ padding: 12, textAlign: "left", color: "white" }}>Nama Kategori</th>
-                <th style={{ padding: 12, textAlign: "left", color: "white" }}>Aksi</th>
-              </tr>
-            </thead>
-            <tbody>
-              {categories.map((cat, index) => (
-                <tr
-                  key={cat.id}
-                  style={{
-                    borderBottom: "1px solid #ddd",
-                    backgroundColor: index % 2 === 0 ? "#f9fafe" : "white",
-                  }}
-                >
-                  <td style={{ padding: 12 }}>{index + 1}</td>
-                  <td style={{ padding: 12, fontWeight: "500" }}>{cat.category}</td>
-                  <td style={{ padding: 12 }}>
-                    <button
-                      style={{
-                        backgroundColor: "#3861ff",
-                        color: "white",
-                        border: "none",
-                        borderRadius: 6,
-                        padding: "6px 12px",
-                        marginRight: 8,
-                        cursor: "pointer",
-                        fontWeight: 600,
-                        transition: "background-color 0.3s ease",
-                      }}
-                      onClick={() => navigate(`/editcategory/${cat.id}`)}
-                      onMouseEnter={(e) => {
-                        e.target.style.backgroundColor = "#1a2a6c";
-                      }}
-                      onMouseLeave={(e) => {
-                        e.target.style.backgroundColor = "#3861ff";
-                      }}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      style={{
-                        backgroundColor: "#e63946",
-                        color: "white",
-                        border: "none",
-                        borderRadius: 6,
-                        padding: "6px 12px",
-                        cursor: "pointer",
-                        fontWeight: 600,
-                        transition: "background-color 0.3s ease",
-                      }}
-                      onClick={() => handleDelete(cat.id)}
-                      onMouseEnter={(e) => {
-                        e.target.style.backgroundColor = "#dc2626";
-                      }}
-                      onMouseLeave={(e) => {
-                        e.target.style.backgroundColor = "#e63946";
-                      }}
-                    >
-                      Hapus
-                    </button>
-                  </td>
-                </tr>
-              ))}
-
-              {/* Form tambah kategori */}
-              <tr>
-                <td colSpan={3} style={{ padding: 12, backgroundColor: "#f8f9fa" }}>
-                  <form
-                    onSubmit={handleAddCategory}
+        <table style={tableStyle}>
+          <thead>
+            <tr style={{ backgroundColor: "#1a2a6c"}}>
+              <th style={{ padding: 12, textAlign: "left", color: "white" }}>No</th>
+              <th style={{ padding: 12, textAlign: "left", color: "white" }}>Nama Kategori</th>
+              <th style={{ padding: 12, textAlign: "left", color: "white" }}>Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            {categories.map((cat, index) => (
+              <tr
+                key={cat.id}
+                style={{
+                  borderBottom: "1px solid #ddd",
+                  backgroundColor: index % 2 === 0 ? "#f9fafe" : "white",
+                }}
+              >
+                <td style={{ padding: 12 }}>{index + 1}</td>
+                <td style={{ padding: 12 }}>{cat.category}</td>
+                <td style={{ padding: 12 }}>
+                  <button
                     style={{
-                      display: "flex",
-                      gap: 12,
-                      alignItems: "center",
-                      flexWrap: "wrap",
+                      backgroundColor: "#3861ff",
+                      color: "white",
+                      border: "none",
+                      borderRadius: 6,
+                      padding: "6px 12px",
+                      marginRight: 8,
+                      cursor: "pointer",
+                      fontWeight: 600,
                     }}
+                    onClick={() => navigate(`/editcategory/${cat.id}`)}
                   >
-                    <input
-                      type="text"
-                      value={newCategory}
-                      onChange={(e) => setNewCategory(e.target.value)}
-                      placeholder="Tambah kategori baru"
-                      required
-                      disabled={loading}
-                      style={{
-                        flex: 1,
-                        padding: "10px 14px",
-                        border: "2px solid #1a2a6c",
-                        borderRadius: 8,
-                        fontSize: "0.95rem",
-                        outline: "none",
-                        backgroundColor: loading ? "#f5f5f5" : "white",
-                        minWidth: "200px",
-                      }}
-                      onFocus={(e) => {
-                        if (!loading) {
-                          e.target.style.borderColor = "#3861ff";
-                          e.target.style.boxShadow = "0 0 6px rgba(56, 97, 255, 0.3)";
-                        }
-                      }}
-                      onBlur={(e) => {
-                        e.target.style.borderColor = "#1a2a6c";
-                        e.target.style.boxShadow = "none";
-                      }}
-                    />
-                    <button
-                      type="submit"
-                      disabled={loading}
-                      style={{
-                        background: loading ? "#6b7280" : "linear-gradient(135deg, #3861ff, #1a2a6c)",
-                        color: "white",
-                        border: "none",
-                        borderRadius: 8,
-                        padding: "10px 20px",
-                        fontWeight: 700,
-                        cursor: loading ? "not-allowed" : "pointer",
-                        opacity: loading ? 0.7 : 1,
-                        minWidth: "100px",
-                        transition: "all 0.3s ease",
-                      }}
-                      onMouseEnter={(e) => {
-                        if (!loading) {
-                          e.target.style.transform = "translateY(-1px)";
-                          e.target.style.boxShadow = "0 4px 12px rgba(56, 97, 255, 0.3)";
-                        }
-                      }}
-                      onMouseLeave={(e) => {
-                        if (!loading) {
-                          e.target.style.transform = "translateY(0)";
-                          e.target.style.boxShadow = "none";
-                        }
-                      }}
-                    >
-                      {loading ? "Menyimpan..." : "Tambah"}
-                    </button>
-                  </form>
+                    Edit
+                  </button>
+                  <button
+                    style={{
+                      backgroundColor: "#e63946",
+                      color: "white",
+                      border: "none",
+                      borderRadius: 6,
+                      padding: "6px 12px",
+                      cursor: "pointer",
+                      fontWeight: 600,
+                    }}
+                    onClick={() => handleDelete(cat.id)}
+                  >
+                    Hapus
+                  </button>
                 </td>
               </tr>
-            </tbody>
-          </table>
-        )}
+            ))}
+
+            {/* Form tambah kategori */}
+            <tr>
+              <td colSpan={3} style={{ padding: 12 }}>
+                <form
+                  onSubmit={handleAddCategory}
+                  style={{
+                    display: "flex",
+                    gap: 12,
+                    alignItems: "center",
+                    flexWrap: "wrap",
+                  }}
+                >
+                  <input
+                    type="text"
+                    value={newCategory}
+                    onChange={(e) => setNewCategory(e.target.value)}
+                    placeholder="Tambah kategori baru"
+                    required
+                    style={{
+                      flex: 1,
+                      padding: "10px 14px",
+                      border: "2px solid #1a2a6c",
+                      borderRadius: 8,
+                      fontSize: "0.95rem",
+                      outline: "none",
+                    }}
+                  />
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    style={{
+                      background: "linear-gradient(135deg, #3861ff, #1a2a6c)",
+                      color: "white",
+                      border: "none",
+                      borderRadius: 8,
+                      padding: "10px 20px",
+                      fontWeight: 700,
+                      cursor: loading ? "not-allowed" : "pointer",
+                      opacity: loading ? 0.7 : 1,
+                    }}
+                  >
+                    {loading ? "Menyimpan..." : "Tambah"}
+                  </button>
+                </form>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   );
