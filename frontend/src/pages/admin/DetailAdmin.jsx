@@ -433,12 +433,21 @@ const DetailAdmin = () => {
 
           <div className="comments-list" role="list" aria-live="polite" aria-relevant="additions removals">
             {comments.length === 0 && <p>Belum ada komentar.</p>}
+            // Ganti bagian ini di dalam comments.map():
             {comments.map((comment) => {
               // Tentukan username dan ID berdasarkan apakah komentar dari user atau admin
               const commentAuthor = comment.user?.username || comment.admin?.username || "Anonim";
               const commentAuthorId = comment.userId || comment.adminId;
-              const currentUserId = role === "admin" ? adminId : userId;
-              const isOwner = commentAuthorId === currentUserId;
+
+              // PERBAIKAN: Cek ownership berdasarkan role dan ID yang sesuai
+              let isOwner = false;
+              if (role === "admin" && comment.adminId) {
+                // Jika login sebagai admin, hanya bisa edit komentar admin dengan ID yang sama
+                isOwner = comment.adminId === adminId;
+              } else if (role === "user" && comment.userId) {
+                // Jika login sebagai user, hanya bisa edit komentar user dengan ID yang sama
+                isOwner = comment.userId === userId;
+              }
 
               return (
                 <article
@@ -455,7 +464,7 @@ const DetailAdmin = () => {
                       {comment.updatedAt !== comment.createdAt && " (diedit)"}
                     </span>
                     <span className="comment-actions">
-                      {/* Admin hanya bisa edit komentar mereka sendiri */}
+                      {/* Admin hanya bisa edit komentar admin mereka sendiri */}
                       {isOwner && (
                         <button
                           onClick={() => handleEditComment(comment.id, comment.content)}
