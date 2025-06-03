@@ -16,6 +16,7 @@ const Admin = db.define("admin", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  refresh_token: DataTypes.TEXT,
 }, {
   
   freezeTableName: true

@@ -154,9 +154,9 @@ POST http://localhost:5003/register/admin
 Content-Type: application/json
 
 {
-    "username": "admin4",
-    "email": "admin4@gmail.com",
-    "password": "admin4"
+    "username": "adminserius",
+    "email": "adminserius@gmail.com",
+    "password": "adminserius"
 }
 
 ###
@@ -165,8 +165,8 @@ POST http://localhost:5003/login
 Content-Type: application/json
 
 {
-    "email": "admin@gmail.com",
-    "password": "admin"
+    "email": "adminserius@gmail.com",
+    "password": "adminserius"
 }
 
 ###
