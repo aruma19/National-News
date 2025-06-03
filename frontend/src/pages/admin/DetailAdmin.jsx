@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import { BASE_URL } from "../../utils";
 import Swal from "sweetalert2";
@@ -20,37 +19,61 @@ const DetailAdmin = () => {
   const [userId, setUserId] = useState(null);
   const [role, setRole] = useState(null);
 
-  const token = localStorage.getItem("accessToken");
-
   useEffect(() => {
-    try {
-      const decoded = jwtDecode(token);
-      setRole(decoded.role);
+    // PERBAIKAN: Pindahkan token check ke function terpisah dan gunakan try-catch yang lebih baik
+    const initializeUser = () => {
+      try {
+        const token = localStorage.getItem("accessToken");
+        if (!token) {
+          navigate("/login");
+          return;
+        }
 
-      if (decoded.role === "admin") {
-        setAdminId(decoded.id);
-        setUserId(null);
-      } else {
-        setUserId(decoded.id);
-        setAdminId(null);
+        const decoded = jwtDecode(token);
+        setRole(decoded.role);
+
+        if (decoded.role === "admin") {
+          setAdminId(decoded.id);
+          setUserId(null);
+        } else {
+          setUserId(decoded.id);
+          setAdminId(null);
+        }
+      } catch (err) {
+        console.error("Token decode error:", err);
+        localStorage.removeItem("accessToken");
+        navigate("/login");
+        return;
       }
+    };
 
-      fetchNewsDetail();
-      fetchComments();
-    } catch (err) {
-      localStorage.removeItem("accessToken");
-      navigate("/login");
-    }
-  }, [id, navigate, token]);
+    initializeUser();
+    
+    // PERBAIKAN: Call API functions langsung tanpa parameter token
+    fetchNewsDetail();
+    fetchComments();
+  }, [id, navigate]);
 
   // Ambil detail berita
   const fetchNewsDetail = async () => {
     try {
+      // PERBAIKAN: Langsung gunakan strictInstance tanpa manual token
       const response = await strictInstance.get(`/news/${id}`);
       setNews(response.data);
       setLikeCount(response.data.likeCount || 0);
     } catch (error) {
-      Swal.fire("Error", "Gagal mengambil data berita", "error");
+      console.error("Error fetching news detail:", error);
+      // PERBAIKAN: Better error handling
+      if (error.response?.status === 401) {
+        // Token issue will be handled by interceptor
+        console.log("Token expired, interceptor will handle refresh");
+      } else if (error.response?.status === 404) {
+        Swal.fire("Error", "Berita tidak ditemukan", "error").then(() => {
+          navigate("/dashboardAdmin");
+        });
+      } else {
+        Swal.fire("Error", "Gagal mengambil data berita", "error");
+      }
     } finally {
       setLoading(false);
     }
@@ -59,10 +82,12 @@ const DetailAdmin = () => {
   // Ambil komentar
   const fetchComments = async () => {
     try {
+      // PERBAIKAN: Langsung gunakan strictInstance tanpa manual token
       const res = await strictInstance.get(`/comments/news/${id}`);
       setComments(res.data);
     } catch (err) {
       console.error("Error fetching comments", err);
+      // Interceptor will handle 401 automatically
     }
   };
 
@@ -74,6 +99,7 @@ const DetailAdmin = () => {
     }
 
     try {
+      // PERBAIKAN: Langsung gunakan strictInstance tanpa manual token
       await strictInstance.post(`/comments`, {
         newsId: Number(id),
         content: newComment,
@@ -82,7 +108,14 @@ const DetailAdmin = () => {
       setNewComment("");
       fetchComments();
     } catch (err) {
-      Swal.fire("Error", "Gagal menambahkan komentar", "error");
+      console.error("Error adding comment:", err);
+      // PERBAIKAN: Better error handling
+      if (err.response?.status === 401) {
+        // Token issue will be handled by interceptor
+        Swal.fire("Error", "Sesi telah berakhir, silakan login kembali", "error");
+      } else {
+        Swal.fire("Error", "Gagal menambahkan komentar", "error");
+      }
     }
   };
 
@@ -96,11 +129,19 @@ const DetailAdmin = () => {
     }
 
     try {
+      // PERBAIKAN: Langsung gunakan strictInstance tanpa manual token
       await strictInstance.put(`/comments/${commentId}`, { content: updatedContent });
       Swal.fire("Berhasil", "Komentar diperbarui", "success");
       fetchComments();
     } catch (err) {
-      Swal.fire("Error", "Gagal mengedit komentar", "error");
+      console.error("Error editing comment:", err);
+      // PERBAIKAN: Better error handling
+      if (err.response?.status === 401) {
+        // Token issue will be handled by interceptor
+        Swal.fire("Error", "Sesi telah berakhir, silakan login kembali", "error");
+      } else {
+        Swal.fire("Error", "Gagal mengedit komentar", "error");
+      }
     }
   };
 
@@ -111,6 +152,8 @@ const DetailAdmin = () => {
       text: "Komentar akan dihapus permanen!",
       icon: "warning",
       showCancelButton: true,
+      confirmButtonColor: "#ef4444",
+      cancelButtonColor: "#6b7280",
       confirmButtonText: "Ya, hapus!",
       cancelButtonText: "Batal",
     });
@@ -118,11 +161,19 @@ const DetailAdmin = () => {
     if (!confirm.isConfirmed) return;
 
     try {
+      // PERBAIKAN: Langsung gunakan strictInstance tanpa manual token
       await strictInstance.delete(`/comments/${commentId}`);
       Swal.fire("Berhasil", "Komentar dihapus", "success");
       setComments((prev) => prev.filter((c) => c.id !== commentId));
     } catch (err) {
-      Swal.fire("Error", "Gagal menghapus komentar", "error");
+      console.error("Error deleting comment:", err);
+      // PERBAIKAN: Better error handling
+      if (err.response?.status === 401) {
+        // Token issue will be handled by interceptor
+        Swal.fire("Error", "Sesi telah berakhir, silakan login kembali", "error");
+      } else {
+        Swal.fire("Error", "Gagal menghapus komentar", "error");
+      }
     }
   };
 
