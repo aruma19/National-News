@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import Swal from "sweetalert2";
 import { useParams, useNavigate } from "react-router-dom";
-import { BASE_URL } from "../../utils";
 import strictInstance from "../../utils/axiosInstance";
 
 const EditCategory = () => {
@@ -14,10 +12,17 @@ const EditCategory = () => {
   useEffect(() => {
     const fetchCategory = async () => {
       try {
+        // PERBAIKAN: Langsung gunakan strictInstance tanpa manual token
         const response = await strictInstance.get(`/categories/${id}`);
         setCategory(response.data.category);
       } catch (err) {
-        Swal.fire("Gagal", "Kategori tidak ditemukan", "error");
+        // PERBAIKAN: Error handling yang lebih baik, interceptor akan handle 401
+        console.error("Error fetching category:", err);
+        if (err.response?.status === 404) {
+          Swal.fire("Gagal", "Kategori tidak ditemukan", "error");
+        } else {
+          Swal.fire("Gagal", "Gagal mengambil data kategori", "error");
+        }
       }
     };
 
@@ -34,11 +39,14 @@ const EditCategory = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // PERBAIKAN: Langsung gunakan strictInstance tanpa manual token
       await strictInstance.put(`/categories/${id}`, { category });
       Swal.fire("Sukses", "Kategori berhasil diperbarui", "success").then(() =>
         navigate("/categorylist")
       );
     } catch (err) {
+      // PERBAIKAN: Error handling, interceptor akan handle 401 otomatis
+      console.error("Error updating category:", err);
       Swal.fire("Gagal", "Kategori gagal diperbarui", "error");
     }
   };
