@@ -11,58 +11,51 @@ const CategoryList = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
-
   const fetchCategories = async () => {
-    const token = localStorage.getItem("accessToken");
+  try {
+    const response = await strictInstance.get("/categories");
+    setCategories(response.data);
+  } catch (err) {
+    console.error("Gagal ambil kategori:", err);
+  }
+};
+
+const handleDelete = async (id) => {
+  const confirm = await Swal.fire({
+    title: "Yakin ingin hapus?",
+    text: "Data yang dihapus tidak dapat dikembalikan!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Ya, hapus!",
+  });
+
+  if (confirm.isConfirmed) {
     try {
-      const response = await strictInstance.get("/categories");
-      setCategories(response.data);
-    } catch (err) {
-      console.error("Gagal ambil kategori:", err);
-    }
-  };
-
-  const handleDelete = async (id) => {
-    const token = localStorage.getItem("accessToken");
-    const confirm = await Swal.fire({
-      title: "Yakin ingin hapus?",
-      text: "Data yang dihapus tidak dapat dikembalikan!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Ya, hapus!",
-    });
-
-    if (confirm.isConfirmed) {
-      try {
-        await strictInstance.delete(`/categories/${id}`);
-        Swal.fire("Dihapus!", "Kategori berhasil dihapus.", "success");
-        fetchCategories();
-      } catch (err) {
-        Swal.fire("Gagal!", "Kategori gagal dihapus.", "error");
-      }
-    }
-  };
-
-  const handleAddCategory = async (e) => {
-    e.preventDefault();
-    const token = localStorage.getItem("accessToken");
-    if (!newCategory.trim()) return;
-
-    setLoading(true);
-    try {
-      await strictInstance.post("/categories", { category: newCategory });
-      setNewCategory("");
-      Swal.fire("Sukses", "Kategori berhasil ditambahkan", "success");
+      await strictInstance.delete(`/categories/${id}`);
+      Swal.fire("Dihapus!", "Kategori berhasil dihapus.", "success");
       fetchCategories();
     } catch (err) {
-      Swal.fire("Error", "Gagal menambahkan kategori", "error");
-    } finally {
-      setLoading(false);
+      Swal.fire("Gagal!", "Kategori gagal dihapus.", "error");
     }
-  };
+  }
+};
+
+const handleAddCategory = async (e) => {
+  e.preventDefault();
+  if (!newCategory.trim()) return;
+
+  setLoading(true);
+  try {
+    await strictInstance.post("/categories", { category: newCategory });
+    setNewCategory("");
+    Swal.fire("Sukses", "Kategori berhasil ditambahkan", "success");
+    fetchCategories();
+  } catch (err) {
+    Swal.fire("Error", "Gagal menambahkan kategori", "error");
+  } finally {
+    setLoading(false);
+  }
+};
 
   const containerStyle = {
     padding: "1rem",

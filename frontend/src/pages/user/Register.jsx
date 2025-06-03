@@ -198,8 +198,8 @@ const RegisterUser = () => {
               <option value="" disabled>
                 --Pilih Jenis Kelamin--
               </option>
-              <option value="Laki-laki">Laki-laki</option>
-              <option value="Perempuan">Perempuan</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
             </select>
           </div>
 

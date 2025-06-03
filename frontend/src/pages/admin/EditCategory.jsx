@@ -12,36 +12,36 @@ const EditCategory = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchCategory = async () => {
-      try {
-        const response = await strictInstance.get(`/categories/${id}`);
-        setCategory(response.data.category);
-      } catch (err) {
-        Swal.fire("Gagal", "Kategori tidak ditemukan", "error");
-      }
-    };
-
-    fetchCategory();
-
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, [id]);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const fetchCategory = async () => {
     try {
-      await strictInstance.put(`/categories/${id}`, { category });
-      Swal.fire("Sukses", "Kategori berhasil diperbarui", "success").then(() =>
-        navigate("/categorylist")
-      );
+      const response = await strictInstance.get(`/categories/${id}`);
+      setCategory(response.data.category);
     } catch (err) {
-      Swal.fire("Gagal", "Kategori gagal diperbarui", "error");
+      Swal.fire("Gagal", "Kategori tidak ditemukan", "error");
     }
   };
+
+  fetchCategory();
+
+  const handleResize = () => {
+    setIsMobile(window.innerWidth <= 768);
+  };
+
+  window.addEventListener('resize', handleResize);
+  return () => window.removeEventListener('resize', handleResize);
+}, [id]);
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    await strictInstance.put(`/categories/${id}`, { category });
+    Swal.fire("Sukses", "Kategori berhasil diperbarui", "success").then(() =>
+      navigate("/categorylist")
+    );
+  } catch (err) {
+    Swal.fire("Gagal", "Kategori gagal diperbarui", "error");
+  }
+};
 
   const containerStyle = {
     maxWidth: isMobile ? "calc(100vw - 40px)" : 600,
