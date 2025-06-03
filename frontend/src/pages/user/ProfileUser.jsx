@@ -118,7 +118,7 @@ const ProfileUser = () => {
       >
         <div style={{ marginBottom: "1.5rem" }}>
           <img
-          src={photo ? `${BASE_URL}/uploads/profile/${photo}` : profileIcon}
+          src={photo ? `${baseURL}/uploads/profile/${photo}` : profileIcon}
           alt="profile"
           style={{
           width: isMobile ? "110px" : "130px",
