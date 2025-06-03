@@ -59,7 +59,7 @@ const DetailAdmin = () => {
   // Ambil komentar
   const fetchComments = async () => {
     try {
-      const response = await strictInstance.get(`/comments/news/${id}`);
+      const res = await strictInstance.get(`/comments/news/${id}`);
       setComments(res.data);
     } catch (err) {
       console.error("Error fetching comments", err);
