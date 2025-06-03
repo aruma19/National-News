@@ -20,6 +20,10 @@ const User = db.define(
       type: Sequelize.STRING,
       allowNull: false,
     },
+    photo: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
     refresh_token: Sequelize.TEXT,
   },
   {
