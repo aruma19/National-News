@@ -18,21 +18,10 @@ const Detail = () => {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
 
-  const [userId, setUserId] = useState(null);
+  const [userId, setUserId] = useState(jwtDecode(token).id);
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
-    const decoded = jwtDecode(token);
-      setRole(decoded.role);
-
-      if (decoded.role === "admin") {
-        setAdminId(decoded.id);
-        setUserId(null);
-      } else {
-        setUserId(decoded.id);
-        setAdminId(null);
-      }
-    
     fetchNewsDetail();
     fetchLikesAndStatus();
     fetchComments();

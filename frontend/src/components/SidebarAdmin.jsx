@@ -3,7 +3,7 @@ import { useNavigate, NavLink } from 'react-router-dom';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { BASE_URL } from "../utils";
-import strictInstance from "../utils/strictInstance";
+import strictInstance from "../utils/axiosInstance";
 
 const SidebarAdmin = () => {
     const [isOpen, setIsOpen] = useState(true); // Default open

@@ -3,7 +3,7 @@ import { useNavigate, NavLink } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { BASE_URL } from "../utils";
-import strictInstance from "../utils/strictInstance";
+import strictInstance from "../utils/axiosInstance";
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false); // Default closed on mobile
