@@ -17,7 +17,6 @@ const EditCategory = () => {
         const response = await strictInstance.get(`/categories/${id}`);
         setCategory(response.data.category);
       } catch (err) {
-        console.error("Error fetching category:", err);
         Swal.fire("Gagal", "Kategori tidak ditemukan", "error");
       }
     };
@@ -40,7 +39,6 @@ const EditCategory = () => {
         navigate("/categorylist")
       );
     } catch (err) {
-      console.error("Error updating category:", err);
       Swal.fire("Gagal", "Kategori gagal diperbarui", "error");
     }
   };
