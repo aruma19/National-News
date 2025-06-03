@@ -16,7 +16,6 @@ const CategoryList = () => {
   }, []);
 
   const fetchCategories = async () => {
-    const token = localStorage.getItem("accessToken");
     try {
       const response = await strictInstance.get("/categories");
       setCategories(response.data);
@@ -26,7 +25,6 @@ const CategoryList = () => {
   };
 
   const handleDelete = async (id) => {
-    const token = localStorage.getItem("accessToken");
     const confirm = await Swal.fire({
       title: "Yakin ingin hapus?",
       text: "Data yang dihapus tidak dapat dikembalikan!",
@@ -41,6 +39,7 @@ const CategoryList = () => {
         Swal.fire("Dihapus!", "Kategori berhasil dihapus.", "success");
         fetchCategories();
       } catch (err) {
+        console.error("Error deleting category:", err);
         Swal.fire("Gagal!", "Kategori gagal dihapus.", "error");
       }
     }
@@ -48,7 +47,6 @@ const CategoryList = () => {
 
   const handleAddCategory = async (e) => {
     e.preventDefault();
-    const token = localStorage.getItem("accessToken");
     if (!newCategory.trim()) return;
 
     setLoading(true);
@@ -58,6 +56,7 @@ const CategoryList = () => {
       Swal.fire("Sukses", "Kategori berhasil ditambahkan", "success");
       fetchCategories();
     } catch (err) {
+      console.error("Error adding category:", err);
       Swal.fire("Error", "Gagal menambahkan kategori", "error");
     } finally {
       setLoading(false);
