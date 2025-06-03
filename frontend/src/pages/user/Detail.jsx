@@ -22,6 +22,17 @@ const Detail = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
+    const decoded = jwtDecode(token);
+      setRole(decoded.role);
+
+      if (decoded.role === "admin") {
+        setAdminId(decoded.id);
+        setUserId(null);
+      } else {
+        setUserId(decoded.id);
+        setAdminId(null);
+      }
+    
     fetchNewsDetail();
     fetchLikesAndStatus();
     fetchComments();

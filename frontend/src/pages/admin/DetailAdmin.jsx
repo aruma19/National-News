@@ -35,24 +35,8 @@ const DetailAdmin = () => {
         setAdminId(null);
       }
 
-      const now = Date.now() / 1000;
-      const timeLeft = decoded.exp - now;
-
-      if (timeLeft <= 0) {
-        localStorage.removeItem("accessToken");
-        navigate("/login");
-        return;
-      }
-
-      const timer = setTimeout(() => {
-        localStorage.removeItem("accessToken");
-        navigate("/login");
-      }, timeLeft * 1000);
-
       fetchNewsDetail();
       fetchComments();
-
-      return () => clearTimeout(timer);
     } catch (err) {
       localStorage.removeItem("accessToken");
       navigate("/login");
