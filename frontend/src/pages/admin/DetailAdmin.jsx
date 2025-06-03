@@ -447,17 +447,15 @@ const DetailAdmin = () => {
                   role="listitem"
                   aria-label={`Komentar dari ${commentAuthor}`}
                 >
-                  <div className="comment-content">
-                    <strong>{commentAuthor}:</strong>
-                  </div>
                   <p className="comment-content">{comment.content}</p>
                   <div className="comment-meta">
+                    <span className="comment-author">{commentAuthor}</span>
                     <span className="comment-date">
                       {formatCommentDate(comment.updatedAt)}
                       {comment.updatedAt !== comment.createdAt && " (diedit)"}
                     </span>
                     <span className="comment-actions">
-                      {/* User/Admin bisa edit komentar mereka sendiri */}
+                      {/* Admin hanya bisa edit komentar mereka sendiri */}
                       {isOwner && (
                         <button
                           onClick={() => handleEditComment(comment.id, comment.content)}
