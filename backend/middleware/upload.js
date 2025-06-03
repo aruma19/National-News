@@ -5,7 +5,7 @@ import { dirname } from 'path';
 
 // karena __dirname tidak tersedia di ESM
 const __filename = fileURLToPath(import.meta.url);
-const _dirname = dirname(_filename);
+const __dirname = dirname(__filename);
 
 // Atur penyimpanan
 const storage = multer.diskStorage({
