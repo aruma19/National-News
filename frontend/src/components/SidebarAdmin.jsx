@@ -41,15 +41,8 @@ const SidebarAdmin = () => {
         });
 
         if (result.isConfirmed) {
-            const token = localStorage.getItem("accessToken");
-
             try {
-                await axios.delete(`${BASE_URL}/logout`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    },
-                    withCredentials: true
-                });
+                await strictInstance.delete("/logout");
             } catch (error) {
                 console.warn("Logout error:", error?.response?.data || error.message);
             } finally {

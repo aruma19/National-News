@@ -3,6 +3,7 @@ import { useNavigate, NavLink } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { BASE_URL } from "../utils";
+import strictInstance from "../utils/strictInstance";
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false); // Default closed on mobile
@@ -41,13 +42,8 @@ const Sidebar = () => {
     });
 
     if (result.isConfirmed) {
-      const token = localStorage.getItem("accessToken");
-
       try {
-        await axios.delete(`${BASE_URL}/logout`, {
-          headers: { Authorization: `Bearer ${token}` },
-          withCredentials: true,
-        });
+        await strictInstance.delete("/logout");
       } catch (error) {
         console.warn(error?.response?.data || error.message);
       } finally {
