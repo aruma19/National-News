@@ -8,7 +8,7 @@ import CategoryRoute from "./routes/CategoryRoute.js";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import db from "./config/Database.js";
-import path, { dirname } from "path";
+import path from "path";
 
 // Import models dan asosiasi agar relasi aktif
 import "./models/UserModel.js";
@@ -18,14 +18,10 @@ import "./models/CategoryModel.js";
 import "./models/AdminModel.js";
 import "./models/CommentModel.js";
 import "./models/associations.js";
-import { fileURLToPath } from "url";
 
 dotenv.config();
 
 const app = express();
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 app.use(cookieParser());
 app.use(cors({ credentials: true, origin: "https://national-news-dot-f-08-450706.uc.r.appspot.com" }));
@@ -39,7 +35,7 @@ app.use(CommentRoute);
 
 const port = process.env.PORT;
 
-app.use("/uploads/profile", express.static(path.join(__dirname, "uploads/profile")));
+//app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
 (async () => {
   try {

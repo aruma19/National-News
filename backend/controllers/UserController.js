@@ -111,27 +111,18 @@ async function logout(req, res) {
 
 async function updateUser(req, res) {
   try {
-    const role = req.role;
-
-    // Cek jika bukan user, tolak permintaan
-    if (role !== "user") {
-      return res.status(403).json({ message: "Hanya user yang dapat mengubah profil." });
-    }
-
-    const userId = req.userId;
+    const userId = req.userId;     // dari verifyToken middleware
+    const role = req.role;         // role: "user" atau "admin"
     const { username, email, gender, password } = req.body;
 
-    const user = await User.findByPk(userId);
-    if (!user) return res.status(404).json({ message: "User tidak ditemukan" });
+    let model = role === "admin" ? Admin : User;
+    let user = await model.findByPk(userId);
+    if (!user) return res.status(404).json({ message: `${role} tidak ditemukan` });
 
+    // Hash password jika ingin diubah
     let hashedPassword = user.password;
     if (password) {
       hashedPassword = await bcrypt.hash(password, 10);
-    }
-
-    let photo = user.photo;
-    if (req.file) {
-      photo = req.file.filename;
     }
 
     await user.update({
@@ -139,10 +130,9 @@ async function updateUser(req, res) {
       email: email || user.email,
       gender: gender || user.gender,
       password: hashedPassword,
-      photo: photo || user.photo,
     });
 
-    res.json({ message: "Profil user berhasil diperbarui", photo });
+    res.json({ message: `Data ${role} berhasil diperbarui` });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
