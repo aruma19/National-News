@@ -62,11 +62,9 @@ const DetailAdmin = () => {
   // Ambil detail berita
   const fetchNewsDetail = async () => {
     try {
-      const res = await axios.get(`${BASE_URL}/news/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setNews(res.data);
-      setLikeCount(res.data.likeCount || 0);
+      const response = await strictInstance.get("/news");
+      setNews(response.data);
+      setLikeCount(response.data.likeCount || 0);
     } catch (error) {
       Swal.fire("Error", "Gagal mengambil data berita", "error");
     } finally {
